@@ -1,0 +1,60 @@
+.titleArea {
+    text-align: center;
+    margin: 40px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    align-items: center;
+}
+
+.inputAreaTitle {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.inputArea {
+    margin: 5px auto;
+}
+
+.name,
+.mail,
+.password {
+    width: 100%;
+    padding: 8px;
+    margin: 3px auto;
+    border: 1px solid #5F5F5F;
+    border-radius: 3px;
+}
+
+.registerButton {
+    width: 100%;
+    background-color:#FF5555;;
+    font-size: 15px;
+    color: white;
+    border: none;
+    padding: 5px;
+    margin: 10px auto;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.annonceForMenbers {
+    font-size: 13px;
+    margin: 20px,auto;
+    text-align: center;
+}
+
+.loginLink {
+    color: #0073CC;
+    margin: auto;
+}

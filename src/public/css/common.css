@@ -1,0 +1,45 @@
+.header {
+    font-size: 20px;
+    align-items: center;
+    font-weight: bold;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+}
+
+.headerlogo {
+    margin-left: 10px;
+    color: white;
+}
+
+.headerLinks {
+    text-decoration: none;
+    font-size: 15px;
+    display: flex;
+}
+
+.headerLinks button {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font: inherit;
+    padding: 5px;
+    width: 120px;
+}
+
+.main {
+    background-color: #f1f1f1;
+    text-align: center;
+    height: 500px;
+    justify-content: center;
+    /* 横方向に中央寄せ */
+    margin: 0;
+    /* デフォルトのマージンをリセット */
+}
+
+.content {
+    justify-content: center;
+    margin-top: 200px;
+}
