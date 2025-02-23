@@ -1,0 +1,91 @@
+.form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.titleArea {
+    text-align: center;
+    margin: 40px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.profileIcon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ユーザー画像が登録されている場合の画像スタイル */
+.profileIconImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 画像が枠にぴったり収まるように調整 */
+}
+
+/* 画像が登録されていない場合の丸いアイコン */
+.defaultProfileIcon {
+    width: 100%;
+    height: 100%;
+    background-color: #D9D9D9;
+    /* 背景色を #D9D9D9 に */
+    border-radius: 50%;
+    /* 丸型にする */
+}
+
+.inputAreaTitle{
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.inputArea {
+    margin: 5px auto;
+}
+
+.mail,
+.password {
+    width: 400px;
+    padding: 8px;
+    margin: 3px auto;
+    border: 1px solid #5F5F5F;
+    border-radius: 3px;
+}
+
+/* エラー表示部分 */
+.form__error {
+    color: red;
+    margin-top: 5px;
+}
+
+.buttonArea{
+    text-align: center;
+}
+
+/* ボタンのスタイル */
+.loginButton {
+    width: 400px;
+    padding: 5px 20px;
+    font-size: 15px;
+    background-color: #FF5555;;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* 登録リンクのスタイル */
+.forRegister{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.registerLink {
+    color: #0073CC;
+}

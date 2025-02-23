@@ -21,7 +21,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_first_login'
     ];
+
+    // 初回ログイン時の処理
+    public function markAsLoggedIn()
+    {
+        $this->is_first_login = false;
+        $this->save();
+    }
 
     /**
      * The attributes that should be hidden for serialization.

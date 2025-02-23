@@ -1,2 +1,4 @@
-*
-!.gitignore
+# Ignore MySQL temp files
+docker/mysql/data/#innodb_temp/
+docker/mysql/data/*.ibt
+docker/mysql/data/*.ibd
