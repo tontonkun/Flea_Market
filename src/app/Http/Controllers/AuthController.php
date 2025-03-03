@@ -13,7 +13,7 @@ class AuthController extends Controller
         // ユーザーが初回ログインかどうかを判定
         if (Auth::check() && Auth::user()->is_first_login) {
             // 初回ログインの場合、mypageにリダイレクト
-            return redirect('/myPage');
+            return $this->showMyPage();
         }
 
         return view('topPage');
@@ -21,6 +21,6 @@ class AuthController extends Controller
 
     public function showMyPage()
     {
-        return view('mypage');
+        return view('myPage');
     }
 }

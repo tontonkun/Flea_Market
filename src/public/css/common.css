@@ -9,34 +9,36 @@
 }
 
 .headerlogo {
-    margin-left: 10px;
+    margin-left: 5px;
     color: white;
 }
 
 .headerLinks {
-    text-decoration: none;
-    font-size: 15px;
+    align-items: center;
+    gap: 15px;
     display: flex;
+    margin-right: 10px;
 }
 
-.headerLinks button {
+.headerLinks form {
+    font-size: 15px;
+}
+
+.headerLinks form button{
     background: none;
     border: none;
-    color: black;
+    color: white;
     cursor: pointer;
     font: inherit;
     padding: 5px;
-    width: 120px;
 }
 
-.main {
-    background-color: #f1f1f1;
-    text-align: center;
-    height: 500px;
-    justify-content: center;
-    /* 横方向に中央寄せ */
-    margin: 0;
-    /* デフォルトのマージンをリセット */
+.headerLinks form button.sell{
+    background-color: white;
+    color: black;
+    font-weight: normal;
+    width: 60px;
+    border-radius: 2px
 }
 
 .content {

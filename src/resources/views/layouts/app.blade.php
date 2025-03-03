@@ -18,12 +18,26 @@
         </div>
 
         @auth
-            <div class="headerlink">
-                @yield('ButtonForLogin/Logout')
+            <div class="headerLinks">
+                @auth
+                    <!-- ログイン中 -->
+                    <form action="/logout" method="POST">
+                        @csrf
+                        <button class="logout">ログアウト</button>
+                    </form>
+                @endauth
 
-                <form action="/mypage" method="GET">
+                @guest
+                    <!-- ログアウト中 -->
+                    <form action="/login" method="GET">
+                        @csrf
+                        <button class="login">ログイン</button>
+                    </form>
+                @endguest
+
+                <form action="/myPage" method="GET">
                     @csrf
-                    <button class="mypage">マイページ</button>
+                    <button class="myPage">マイページ</button>
                 </form>
 
                 <form action="/sell" method="GET">

@@ -7,7 +7,7 @@
 @section('content')
 
 
-    <form class="form" action="setUpProfiles" method="POST">
+    <form class="form" action="setUpProfiles" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="titleArea">
             <div class="title">
@@ -15,18 +15,19 @@
             </div>
         </div>
 
-        <div class="profileIconArea">
-            <!-- 画像が登録されていない場合はデフォルトの丸型アイコンを表示 -->
+        <div class="iconSettingArea">
             <div class="profileIcon">
-                @if(Auth::user()->profile_image) <!-- ユーザーが画像をアップロードした場合 -->
+                @if(Auth::user()->profile_image)
+                    <!-- ユーザーが画像をアップロードした場合 -->
                     <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}" alt="Profile Icon"
                         class="profileIconImage">
-                @else <!-- 画像が登録されていない場合 -->
+                @else 
+                    <!-- 画像が登録されていない場合 -->
                     <div class="defaultProfileIcon"></div>
                 @endif
             </div>
             <div class="uploadButtonArea">
-                <label for="profile_image" class="uploadButton">アイコン画像を選択</label>
+                <label for="profile_image" class="customUploadButton">画像を選択する</label>
                 <input type="file" id="profile_image" name="profile_image" class="fileInput">
                 @error('profile_image')
                     <div class="error">{{ $message }}</div>
