@@ -2,32 +2,10 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/postingPage.css') }}">
-    <style>
-        /* カテゴリーボタンのデフォルトスタイル */
-        .categoryButton {
-            display: none;
-        }
-
-        .categoryLabel {
-            display: inline-block;
-            background-color: white;
-            color: black;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-        }
-
-        /* カテゴリーボタンが選択された時の反転効果 */
-        .categoryButton:checked+.categoryLabel {
-            background-color: black;
-            color: white;
-        }
-    </style>
 @endsection
 
 @section('content')
-    <form class="form" action="postItems" method="POST">
+    <form class="form" action="/postItems" method="POST">
         @csrf
         <div class="mainTitleArea">
             商品の出品
@@ -44,8 +22,8 @@
                 @else 
                     <div class="defaultDisplay">
                         <div class="uploadButtonArea">
-                            <input type="file" id="profile_image" name="profile_image" class="fileInput">
-                            <label for="profile_image">画像を選択する</label>
+                            <input type="file" id="product_image" name="product_image" class="fileInput">
+                            <label for="product_image">画像を選択する</label>
                         </div>
                     </div>
                 @endif
@@ -110,7 +88,15 @@
             商品の状態
         </div>
         <div class="inputArea">
-            <input class="item_state" type="text" name="item_state" value="{{ old('item_state') }}">
+            <select class="item_state" name="item_state">
+                <option value="">選択してください</option>
+                <option value="good" {{ old('item_state') == 'good' ? 'selected' : '' }}>良好</option>
+                <option value="no_visible_damage" {{ old('item_state') == 'no_visible_damage' ? 'selected' : '' }}>目立った傷や汚れなし
+                </option>
+                <option value="slightly_damaged" {{ old('item_state') == 'slightly_damaged' ? 'selected' : '' }}>やや傷や汚れあり
+                </option>
+                <option value="bad_condition" {{ old('item_state') == 'bad_condition' ? 'selected' : '' }}>状態が悪い</option>
+            </select>
             @error('item_state')
                 <div class="error">{{ $message }}</div>
             @enderror
@@ -124,7 +110,7 @@
             商品名
         </div>
         <div class="inputArea">
-            <input class="item_name" type="text" name="item_name">
+            <input class="item_name" type="text" name="item_name" value="{{ old('item_name') }}">
             @error('item_name')
                 <div class="error">{{ $message }}</div>
             @enderror
@@ -134,7 +120,7 @@
             ブランド名
         </div>
         <div class="inputArea">
-            <input class="brand_name" type="text" name="brand_name">
+            <input class="brand_name" type="text" name="brand_name" value="{{ old('brand_name') }}">
             @error('brand_name')
                 <div class="error">{{ $message }}</div>
             @enderror
@@ -144,7 +130,7 @@
             商品の説明
         </div>
         <div class="inputArea">
-            <input class="item_description" type="text" name="item_description">
+            <input class="item_description" type="text" name="item_description" value="{{ old('item_description') }}">
             @error('item_description')
                 <div class="error">{{ $message }}</div>
             @enderror
@@ -154,7 +140,7 @@
             販売価格
         </div>
         <div class="inputArea">
-            <input class="item_cost" type="text" name="item_cost">
+            <input class="item_cost" type="text" name="item_cost" value="{{ old('item_cost') }}">
             @error('item_cost')
                 <div class="error">{{ $message }}</div>
             @enderror

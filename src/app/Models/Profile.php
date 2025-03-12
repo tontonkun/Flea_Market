@@ -13,14 +13,14 @@ class Profile extends Model
 
     protected $fillable = [
         'user_id',
-        'post_code',
         'user_image_pass',
+        'post_code',
         'address',
         'building_name',
         'profile_image',
     ];
 
-    // プロフィールがどのユーザーに関連しているかを定義（リレーション）
+    // リレーション
     public function user()
     {
         return $this->belongsTo(User::class);

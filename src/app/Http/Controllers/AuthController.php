@@ -12,10 +12,15 @@ class AuthController extends Controller
 
         // ユーザーが初回ログインかどうかを判定
         if (Auth::check() && Auth::user()->is_first_login) {
-            // 初回ログインの場合、mypageにリダイレクト
-            return $this->showMyPage();
+            // 初回ログインの場合、is_first_login を false にして mypage にリダイレクト
+            $user = Auth::user(); // 現在のユーザーを取得
+            $user->update(['is_first_login' => false]); // フラグを false に更新
+
+            // mypage へリダイレクト
+            return redirect()->route('mypage'); // 'mypage' は実際のルート名に変更
         }
 
+        // 初回ログインでない場合はトップページに遷移
         return view('topPage');
     }
 
