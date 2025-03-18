@@ -10,8 +10,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [AuthController::class, 'showTopPage']);
 
     //ProfileController
+    Route::get('/profile', [ProfileController::class, 'showProfile']);
+    Route::get('/myPage', [ProfileController::class, 'showMyPage']);
     Route::post('/setUpProfiles', [ProfileController::class, 'update']);
-    Route::get('/myPage', [ProfileController::class, 'showProfile']);
+    
+
 
     //PostingController
     Route::get('/sell', [PostingController::class, 'showPostingPage']);

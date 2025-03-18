@@ -13,23 +13,28 @@ class Product extends Model
 
     protected $fillable = [
         'user_id',
+        'condition_id',
         'product_name',
         'price',
+        'condition_id',
         'brand_name',
         'product_img_pass',
         'discription',
         'is_active'
     ];
 
-    // リレーション: Userとの1対多
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // リレーション: Categoryとの1対多
+    public function condition()
+    {
+        return $this->belongsTo(Condition::class);
+    }
+
     public function categories()
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsToMany(Category::class, 'product_category');
     }
 }

@@ -6,7 +6,7 @@
 
 {{-- フラッシュメッセージの表示 --}}
 @if(session('success'))
-    <div class="announce postingItem">
+    <div class="postingAnnounce">
         {{ session('success') }}
     </div>
 @endif

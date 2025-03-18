@@ -11,23 +11,13 @@
 }
 
 /* フラッシュメッセージのスタイル */
-.announce {
-    background-color: #28a745;
-    /* 背景色 (緑色) */
-    color: white;
-    /* 文字色 */
+.postingAnnounce{
+    background-color: #dff0d8;
+    color: #3c763d;
     padding: 10px 20px;
-    /* パディング */
     border-radius: 5px;
-    /* 角丸 */
-    margin-top: 20px;
-    /* 上に余白 */
     text-align: center;
-    /* テキスト中央寄せ */
     font-size: 16px;
-    /* フォントサイズ */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* 影を追加 */
 }
 
 /* postingItem に特定のスタイルを追加 */

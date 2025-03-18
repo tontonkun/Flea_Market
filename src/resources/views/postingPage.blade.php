@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form class="form" action="/postItems" method="POST">
+    <form class="form" action="/postItems" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mainTitleArea">
             商品の出品
@@ -15,22 +15,23 @@
             商品画像
         </div>
         <div class="imageSettingArea">
-            <div class="imageArea">
-                @if(Auth::user()->product_img_pass)
-                    <img src="{{ asset('storage/product_images/' . Auth::user()->product_img_pass) }}" alt="Product Image"
-                        class="itemImage">
-                @else 
-                    <div class="defaultDisplay">
-                        <div class="uploadButtonArea">
-                            <input type="file" id="product_image" name="product_image" class="fileInput">
-                            <label for="product_image">画像を選択する</label>
-                        </div>
+            <div class="imageArea" id="imageArea">
+                <!-- 画像が選択されていない場合のデフォルトの表示 -->
+                <div class="defaultDisplay">
+                    <div class="uploadButtonArea">
+                        <input type="file" id="product_image" name="product_image" class="fileInput"
+                            onchange="previewImage(event)">
+                        <label for="product_image">画像を選択する</label>
                     </div>
-                @endif
+                </div>
+
+                <!-- 画像プレビューと画像変更ボタン -->
+                <div id="imagePreviewContainer" style="display: none;">
+                    <img id="imagePreview" style="max-width: 100%; max-height: 300px;">
+                    <button type="button" id="changeImageButton" class="changeImageButton"
+                        onclick="resetImage()">画像を変更</button>
+                </div>
             </div>
-            @error('profile_image')
-                <div class="error">{{ $message }}</div>
-            @enderror
         </div>
 
         <div class="sectionTitle">
@@ -88,16 +89,15 @@
             商品の状態
         </div>
         <div class="inputArea">
-            <select class="item_state" name="item_state">
+            <select class="item_state" name="condition_id">
                 <option value="">選択してください</option>
-                <option value="good" {{ old('item_state') == 'good' ? 'selected' : '' }}>良好</option>
-                <option value="no_visible_damage" {{ old('item_state') == 'no_visible_damage' ? 'selected' : '' }}>目立った傷や汚れなし
-                </option>
-                <option value="slightly_damaged" {{ old('item_state') == 'slightly_damaged' ? 'selected' : '' }}>やや傷や汚れあり
-                </option>
-                <option value="bad_condition" {{ old('item_state') == 'bad_condition' ? 'selected' : '' }}>状態が悪い</option>
+                @foreach($conditions as $condition)
+                    <option value="{{ $condition->id }}" {{ old('condition_id') == $condition->id ? 'selected' : '' }}>
+                        {{ $condition->condition }}
+                    </option>
+                @endforeach
             </select>
-            @error('item_state')
+            @error('condition_id')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>
@@ -139,7 +139,7 @@
         <div class="subTitle">
             販売価格
         </div>
-        <div class="inputArea">
+        <div class="inputAreaForCost">
             <input class="item_cost" type="text" name="item_cost" value="{{ old('item_cost') }}">
             @error('item_cost')
                 <div class="error">{{ $message }}</div>
@@ -147,8 +147,58 @@
         </div>
 
         <div class="buttonArea">
-            <button class="postiingButton" type="submit">出品する</button>
+            <button class="postingButton" type="submit">出品する</button>
         </div>
 
     </form>
+
+
+
+    <script>
+        // 画像を選択した後のプレビューを表示する関数
+        function previewImage(event) {
+            const file = event.target.files[0]; // 選択したファイルを取得
+
+            if (file) {
+                const reader = new FileReader();
+
+                // ファイルが読み込まれた時の処理
+                reader.onload = function (e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                    const imageArea = document.getElementById('imageArea');
+
+                    // プレビュー画像を設定
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block'; // 画像を表示
+
+                    // 「画像変更」ボタンを表示
+                    imagePreviewContainer.style.display = 'block'; // ボタンを表示
+                    imageArea.querySelector('.defaultDisplay').style.display = 'none'; // デフォルトの表示を非表示
+
+                }
+
+                // ファイルを読み込む
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 画像変更ボタンを押した際に画像選択を再度行えるようにする関数
+        function resetImage() {
+            const fileInput = document.getElementById('product_image');
+            fileInput.value = ''; // ファイル入力の値をリセット
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const imageArea = document.getElementById('imageArea');
+
+            imagePreview.style.display = 'none'; // プレビュー画像を非表示
+            imagePreviewContainer.style.display = 'none'; // ボタンを非表示
+            imageArea.querySelector('.defaultDisplay').style.display = 'block'; // デフォルトの画像選択表示を表示
+
+            // 画像選択ボタンが元の位置に戻る
+            imageArea.querySelector('.uploadButtonArea').style.display = 'block'; // 画像選択ボタンを再表示
+        }
+
+    </script>
+
 @endsection

@@ -16,8 +16,7 @@ class AuthController extends Controller
             $user = Auth::user(); // 現在のユーザーを取得
             $user->update(['is_first_login' => false]); // フラグを false に更新
 
-            // mypage へリダイレクト
-            return redirect()->route('mypage'); // 'mypage' は実際のルート名に変更
+            return redirect('profile');
         }
 
         // 初回ログインでない場合はトップページに遷移

@@ -12,13 +12,12 @@ class Condition extends Model
     protected $table = 'conditions';
 
     protected $fillable = [
-        'product_id',
         'condition',
     ];
 
     // リレーション
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class);
     }
 }
