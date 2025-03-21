@@ -17,24 +17,24 @@
             <img src="/img/logo.svg" alt="coachtech" width="220" height="50">
         </div>
 
-        @auth
-            <div class="headerLinks">
-                @auth
-                    <!-- ログイン中 -->
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button class="logout">ログアウト</button>
-                    </form>
-                @endauth
+        <div class="headerLinks">
+            @auth
+                <!-- ログイン中 -->
+                <form action="/logout" method="POST">
+                    @csrf
+                    <button class="logout">ログアウト</button>
+                </form>
+            @endauth
 
-                @guest
-                    <!-- ログアウト中 -->
-                    <form action="/login" method="GET">
-                        @csrf
-                        <button class="login">ログイン</button>
-                    </form>
-                @endguest
+            @guest
+                <!-- ログアウト中 -->
+                <form action="/login" method="GET">
+                    @csrf
+                    <button class="login">ログイン</button>
+                </form>
+            @endguest
 
+            @auth
                 <form action="/myPage" method="GET">
                     @csrf
                     <button class="myPage">マイページ</button>
@@ -44,11 +44,9 @@
                     @csrf
                     <button class="sell">出品</button>
                 </form>
-            </div>
-        @endauth
-
+            @endauth
+        </div>
     </div>
-
     @yield('content')
 
 </body>

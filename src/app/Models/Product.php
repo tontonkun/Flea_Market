@@ -19,7 +19,7 @@ class Product extends Model
         'condition_id',
         'brand_name',
         'product_img_pass',
-        'discription',
+        'description',
         'is_active'
     ];
 

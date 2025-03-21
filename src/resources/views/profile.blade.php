@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/myPage.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
 @endsection
 
 @section('content')
@@ -22,7 +22,7 @@
                         class="profileIconImage">
                 @else
                     <!-- 画像が登録されていない場合 -->
-                    <div class="defaultProfileIcon"></div>
+                    <div class="defaultProfileIcon" id="profileImagePreview"></div>
                 @endif
             </div>
             <div class="uploadButtonArea">
@@ -86,4 +86,24 @@
         </div>
 
     </form>
+@endsection
+
+@section('js')
+    <script>
+        // 画像選択時にプレビューを表示
+        document.getElementById('profile_image').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                // プレビュー画像を表示
+                const profileImagePreview = document.getElementById('profileImagePreview');
+                profileImagePreview.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 @endsection

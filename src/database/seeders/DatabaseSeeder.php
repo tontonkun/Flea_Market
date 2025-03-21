@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        \App\Models\Condition::create(['condition' => '良好']);
+        \App\Models\Condition::create(['condition' => '目立った傷や汚れなし']);
+        \App\Models\Condition::create(['condition' => 'やや傷や汚れあり']);
+        \App\Models\Condition::create(['condition' => '状態が悪い']);
     }
 }

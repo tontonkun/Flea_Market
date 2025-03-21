@@ -14,7 +14,7 @@ class ProfileController extends Controller
         // 既存のユーザーのプロフィールを取得
         $profile = Auth::user()->profile;
 
-        return view('myPage', compact('profile'));
+        return view('profile', compact('profile'));
     }
 
     public function update(ProfileUpdateRequest $request)
@@ -52,13 +52,5 @@ class ProfileController extends Controller
 
         // 更新後、リダイレクト
         return redirect('/')->with('success', 'プロフィールが更新されました。');
-    }
-
-    public function showMyPage(ProfileUpdateRequest $request)
-    {
-        // 既存のユーザーのプロフィールを取得
-        $profile = Auth::user()->profile;
-
-        return view('myPage', compact('profile'));
     }
 }

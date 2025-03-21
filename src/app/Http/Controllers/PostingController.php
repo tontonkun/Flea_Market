@@ -24,7 +24,6 @@ class PostingController extends Controller
     public function PostItems(Request $request)
     {
         // 商品の状態を設定（先に取得してから使用）
-        //$condition = Condition::where('condition', $request->input('item_state'))->first();
         $condition = Condition::find($request->input('condition_id'));
 
         // 画像の保存処理（画像がアップロードされた場合のみ）
@@ -49,8 +48,9 @@ class PostingController extends Controller
         $product->product_name = $request->input('item_name');
         $product->price = $request->input('item_cost');
         $product->brand_name = $request->input('brand_name') ?? null;
-        $product->product_img_pass = $imagePath; // 画像パス
-        $product->discription = $request->input('item_description') ?? null;
+        $product->product_img_pass = 'storage/' . $imagePath;
+        $product->save();
+        $product->description = $request->input('item_description') ?? null;
         $product->is_active = true;
 
         // 商品の状態が設定されていれば、それも保存

@@ -20,11 +20,11 @@ class CreateProductsTable extends Migration
             $table->integer('price');
             $table->string('brand_name', 255)->nullable();
             $table->string('product_img_pass', 255)->nullable();
-            $table->string('discription', 255)->nullable();
+            $table->string('description', 255)->nullable();
             $table->foreignId('condition_id')->nullable()->constrained('conditions')->onDelete('set null');
+            $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
-            $table->boolean('is_active');
         });
     }
 

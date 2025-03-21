@@ -5,85 +5,112 @@
 @endsection
 
 @section('content')
-
-    <form class="form" action="setUpProfiles" method="POST" enctype="multipart/form-data">
-        @csrf
-        <div class="titleArea">
-            <div class="title">
-                プロフィール設定
-            </div>
+    <div class="upperArea">
+        <div class="profileIcon">
+            @if($profile && $profile->profile_image)
+                <!-- ユーザーが画像をアップロードした場合 -->
+                <img src="{{ asset('storage/profile_images/' . $profile->profile_image) }}" alt="Profile Icon"
+                    class="profileIconImage">
+            @else
+                <!-- 画像が登録されていない場合 -->
+                <div class="defaultProfileIcon"></div>
+            @endif
         </div>
-
-        <div class="iconSettingArea">
-            <div class="profileIcon">
-                @if($profile && $profile->profile_image)
-                    <!-- ユーザーが画像をアップロードした場合 -->
-                    <img src="{{ asset('storage/profile_images/' . $profile->profile_image) }}" alt="Profile Icon"
-                        class="profileIconImage">
-                @else
-                    <!-- 画像が登録されていない場合 -->
-                    <div class="defaultProfileIcon"></div>
-                @endif
-            </div>
-            <div class="uploadButtonArea">
-                <label for="profile_image" class="customUploadButton">画像を選択する</label>
-                <input type="file" id="profile_image" name="profile_image" class="fileInput">
-                @error('profile_image')
-                    <div class="error">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
-
-        <div class="inputAreaTitle">
+        <div class="userName">
             ユーザー名
         </div>
-        <div class="inputArea">
-            <!-- ユーザー名をデフォルトで表示 -->
-            <input class="name" type="text" name="user_name" value="{{ old('name', $profile->user_name ?? '') }}">
-            @error('name')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="inputAreaTitle">
-            郵便番号
-        </div>
-        <div class="inputArea">
-            <!-- 郵便番号をデフォルトで表示 -->
-            <input class="postal_code" type="tel" name="postal_code" pattern="\d{3}-\d{4}"
-                value="{{ old('postal_code', $profile->postal_code ?? '') }}">
-            @error('postal_code')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="inputAreaTitle">
-            住所
-        </div>
-        <div class="inputArea">
-            <!-- 住所をデフォルトで表示 -->
-            <input class="address" type="text" name="address" value="{{ old('address', $profile->address ?? '') }}">
-            @error('address')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="inputAreaTitle">
-            建物名
-        </div>
-        <div class="inputArea">
-            <!-- 建物名をデフォルトで表示 -->
-            <input class="building_name" type="text" name="building_name"
-                value="{{ old('building_name', $profile->building_name ?? '') }}">
-            @error('building_name')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="buttonArea">
-            <button class="updateButton" type="submit">更新する
+        <form action="/myPage/profile" method="GET">
+            @csrf
+            <button class="editProfile">
+                プロフィールを編集
             </button>
-        </div>
+        </form>
+    </div>
 
-    </form>
+    <div class="displaySelection">
+        <button id="posted-sell" class="posted sold">出品した商品</button>
+        <button id="posted-buy" class="posted bought">購入した商品</button>
+    </div>
+
+    <!-- 出品した商品リスト -->
+    <div id="sell-products" class="product">
+        <h2>出品した商品</h2>
+        <div class="productList">
+            @foreach($postedProducts as $product) <!-- 変数名を変更 -->
+                <div class="productItemArea">
+                    <div class="productItem">
+                        <!-- 商品画像 -->
+                        @if($product->product_img_pass)
+                            <img src="{{ asset('storage/product_images/' . $product->product_img_pass) }}"
+                                alt="{{ $product->product_name }}">
+                        @else
+                            <div class="defaultItemImage">
+                                画像なし
+                            </div>
+                        @endif
+                    </div>
+                    <p>{{ $product->product_name }}</p>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- 購入した商品リスト -->
+    <div id="buy-products" class="product" style="display: none;">
+        <h2>購入した商品</h2>
+        <div class="productList">
+            @foreach($purchasedProducts as $product)
+                <div class="productItemArea">
+                    <div class="productItem">
+                        <!-- 商品画像 -->
+                        @if($product->product_img_pass)
+                            <img src="{{ asset('storage/product_images/' . $product->product_img_pass) }}"
+                                alt="{{ $product->product_name }}">
+                        @else
+                            <div class="defaultItemImage">
+                                画像なし
+                            </div>
+                        @endif
+                    </div>
+                    <p>{{ $product->product_name }}</p>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+@endsection
+
+@section('js')
+    <script>
+        // 出品した商品ボタンのクリック時
+        document.getElementById('posted-sell').addEventListener('click', function () {
+            // 出品した商品を表示
+            document.getElementById('sell-products').style.display = 'block';
+            document.getElementById('buy-products').style.display = 'none';
+
+            // 色を赤に変更
+            this.style.color = 'red';
+            document.getElementById('posted-buy').style.color = 'black';
+        });
+
+        // 購入した商品ボタンのクリック時
+        document.getElementById('posted-buy').addEventListener('click', function () {
+            // 購入した商品を表示
+            document.getElementById('buy-products').style.display = 'block';
+            document.getElementById('sell-products').style.display = 'none';
+
+            // 色を赤に変更
+            this.style.color = 'red';
+            document.getElementById('posted-sell').style.color = 'black';
+        });
+
+        // 初期状態で「出品した商品」を表示し、「出品した商品」のボタンを赤に
+        window.onload = function () {
+            document.getElementById('sell-products').style.display = 'block'; // 出品した商品表示
+            document.getElementById('buy-products').style.display = 'none';  // 購入した商品非表示
+            document.getElementById('posted-sell').style.color = 'red'; // 出品した商品のボタン赤
+            document.getElementById('posted-buy').style.color = 'black'; // 購入した商品のボタン黒
+        };
+    </script>
+
 @endsection

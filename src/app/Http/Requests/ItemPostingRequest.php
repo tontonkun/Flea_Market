@@ -30,7 +30,7 @@ class ItemPostingRequest extends FormRequest
             'condition_name.*' => 'exists:conditions,name',
             'product_name' => 'required|string|max:255',
             'brand_name' => 'nullable|string|max:255',
-            'discription' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:1',
         ];
     }
