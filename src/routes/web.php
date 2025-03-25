@@ -5,16 +5,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostingController;
 use App\Http\Controllers\MyPageController;
+use App\Http\Controllers\MainPageController;
+use App\Http\Controllers\ProductController;
 
 
-// 未ログイン時
-Route::get('/', function () {
-    return view('mainPage');
-});
+//MainPageController
+Route::get('/', [MainPageController::class, 'showMainPage']);
 
 Route::middleware('auth')->group(function () {
-    //AuthController
-    Route::get('/myPage', [AuthController::class, 'showMyPage']);
 
     //ProfileController
     Route::get('/myPage/profile', [ProfileController::class, 'showProfile']);
@@ -27,4 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/sell', [PostingController::class, 'showPostingPage']);
     Route::get('/postItems', [PostingController::class, 'PostItems']);
     Route::post('/postItems', [PostingController::class, 'PostItems'])->name('postItems');
+
+    //ProductController
+    Route::get('/product/{id}', [ProductController::class, 'showDetail'])->name('product.showDetail');
 });

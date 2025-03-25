@@ -1,0 +1,58 @@
+.separatedContent{
+    margin: 30px;
+    display: flex;
+}
+
+.imageArea{
+    height: 100%;
+    width: 50%;
+}
+
+.defaultItemImage {
+    width: 100%;
+    /* デフォルトの画像の幅を合わせる */
+    height: 100px;
+    /* 画像の高さ */
+    background-color: #ddd;
+    /* 画像がない場合の背景色 */
+}
+
+.productDetailArea {
+    height: 100%;
+    width: 50%;
+}
+
+.productName{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.brandArea{
+    display: flex;
+    font-size: 10px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.brandArea p{
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.priceArea {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.yen {
+    font-size: 15px;
+}
+
+.tax{
+    font-size: 15px;
+}
+
+.price{
+    font-size: 20px;
+}

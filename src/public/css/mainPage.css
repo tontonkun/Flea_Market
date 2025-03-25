@@ -1,0 +1,92 @@
+/* フラッシュメッセージのスタイル */
+.postingAnnounce {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.displaySelectionArea{
+    display: flex;
+    align-items: center;
+    height: 30px;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    margin-top: 30px;
+    padding-left: 50px;
+}
+
+.displaySelection{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 50px;
+    background: none;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.posted:hover {
+    color: #007BFF;
+    /* ホバー時の色 */
+}
+
+.displayArea{
+    padding-top: 30px;
+    margin: 30px;
+}
+
+.productList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    /* アイテム間の隙間 */
+}
+
+.productItem {
+    text-align: center;
+    /* 商品画像と商品名を中央揃え */
+    margin: 10px;
+    /* 商品アイテムの間隔 */
+    display: inline-block;
+    /* アイテムを横並びに表示 */
+    width: 150px;
+}
+
+.productImageContainer {
+    margin-bottom: 8px;
+    /* 画像と商品名の間隔 */
+}
+
+.productImage {
+    width: 100%;
+    /* 画像の幅を商品アイテムに合わせる */
+    height: auto;
+    /* 高さは自動調整 */
+    border: 1px solid black;
+}
+
+.defaultItemImage {
+    width: 100%;
+    /* デフォルトの画像の幅を合わせる */
+    height: 100px;
+    /* 画像の高さ */
+    background-color: #ddd;
+    /* 画像がない場合の背景色 */
+}
+
+.productName {
+    font-size: 14px;
+    /* 商品名のフォントサイズ */
+    margin-top: 5px;
+    /* 商品名と画像の間隔 */
+    color: #333;
+    /* 商品名の色 */
+    text-overflow: ellipsis;
+    /* 長い商品名を省略 */
+    white-space: nowrap;
+    /* 商品名が長すぎる場合は省略 */
+    overflow: hidden;
+}

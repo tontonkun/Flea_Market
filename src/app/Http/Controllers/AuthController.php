@@ -35,6 +35,6 @@ class AuthController extends Controller
             ->get();
 
         // ビューにプロフィール、出品商品、購入商品を渡す
-        return view('myPage', compact('profile', 'postedProducts', 'purchasedProducts'));
+        return view('mainPage', compact('profile', 'postedProducts', 'purchasedProducts'));
     }
 }
