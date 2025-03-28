@@ -90,24 +90,42 @@
 }
 
 .productItemArea{
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    text-align: center;
 }
 
 .productItem {
     width: 200px;
     height: 200px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     border: 1px solid #ddd;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
-.product-item img {
+/* 画像のスタイルはそのままで調整 */
+.productItem img {
     width: 100%;
-    /* 画像をコンテナの幅に合わせる */
     height: auto;
+    object-fit: cover;
+    max-width: 200px;
+    /* 画像の最大幅を設定 */
 }
 
+/* 商品名のスタイル調整 */
+.productItem p {
+    margin-top: 10px;
+    /* 画像と商品名の間に余白 */
+    font-size: 14px;
+    color: #333;
+    /* 商品名の色 */
+}
+
+/* 画像がない場合のデフォルト画像のスタイル */
 .defaultItemImage {
     display: flex;
     width: 100%;
@@ -115,13 +133,17 @@
     background-color: #D9D9D9;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 
-.productItemArea p{
-    margin-top: 5px;
-}
-
-a.active {
-    color: red;
+/* 商品名のスタイル微調整 */
+.productItemArea p {
+    font-size: 16px;
+    /* 少し大きめに設定 */
     font-weight: bold;
+    /* 商品名に強調 */
+    color: #333;
+    /* 文字色 */
+    margin-top: 10px;
+    /* 商品画像との間隔 */
 }

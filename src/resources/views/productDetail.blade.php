@@ -25,23 +25,30 @@
             </div>
             <div class="priceArea">
                 <p class="yen">¥</p>
-                <p class="price">{{ $product->price }}</p>
+                <p class="price">{{ number_format($product->price) }}</p>
                 <p class="tax">（税込）</p>
             </div>
 
+            <form action="/purchase" method="GET">
+                <button class="purchaseButton">
+                    購入手続きへ
+                </button>
+            </form>
+
             <div class="productDescription">
-                <p class="sectionTitle">商品説明</p>
+                <div class="sectionTitle">商品説明</div>
                 <p>{{ $product->description }}</p>
             </div>
 
             <div class="productInfo">
-                <p class="sectionTitle">商品の情報</p>
+                <div class="sectionTitle">商品の情報</div>
                 <div class="categoryArea">
                     <p class="subSectionTitle">カテゴリー</p>
+                    <p class="category"></p>
                 </div>
                 <div class="conditionArea">
                     <p class="subSectionTitle">商品の状態</p>
-                    <p class="condition">{{ $product->price }}</p>
+                    <p class="condition">{{ $product->condition->condition ?? '状態情報なし' }}</p>
                 </div>
             </div>
 

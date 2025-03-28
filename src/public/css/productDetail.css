@@ -42,17 +42,54 @@
 .priceArea {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .yen {
     font-size: 15px;
 }
 
+.price {
+    font-size: 20px;
+}
+
 .tax{
     font-size: 15px;
 }
 
-.price{
+.purchaseButton {
+    width: 250px;
+    color: white;
+    background-color: #ff5555;
+    border: none;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.sectionTitle{
+    font-weight: bold;
+    margin-top: 30px;
     font-size: 20px;
+}
+
+.subSectionTitle{
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.productDescription p{
+    font-size: 18px;
+}
+
+.categoryArea{
+    display: flex;
+}
+
+.conditionArea{
+    display: flex;
+}
+
+.condition{
+    margin-left: 20px;
+    font-size: 15px;
 }

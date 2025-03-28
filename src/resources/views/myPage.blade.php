@@ -37,8 +37,9 @@
         <h2>出品した商品</h2>
         <div class="productList">
             @foreach($postedProducts as $product) <!-- 変数名を変更 -->
-                <div class="productItemArea">
-                    <div class="productItem">
+                <div class="productItem">
+                    <!-- 商品画像をクリックすると詳細ページへ遷移 -->
+                    <a href="{{ route('product.showDetail', $product->id) }}">
                         <!-- 商品画像 -->
                         @if($product->product_img_pass)
                             <img src="{{ asset('storage/product_images/' . $product->product_img_pass) }}"
@@ -48,8 +49,10 @@
                                 画像なし
                             </div>
                         @endif
-                    </div>
-                    <p>{{ $product->product_name }}</p>
+                    </a>
+                </div>
+                <div>
+                    {{ $product->product_name }}
                 </div>
             @endforeach
         </div>

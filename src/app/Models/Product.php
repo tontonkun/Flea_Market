@@ -23,17 +23,17 @@ class Product extends Model
         'is_active'
     ];
 
-    public function users()
+    public function user()
     {
         return $this->belongsToMany(User::class, 'favorites', 'product_id', 'user_id');
     }
 
-    public function conditions()
+    public function condition()
     {
         return $this->belongsTo(Condition::class);
     }
 
-    public function categories()
+    public function category()
     {
         return $this->belongsToMany(Category::class, 'product_category');
     }

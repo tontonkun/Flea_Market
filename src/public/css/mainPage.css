@@ -60,7 +60,7 @@
     /* 画像と商品名の間隔 */
 }
 
-.productImage {
+.productImageContainer a{
     width: 100%;
     /* 画像の幅を商品アイテムに合わせる */
     height: auto;

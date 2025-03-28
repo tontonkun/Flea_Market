@@ -10,7 +10,7 @@ class ProductController extends Controller
     public function showDetail($id)
     {
         // 商品IDに基づいて商品の詳細情報を取得
-        $product = Product::findOrFail($id);
+        $product = Product::with('condition')->find($id);
 
         // 商品詳細ページを表示
         return view('productDetail', compact('product'));

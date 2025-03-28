@@ -25,6 +25,7 @@
                     <div class="productImageContainer">
                         <!-- 商品画像をクリックすると詳細ページへ遷移 -->
                         <a href="{{ route('product.showDetail', $product->id) }}">
+                            <!-- 商品画像 -->
                             @if ($product->product_img_pass)
                                 <img src="{{ asset('storage/' . $product->product_img_pass) }}" alt="{{ $product->product_name }}"
                                     class="productImage">

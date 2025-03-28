@@ -12,6 +12,10 @@ use App\Http\Controllers\ProductController;
 //MainPageController
 Route::get('/', [MainPageController::class, 'showMainPage']);
 
+
+//ProductController
+Route::get('/product/{id}', [ProductController::class, 'showDetail'])->name('product.showDetail');
+
 Route::middleware('auth')->group(function () {
 
     //ProfileController
@@ -26,6 +30,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/postItems', [PostingController::class, 'PostItems']);
     Route::post('/postItems', [PostingController::class, 'PostItems'])->name('postItems');
 
-    //ProductController
-    Route::get('/product/{id}', [ProductController::class, 'showDetail'])->name('product.showDetail');
 });
