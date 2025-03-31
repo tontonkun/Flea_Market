@@ -9,8 +9,9 @@
         <div class="profileIcon">
             @if($profile && $profile->profile_image)
                 <!-- ユーザーが画像をアップロードした場合 -->
-                <img src="{{ asset('storage/profile_images/' . $profile->profile_image) }}" alt="Profile Icon"
-                    class="profileIconImage">
+                <img src="{{ asset('/' . $product->product_img_pass) }}" alt="{{ $product->product_name }}"
+                    class="productImage">
+
             @else
                 <!-- 画像が登録されていない場合 -->
                 <div class="defaultProfileIcon"></div>
@@ -42,8 +43,7 @@
                     <a href="{{ route('product.showDetail', $product->id) }}">
                         <!-- 商品画像 -->
                         @if($product->product_img_pass)
-                            <img src="{{ asset('storage/product_images/' . $product->product_img_pass) }}"
-                                alt="{{ $product->product_name }}">
+                            <img src="{{ asset('/' . $product->product_img_pass) }}" alt="{{ $product->product_name }}">
                         @else
                             <div class="defaultItemImage">
                                 画像なし

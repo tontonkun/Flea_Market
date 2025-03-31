@@ -15,6 +15,9 @@ Route::get('/', [MainPageController::class, 'showMainPage']);
 
 //ProductController
 Route::get('/product/{id}', [ProductController::class, 'showDetail'])->name('product.showDetail');
+Route::post('/product/{id}/favorite', [ProductController::class, 'addFavorite'])->name('product.addFavorite');
+Route::post('/product/{id}/addComment', [ProductController::class, 'addComment'])->name('product.addComment');
+
 
 Route::middleware('auth')->group(function () {
 

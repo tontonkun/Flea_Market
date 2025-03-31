@@ -27,8 +27,7 @@
                         <a href="{{ route('product.showDetail', $product->id) }}">
                             <!-- 商品画像 -->
                             @if ($product->product_img_pass)
-                                <img src="{{ asset('storage/' . $product->product_img_pass) }}" alt="{{ $product->product_name }}"
-                                    class="productImage">
+                                <img src="{{ asset('/' . $product->product_img_pass) }}" class="productImage">
                             @else
                                 <div class="defaultItemImage">No Image</div>
                             @endif
