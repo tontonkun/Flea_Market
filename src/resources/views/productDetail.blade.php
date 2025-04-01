@@ -8,8 +8,8 @@
     <div class="separatedContent">
         <div class="imageArea">
             @if ($product->product_img_pass)
-                <img src="{{ asset('/' . $product->product_img_pass) }}" alt="{{ $product->product_name }}"
-                    class="productImage">
+                <img class="productImage" src="{{ asset('/' . $product->product_img_pass) }}"
+                    alt="{{ $product->product_name }}">
             @else
                 <div class="defaultItemImage">No Image</div>
             @endif
@@ -49,6 +49,7 @@
             </div>
 
             <form action="/purchase" method="GET">
+                <input type="hidden" name="productId" value="{{ $product->id }}">
                 <button class="purchaseButton">
                     購入手続きへ
                 </button>

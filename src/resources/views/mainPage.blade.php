@@ -41,7 +41,20 @@
 
     <!-- マイリストの商品リスト（非表示）-->
     <div id="myListProducts" class="productList" style="display: none;">
-        <!-- マイリストに追加された商品をここに表示 -->
+        @foreach ($favoriteProducts as $favorite)
+            <div class="productItem">
+                <div class="productImageContainer">
+                    <a href="{{ route('product.showDetail', $favorite->product->id) }}">
+                        @if ($favorite->product->product_img_pass)
+                            <img src="{{ asset('/' . $favorite->product->product_img_pass) }}" class="productImage">
+                        @else
+                            <div class="defaultItemImage">No Image</div>
+                        @endif
+                    </a>
+                </div>
+                <div class="productName">{{ $favorite->product->product_name }}</div>
+            </div>
+        @endforeach
     </div>
 @endsection
 

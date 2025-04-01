@@ -17,6 +17,14 @@
             <img src="/img/logo.svg" alt="coachtech" width="220" height="50">
         </div>
 
+        <div class="searchBox">
+            <form action="/mainPage/search" method="GET">
+                <input type="text" name="query" value="{{ request()->query('query') }}" placeholder="何をお探しですか？"
+                    class="searchInput">
+                <button type="submit" class="searchButton">検索</button>
+            </form>
+        </div>
+
         <div class="headerLinks">
             @auth
                 <!-- ログイン中 -->

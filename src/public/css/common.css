@@ -13,6 +13,22 @@
     color: white;
 }
 
+.searchBox{
+    align-items: center;
+}
+
+.searchBox form input{
+    margin-left: -300px;
+    width: 400px;
+    height: 40px;
+    border-radius: 3px;
+}
+
+.searchButton {
+    height: 40px;
+    border-radius: 3px;
+}
+
 .headerLinks {
     align-items: center;
     gap: 15px;

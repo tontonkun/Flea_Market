@@ -1,0 +1,75 @@
+.entire{
+    display: flex;
+    padding: 100px;
+}
+
+.pageLeftSide {
+    width: 1200px;
+}
+
+.pageRightSide {
+    margin-left: 80px;
+    width: 800px;
+}
+
+.productDescriptionArea{
+    display: flex;
+    height: 300px;
+    border-bottom: 1px solid black;
+}
+
+.productImageArea img{
+    width: 250px;
+}
+
+.defaultItemImage{
+    width: 100%;
+    background-color: #ddd;
+}
+
+.productInfoArea{
+    margin-left: 40px;
+}
+
+.productName{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.productCost{
+    display: flex;
+    font-size: 30px;
+    margin-top: -20px;
+}
+
+.paymentSelectionArea{
+    height: 180px;
+    padding: 20px;
+    border-bottom: 1px solid black;
+}
+
+.sectiontitle{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.paymentSelect {
+    width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.deliveryInfoArea{
+    border-bottom: 1px solid black;
+}
+
+.titleAndButtonArea{
+    
+}

@@ -5,14 +5,14 @@
 
 .imageArea,
 .productDetailArea {
+    margin-left: 100px;
     height: 100%;
-    width: 50%;
+    width: 800px;
 }
 
 .productImage{
-    margin-left: 50px;
-    width: 400px;
-    height: 400px
+    width: 700px;
+    height: auto;
 }
 
 .defaultItemImage,

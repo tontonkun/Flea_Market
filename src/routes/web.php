@@ -7,11 +7,11 @@ use App\Http\Controllers\PostingController;
 use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProductController;
-
+use App\Http\Controllers\PurchaseController;
 
 //MainPageController
 Route::get('/', [MainPageController::class, 'showMainPage']);
-
+Route::get('/mainPage/search', [MainPageController::class, 'showMainPage']);
 
 //ProductController
 Route::get('/product/{id}', [ProductController::class, 'showDetail'])->name('product.showDetail');
@@ -33,4 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/postItems', [PostingController::class, 'PostItems']);
     Route::post('/postItems', [PostingController::class, 'PostItems'])->name('postItems');
 
+    //PurchaseController
+    Route::get('/purchase', [PurchaseController::class, 'showPurchasePage']);
+    Route::post('/purchase/{product_id}/process', [PurchaseController::class, 'purchaseItems']);
 });
