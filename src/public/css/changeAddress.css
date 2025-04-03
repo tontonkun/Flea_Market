@@ -1,0 +1,57 @@
+.form {
+    width: 700px;
+    justify-content: center;
+    margin: auto;
+}
+
+.titleArea {
+    margin: 40px;
+    font-weight: bold;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.inputArea {
+    margin: 5px auto;
+    margin: 20px auto;
+}
+
+.inputAreaTitle {
+    font-size: 20px;
+    font-weight: bold;
+    padding-top: 20px;
+    margin-bottom: 5px;
+}
+
+.name,
+.postal_code,
+.address,
+.building_name {
+    width: 700px;
+    height: 45px;
+    border: 1px solid #5F5F5F;
+    border-radius: 3px;
+}
+
+/* エラー表示部分 */
+.form__error {
+    color: red;
+    margin-top: 5px;
+}
+
+/* ボタンのスタイル */
+.updateButton {
+    width: 700px;
+    height: 45px;
+    padding: 5px 20px;
+    font-size: 20px;
+    background-color: #FF5555;
+    ;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}

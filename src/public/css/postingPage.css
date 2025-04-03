@@ -127,23 +127,26 @@
     height: 80px;
 }
 
+.inputAreaForCost {
+    position: relative;
+    width: 100%;
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    font-size: 16px;
+    color: #333;
+}
+
 .item_cost {
     width: 100%;
     height: 30px;
-    position: relative;
-    padding-left: 30px;
-    /* 左側にスペースを確保 */
+    padding-left: 25px;
     font-size: 16px;
-}
-
-.item_cost::before {
-    content: "￥";
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: #333;
+    padding-right: 10px;
+    box-sizing: border-box;
 }
 
 .buttonArea{

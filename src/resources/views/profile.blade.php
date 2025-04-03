@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <form class="form" action="setUpProfiles" method="POST" enctype="multipart/form-data">
+    <form class="form" action="/setUpProfiles" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="titleArea">
             <div class="title">

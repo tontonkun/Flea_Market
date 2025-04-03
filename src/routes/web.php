@@ -8,6 +8,7 @@ use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\AddressController;
 
 //MainPageController
 Route::get('/', [MainPageController::class, 'showMainPage']);
@@ -36,4 +37,8 @@ Route::middleware('auth')->group(function () {
     //PurchaseController
     Route::get('/purchase', [PurchaseController::class, 'showPurchasePage']);
     Route::post('/purchase/{product_id}/process', [PurchaseController::class, 'purchaseItems']);
+
+    //AddressController
+    Route::get('/purchase/address/{item_id}', [AddressController::class, 'showAdressChangePage']);
+    Route::get('/changeAddress/{item_id}', [AddressController::class, 'changeAddress']);
 });

@@ -84,6 +84,8 @@
 
 .purchaseButton {
     width: 400px;
+    height: 35px;
+    font-size: 15px;
     color: white;
     background-color: #ff5555;
     border: none;

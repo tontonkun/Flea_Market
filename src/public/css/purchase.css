@@ -4,12 +4,7 @@
 }
 
 .pageLeftSide {
-    width: 1200px;
-}
-
-.pageRightSide {
-    margin-left: 80px;
-    width: 800px;
+    width: 1300px;
 }
 
 .productDescriptionArea{
@@ -42,13 +37,13 @@
     margin-top: -20px;
 }
 
-.paymentSelectionArea{
-    height: 180px;
+.paymentSelectionArea, .deliveryInfoArea{
+    height: 200px;
     padding: 20px;
     border-bottom: 1px solid black;
 }
 
-.sectiontitle{
+.sectionTitle{
     font-size: 20px;
     font-weight: bold;
 }
@@ -62,14 +57,68 @@
     background-color: #fff;
     box-sizing: border-box;
     cursor: pointer;
-    margin-left: 20px;
-    margin-top: 20px;
-}
-
-.deliveryInfoArea{
-    border-bottom: 1px solid black;
+    margin-left: 30px;
+    margin-top: 30px;
 }
 
 .titleAndButtonArea{
-    
+    display: flex;
+    width: 100%;
+    height: 50px;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.addressChange{
+    color: #0073ce;
+    font-size: 18px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.addressInfo{
+    margin-top: -20px;
+    margin-left: 100px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.addressAndBuilding{
+    display: flex;
+}
+
+.pageRightSide {
+    margin-left: 80px;
+    width: 700px;
+}
+
+.summaryBox{
+    border: 1px solid black;
+}
+
+.lowerArea{
+    border-top: 1px solid black;
+}
+
+.upperArea,
+.lowerArea {
+    font-size: 25px;
+    justify-content: space-between;
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.finalPurchaseButton{
+    width: 100%;
+    margin-top: 50px;
+    padding: 10px;
+    font-size: 25px;
+    color: white;
+    background-color: #ff5555;
+    border: none;
+}
+

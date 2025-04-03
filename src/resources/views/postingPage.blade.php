@@ -138,17 +138,18 @@
 
         <div class="subTitle">
             販売価格
-        </div>
-        <div class="inputAreaForCost">
-            <input class="item_cost" type="text" name="item_cost" value="{{ old('item_cost') }}">
-            @error('item_cost')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
+            <div class="inputAreaForCost">
+                <input class="item_cost" type="text" name="item_cost" value="{{ old('item_cost') }}">
+                <span class="currency-symbol">￥</span>
+                @error('item_cost')
+                    <div class="error">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="buttonArea">
-            <button class="postingButton" type="submit">出品する</button>
-        </div>
+
+            <div class="buttonArea">
+                <button class="postingButton" type="submit">出品する</button>
+            </div>
 
     </form>
 

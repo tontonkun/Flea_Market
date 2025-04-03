@@ -3,22 +3,22 @@
     align-items: center;
     font-weight: bold;
     padding: 5px;
-    display: flex;
-    justify-content: space-between;
+    display: flex;justify-content: space-between;
     background-color: black;
 }
 
 .headerlogo {
-    margin-left: 5px;
+    width: 300px;
+    margin-left: 10px;
     color: white;
 }
 
 .searchBox{
     align-items: center;
+    margin-right: 300px;
 }
 
 .searchBox form input{
-    margin-left: -300px;
     width: 400px;
     height: 40px;
     border-radius: 3px;

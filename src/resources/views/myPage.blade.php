@@ -50,9 +50,9 @@
                             </div>
                         @endif
                     </a>
-                </div>
-                <div>
-                    {{ $product->product_name }}
+                    <div>
+                        {{ $product->product_name }}
+                    </div>
                 </div>
             @endforeach
         </div>

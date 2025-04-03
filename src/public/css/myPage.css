@@ -91,17 +91,13 @@
 
 .productItemArea{
     width: 200px;
-    text-align: center;
 }
 
 .productItem {
     width: 200px;
     height: 200px;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -116,12 +112,10 @@
 }
 
 /* 商品名のスタイル調整 */
-.productItem p {
-    margin-top: 10px;
-    /* 画像と商品名の間に余白 */
-    font-size: 14px;
+.productItem div {
+    margin-top: 5px;
+    font-size: 18px;
     color: #333;
-    /* 商品名の色 */
 }
 
 /* 画像がない場合のデフォルト画像のスタイル */
