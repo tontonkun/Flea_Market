@@ -19,9 +19,10 @@
 }
 
 .displaySelection{
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
     margin: 50px;
+    padding-bottom: 10px;
     background: none;
     border: none;
     text-align: center;
@@ -37,30 +38,30 @@
     margin: 30px;
 }
 
-.productList {
+.itemList {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
     /* アイテム間の隙間 */
 }
 
-.productItem {
+.itemArea {
     text-align: center;
     /* 商品画像と商品名を中央揃え */
     margin: 10px;
     /* 商品アイテムの間隔 */
     display: inline-block;
     /* アイテムを横並びに表示 */
-    width: 150px;
+    width: 250px;
 }
 
-.productImageContainer {
+.itemImageContainer {
     margin-bottom: 8px;
     /* 画像と商品名の間隔 */
 }
 
-.productImage{
-    width: 180px;
+.itemImage{
+    width: 250px;
     height: auto;
     border: 1px solid black;
 }
@@ -74,8 +75,8 @@
     /* 画像がない場合の背景色 */
 }
 
-.productName {
-    font-size: 18px;
+.itemName {
+    font-size: 20px;
     margin-top: 5px;
     text-align: left;
     text-overflow: ellipsis;

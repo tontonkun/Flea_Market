@@ -19,61 +19,46 @@
 
     <div class="displayArea">
         <!-- おすすめ商品リスト -->
-        <div id="recommendedProducts" class="productList">
-            @foreach ($recommendedProducts as $product)
-                <div class="productItem">
-                    <div class="productImageContainer">
+        <div id="recommendedItems" class="itemList">
+            @foreach ($recommendedItems as $item)
+                <div class="itemArea">
+                    <div class="itemImageContainer">
                         <!-- 商品画像をクリックすると詳細ページへ遷移 -->
-                        <a href="{{ route('product.showDetail', $product->id) }}">
+                        <a href="{{ route('item.showDetail', $item->id) }}">
                             <!-- 商品画像 -->
-                            @if ($product->product_img_pass)
-                                <img src="{{ asset('/' . $product->product_img_pass) }}" class="productImage">
+                            @if ($item->item_img_pass)
+                                <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
                             @else
                                 <div class="defaultItemImage">No Image</div>
                             @endif
                         </a>
                     </div>
-                    <div class="productName">{{ $product->product_name }}</div>
+                    <div class="itemName">{{ $item->item_name }}</div>
                 </div>
             @endforeach
         </div>
     </div>
 
     <!-- マイリストの商品リスト（非表示）-->
-    <div id="myListProducts" class="productList" style="display: none;">
-        @foreach ($favoriteProducts as $favorite)
-            <div class="productItem">
-                <div class="productImageContainer">
-                    <a href="{{ route('product.showDetail', $favorite->product->id) }}">
-                        @if ($favorite->product->product_img_pass)
-                            <img src="{{ asset('/' . $favorite->product->product_img_pass) }}" class="productImage">
-                        @else
-                            <div class="defaultItemImage">No Image</div>
-                        @endif
-                    </a>
+    <div id="myListItems" class="itemList" style="display: none;">
+        @foreach ($favoriteItems as $favorite)
+            <!-- itemが存在する場合のみ表示 -->
+            @if ($favorite->item)
+                <div class="itemItem">
+                    <div class="itemImageContainer">
+                        <a href="{{ route('item.showDetail', $favorite->item->id) }}">
+                            @if ($favorite->item->item_img_pass)
+                                <img src="{{ asset('/' . $favorite->item->item_img_pass) }}" class="itemImage">
+                            @else
+                                <div class="defaultItemImage">No Image</div>
+                            @endif
+                        </a>
+                    </div>
+                    <div class="itemName">{{ $favorite->item->item_name }}</div>
                 </div>
-                <div class="productName">{{ $favorite->product->product_name }}</div>
-            </div>
+            @endif
         @endforeach
     </div>
+
 @endsection
 
-@section('js')
-    <script>
-        // 「おすすめ」ボタンがクリックされたとき
-        document.getElementById('recommends').addEventListener('click', function () {
-            document.getElementById('recommendedProducts').style.display = 'block';
-            document.getElementById('myListProducts').style.display = 'none';
-            document.getElementById('recommends').classList.add('active');
-            document.getElementById('myList').classList.remove('active');
-        });
-
-        // 「マイリスト」ボタンがクリックされたとき
-        document.getElementById('myList').addEventListener('click', function () {
-            document.getElementById('myListProducts').style.display = 'block';
-            document.getElementById('recommendedProducts').style.display = 'none';
-            document.getElementById('myList').classList.add('active');
-            document.getElementById('recommends').classList.remove('active');
-        });
-    </script>
-@endsection

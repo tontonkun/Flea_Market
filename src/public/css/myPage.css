@@ -74,26 +74,26 @@
 }
 
 .posted:hover {
-    color: #007BFF;
+    color: #ff5555;
     /* ホバー時の色 */
 }
 
-.product{
+.item{
     margin: 30px;
 }
 
-.productList {
+.itemList {
     display: flex;
     flex-wrap: wrap;
     gap: 40px;
     /* アイテム間の隙間 */
 }
 
-.productItemArea{
+.itemItemArea{
     width: 200px;
 }
 
-.productItem {
+.itemArea {
     width: 200px;
     height: 200px;
     display: flex;
@@ -103,7 +103,7 @@
 }
 
 /* 画像のスタイルはそのままで調整 */
-.productItem img {
+.itemArea img {
     width: 100%;
     height: auto;
     object-fit: cover;
@@ -112,7 +112,7 @@
 }
 
 /* 商品名のスタイル調整 */
-.productItem div {
+.itemItem div {
     margin-top: 5px;
     font-size: 18px;
     color: #333;
@@ -130,7 +130,7 @@
 }
 
 /* 商品名のスタイル微調整 */
-.productItemArea p {
+.itemItemArea p {
     font-size: 16px;
     /* 少し大きめに設定 */
     font-weight: bold;

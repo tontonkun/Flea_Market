@@ -7,13 +7,13 @@
     width: 1300px;
 }
 
-.productDescriptionArea{
+.itemDescriptionArea{
     display: flex;
     height: 300px;
     border-bottom: 1px solid black;
 }
 
-.productImageArea img{
+.itemImage{
     width: 250px;
 }
 
@@ -22,16 +22,16 @@
     background-color: #ddd;
 }
 
-.productInfoArea{
+.itemInfoArea{
     margin-left: 40px;
 }
 
-.productName{
+.itemName{
     font-size: 30px;
     font-weight: bold;
 }
 
-.productCost{
+.itemCost{
     display: flex;
     font-size: 30px;
     margin-top: -20px;
@@ -120,5 +120,6 @@
     color: white;
     background-color: #ff5555;
     border: none;
+    cursor: pointer;
 }
 

@@ -1,3 +1,7 @@
+body{
+    min-width: 1500px;
+}
+
 .header {
     font-size: 20px;
     align-items: center;
@@ -58,7 +62,3 @@
     border-radius: 2px
 }
 
-.content {
-    justify-content: center;
-    margin-top: 200px;
-}

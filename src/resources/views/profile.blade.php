@@ -15,20 +15,22 @@
         </div>
 
         <div class="iconSettingArea">
-            <div class="profileIcon">
-                @if($profile && $profile->profile_image)
-                    <!-- ユーザーが画像をアップロードした場合 -->
-                    <img src="{{ asset('storage/profile_images/' . $profile->profile_image) }}" alt="Profile Icon"
-                        class="profileIconImage">
+            <div class="profileIcon" id="profileIconArea">
+                <!-- 画像がアップロードされている場合 -->
+                @if($profile && $profile->user_image_pass)
+                    <img src="{{ asset('storage/profile_images/' . $profile->user_image_pass) }}" alt="Profile Icon"
+                        class="profileIconImage" id="profileImagePreview" style="display: block;">
                 @else
-                    <!-- 画像が登録されていない場合 -->
-                    <div class="defaultProfileIcon" id="profileImagePreview"></div>
+                    <!-- 画像がない場合 -->
+                    <div class="defaultProfileIcon" id="defaultProfileText"></div>
                 @endif
             </div>
+
             <div class="uploadButtonArea">
-                <label for="profile_image" class="customUploadButton">画像を選択する</label>
-                <input type="file" id="profile_image" name="profile_image" class="fileInput">
-                @error('profile_image')
+                <label for="user_image_pass" class="customUploadButton">画像を選択する</label>
+                <input type="file" id="user_image_pass" name="user_image_pass" class="fileInput"
+                    onchange="previewProfileImage(event)">
+                @error('user_image_pass')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>
@@ -38,9 +40,8 @@
             ユーザー名
         </div>
         <div class="inputArea">
-            <!-- ユーザー名をデフォルトで表示 -->
-            <input class="name" type="text" name="user_name" value="{{ old('name', $profile->user_name ?? '') }}">
-            @error('name')
+            <input class="name" type="text" name="user_name" value="{{ $profile->user_name ?? '' }}">
+            @error('user_name')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>
@@ -49,9 +50,8 @@
             郵便番号
         </div>
         <div class="inputArea">
-            <!-- 郵便番号をデフォルトで表示 -->
             <input class="postal_code" type="tel" name="postal_code" pattern="\d{3}-\d{4}"
-                value="{{ old('postal_code', $profile->postal_code ?? '') }}">
+                value="{{ $profile->post_code ?? '' }}">
             @error('postal_code')
                 <div class="error">{{ $message }}</div>
             @enderror
@@ -61,8 +61,7 @@
             住所
         </div>
         <div class="inputArea">
-            <!-- 住所をデフォルトで表示 -->
-            <input class="address" type="text" name="address" value="{{ old('address', $profile->address ?? '') }}">
+            <input class="address" type="text" name="address" value="{{ $profile->address ?? '' }}">
             @error('address')
                 <div class="error">{{ $message }}</div>
             @enderror
@@ -72,38 +71,57 @@
             建物名
         </div>
         <div class="inputArea">
-            <!-- 建物名をデフォルトで表示 -->
-            <input class="building_name" type="text" name="building_name"
-                value="{{ old('building_name', $profile->building_name ?? '') }}">
+            <input class="building_name" type="text" name="building_name" value="{{ $profile->building_name ?? '' }}">
             @error('building_name')
                 <div class="error">{{ $message }}</div>
             @enderror
         </div>
 
         <div class="buttonArea">
-            <button class="updateButton" type="submit">更新する
-            </button>
+            <button class="updateButton" type="submit">更新する</button>
         </div>
 
     </form>
-@endsection
 
-@section('js')
     <script>
-        // 画像選択時にプレビューを表示
-        document.getElementById('profile_image').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                // プレビュー画像を表示
-                const profileImagePreview = document.getElementById('profileImagePreview');
-                profileImagePreview.src = e.target.result;
-            };
+        function previewProfileImage(event) {
+            const file = event.target.files[0]; // 選択したファイルを取得
 
             if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imagePreview = document.getElementById('profileImagePreview');
+                    const defaultText = document.getElementById('defaultProfileText');
+
+                    // プレビュー画像が存在しない場合、動的に作成
+                    if (!imagePreview) {
+                        // <img>要素を動的に作成
+                        const newImagePreview = document.createElement('img');
+                        newImagePreview.id = 'profileImagePreview';
+                        newImagePreview.style.maxWidth = '100%';
+                        newImagePreview.style.maxHeight = '300px';
+                        document.getElementById('profileIconArea').appendChild(newImagePreview);
+                    }
+
+                    // プレビュー画像を設定
+                    const updatedImagePreview = document.getElementById('profileImagePreview');
+                    updatedImagePreview.src = e.target.result;
+                    updatedImagePreview.style.display = 'block'; // プレビュー画像を表示
+
+                    // 「画像がありません」テキストを非表示
+                    if (defaultText) {
+                        defaultText.style.display = 'none';
+                    }
+                };
+
+                reader.onerror = function () {
+                    console.error("画像の読み込みに失敗しました");
+                };
+
                 reader.readAsDataURL(file);
             }
-        });
+        }
     </script>
+
 @endsection

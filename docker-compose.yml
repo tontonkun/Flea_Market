@@ -39,3 +39,15 @@ services:
       - mysql
     ports:
       - 8080:80
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"  # SMTP ポート
+      - "8025:8025"  # Web UI ポート
+    networks:
+      - default
+
+networks:
+  mailhog_network:
+    driver: bridge

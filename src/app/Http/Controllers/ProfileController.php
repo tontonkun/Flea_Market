@@ -9,35 +9,37 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    // プロフィール表示
     public function showProfile(ProfileUpdateRequest $request)
     {
-        // 既存のユーザーのプロフィールを取得
-        $profile = Auth::user()->profile;
+        // ユーザーのプロフィールを取得、無ければ新しいインスタンスを作成
+        $profile = Auth::user()->profile ?? new Profile();
 
         return view('profile', compact('profile'));
     }
 
+    // プロフィール更新
     public function update(ProfileUpdateRequest $request)
     {
-        // プロフィール画像の処理
-        if ($request->hasFile('profile_image')) {
-            // 新しい画像の保存
-            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-
-            // 古い画像があれば削除
-            if (Auth::user()->profile && Auth::user()->profile->profile_image) {
-                Storage::disk('public')->delete('profile_images/' . Auth::user()->profile->profile_image);
-            }
-
-            // ユーザーのプロフィールを取得し、画像ファイル名を保存
-            Auth::user()->profile->profile_image = basename($imagePath);
-        }
-
-        // プロフィールが既に存在するかどうかを確認
+        // プロフィールが存在しない場合は新規作成
         $profile = Auth::user()->profile ?? new Profile();
 
+        // プロフィール画像の処理
+        if ($request->hasFile('user_image_pass')) {
+            // 新しい画像の保存
+            $imagePath = $request->file('user_image_pass')->store('profile_images', 'public');
+
+            // 古い画像があれば削除
+            if ($profile->user_image_pass) {
+                Storage::disk('public')->delete('profile_images/' . $profile->user_image_pass);
+            }
+
+            // 画像ファイル名を保存
+            $profile->user_image_pass = basename($imagePath);
+        }
+
         // プロフィール情報の更新
-        $profile->user_id = Auth::id();
+        $profile->user_id = Auth::id(); // ユーザーIDをセット
         $profile->post_code = $request->input('postal_code');
         $profile->user_name = $request->input('user_name');
         $profile->address = $request->input('address');

@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ItemPostingRequest;
 use Auth;
-use App\Models\Product;
+use App\Models\Item;
 use App\Models\Condition;
 use App\Models\Category;
-use App\Models\ProductCategory; // 中間テーブルのモデルを追加
+use App\Models\ItemCategory; // 中間テーブルのモデルを追加
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -29,9 +29,9 @@ class PostingController extends Controller
         // 画像の保存処理（画像がアップロードされた場合のみ）
         $imagePath = null; // 初期化
 
-        if ($request->hasFile('product_image')) {
+        if ($request->hasFile('item_image')) {
             // 画像保存先ディレクトリ
-            $directory = storage_path('app/public/product_images');
+            $directory = storage_path('app/public/item_images');
 
             // ディレクトリが存在しない場合に作成
             if (!File::exists($directory)) {
@@ -39,27 +39,27 @@ class PostingController extends Controller
             }
 
             // 画像を指定したディレクトリに保存
-            $imagePath = $request->file('product_image')->store('product_images', 'public');
+            $imagePath = $request->file('item_image')->store('item_images', 'public');
         }
 
         // 新しい商品を保存
-        $product = new Product();
-        $product->user_id = auth()->id(); // 現在ログインしているユーザーIDを保存
-        $product->product_name = $request->input('item_name');
-        $product->price = $request->input('item_cost');
-        $product->brand_name = $request->input('brand_name') ?? null;
-        $product->product_img_pass = 'storage/' . $imagePath;
-        $product->save();
-        $product->description = $request->input('item_description') ?? null;
-        $product->is_active = true;
+        $item = new Item();
+        $item->user_id = auth()->id(); // 現在ログインしているユーザーIDを保存
+        $item->item_name = $request->input('item_name');
+        $item->price = $request->input('item_cost');
+        $item->brand_name = $request->input('brand_name') ?? null;
+        $item->item_img_pass = 'storage/' . $imagePath;
+        $item->save();
+        $item->description = $request->input('item_description') ?? null;
+        $item->is_active = true;
 
         // 商品の状態が設定されていれば、それも保存
         if ($condition) {
-            $product->condition_id = $condition->id; // 状態IDを設定
+            $item->condition_id = $condition->id; // 状態IDを設定
         }
 
         // 商品を保存（ここで保存）
-        $product->save();
+        $item->save();
 
         // カテゴリの保存処理
         if ($request->has('selected_category')) {
@@ -67,8 +67,8 @@ class PostingController extends Controller
                 $category = Category::firstOrCreate(['category' => $categoryName]); // 存在しないカテゴリは作成
 
                 // 中間テーブルにカテゴリを関連付け
-                ProductCategory::create([
-                    'product_id' => $product->id, // 保存した後にIDを使う
+                ItemCategory::create([
+                    'item_id' => $item->id, // 保存した後にIDを使う
                     'category_id' => $category->id,
                 ]);
             }

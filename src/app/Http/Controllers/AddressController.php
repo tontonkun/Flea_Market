@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Item;
 
 class AddressController extends Controller
 {
     public function showAdressChangePage($item_id)
     {
         // 商品IDを使って、商品をデータベースから取得
-        $product = Product::find($item_id);
+        $item = Item::find($item_id);
 
         // 商品が見つからない場合のエラーハンドリング
-        if (!$product) {
+        if (!$item) {
             return redirect()->route('home')->with('error', '商品が見つかりません。');
         }
 
         // addressChangeビューに商品情報を渡す
-        return view('addressChange', compact('product'));
+        return view('addressChange', compact('item'));
     }
 
-    public function changeAddress(Request $request, $product_id)
+    public function changeAddress(Request $request, $item_id)
     {
         // フォームの入力値をバリデーション
         $validated = $request->validate([
@@ -38,7 +38,7 @@ class AddressController extends Controller
         ]);
 
         // 購入ページにリダイレクト
-        return redirect()->route('purchasePage', ['product_id' => $product_id])
+        return redirect()->route('purchasePage', ['item_id' => $item_id])
             ->with('success', '配送先住所が変更されました！');
     }
 

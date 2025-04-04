@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product;
-use App\Models\Profile;
-use App\Models\Favorite;
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class MainPageController extends Controller
@@ -27,12 +25,12 @@ class MainPageController extends Controller
         // おすすめ商品（全ユーザーが出品した商品）
         if ($query) {
             // 検索クエリがある場合、その条件で商品を絞り込み
-            $recommendedProducts = Product::where('is_active', true)
-                ->where('product_name', 'LIKE', "%{$query}%") // 商品名に部分一致
+            $recommendedItems = Item::where('is_active', true)
+                ->where('item_name', 'LIKE', "%{$query}%") // 商品名に部分一致
                 ->get();
         } else {
             // 検索クエリがない場合、すべての商品を表示
-            $recommendedProducts = Product::where('is_active', true)->get();
+            $recommendedItems = Item::where('is_active', true)->get();
         }
 
         // ログインユーザーのお気に入り商品
@@ -41,19 +39,19 @@ class MainPageController extends Controller
             $favoriteQuery = $query; // お気に入り商品にも検索条件を適用
             if ($favoriteQuery) {
                 // お気に入り商品の検索
-                $favoriteProducts = auth()->user()->favorites()
-                    ->whereHas('product', function ($query) use ($favoriteQuery) {
-                        $query->where('product_name', 'LIKE', "%{$favoriteQuery}%");
+                $favoriteItems = auth()->user()->favorites()
+                    ->whereHas('item', function ($query) use ($favoriteQuery) {
+                        $query->where('item_name', 'LIKE', "%{$favoriteQuery}%");
                     })
                     ->get();
             } else {
                 // お気に入り商品があれば全件取得
-                $favoriteProducts = auth()->user()->favorites;
+                $favoriteItems = auth()->user()->favorites;
             }
         } else {
-            $favoriteProducts = collect(); // ログインしていない場合は空のコレクションを返す
+            $favoriteItems = collect(); // ログインしていない場合は空のコレクションを返す
         }
 
-        return view('mainPage', compact('recommendedProducts', 'favoriteProducts', 'query'));
+        return view('mainPage', compact('recommendedItems', 'favoriteItems', 'query'));
     }
 }

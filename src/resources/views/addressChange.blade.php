@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <form class="form" action="/changeAddress/{{ $product->id }}" method="POST">
+    <form class="form" action="/changeAddress/{{ $item->id }}" method="POST">
         @csrf
         <div class="titleArea">
             <div class="title">

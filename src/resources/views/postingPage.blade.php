@@ -19,9 +19,9 @@
                 <!-- 画像が選択されていない場合のデフォルトの表示 -->
                 <div class="defaultDisplay">
                     <div class="uploadButtonArea">
-                        <input type="file" id="product_image" name="product_image" class="fileInput"
+                        <input type="file" id="item_image" name="item_image" class="fileInput"
                             onchange="previewImage(event)">
-                        <label for="product_image">画像を選択する</label>
+                        <label for="item_image">画像を選択する</label>
                     </div>
                 </div>
 
@@ -186,7 +186,7 @@
 
         // 画像変更ボタンを押した際に画像選択を再度行えるようにする関数
         function resetImage() {
-            const fileInput = document.getElementById('product_image');
+            const fileInput = document.getElementById('item_image');
             fileInput.value = ''; // ファイル入力の値をリセット
             const imagePreview = document.getElementById('imagePreview');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
