@@ -58,6 +58,9 @@
     </div>
     @yield('content')
 
+    <script src="{{ asset('js/app.js') }}"></script>
+
+    @yield('js')
 </body>
 
 </html>

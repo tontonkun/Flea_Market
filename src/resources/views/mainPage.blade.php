@@ -37,28 +37,70 @@
                 </div>
             @endforeach
         </div>
-    </div>
 
-    <!-- マイリストの商品リスト（非表示）-->
-    <div id="myListItems" class="itemList" style="display: none;">
-        @foreach ($favoriteItems as $favorite)
-            <!-- itemが存在する場合のみ表示 -->
-            @if ($favorite->item)
-                <div class="itemItem">
+        <!-- マイリストの商品リスト（非表示）-->
+        <div id="myListItems" class="itemList" style="display: none;">
+            @foreach ($favoriteItems as $favorite)
+                <div class="itemArea">
                     <div class="itemImageContainer">
-                        <a href="{{ route('item.showDetail', $favorite->item->id) }}">
-                            @if ($favorite->item->item_img_pass)
-                                <img src="{{ asset('/' . $favorite->item->item_img_pass) }}" class="itemImage">
+                        <a href="{{ route('item.showDetail', $favorite->id) }}">
+                            @if ($favorite->item_img_pass)
+                                <img src="{{ asset($favorite->item_img_pass) }}" class="itemImage">
                             @else
                                 <div class="defaultItemImage">No Image</div>
                             @endif
                         </a>
                     </div>
-                    <div class="itemName">{{ $favorite->item->item_name }}</div>
+                    <div class="itemName">{{ $favorite->item_name }}</div>
                 </div>
-            @endif
-        @endforeach
+            @endforeach
+        </div>
     </div>
-
 @endsection
 
+@section('js')
+    <script>
+        // DOMの読み込み完了後にスクリプトを実行
+        window.addEventListener('DOMContentLoaded', function () {
+            console.log("DOMが読み込まれました");
+
+            // ボタン要素を取得
+            const recommendsButton = document.getElementById('recommends');
+            const myListButton = document.getElementById('myList');
+            const recommendedItems = document.getElementById('recommendedItems');
+            const myListItems = document.getElementById('myListItems');
+
+            // 「おすすめ」ボタンのクリックイベント
+            recommendsButton.addEventListener('click', function () {
+                console.log('おすすめボタンがクリックされました');
+
+                // おすすめ商品リストを表示
+                recommendedItems.style.display = 'block';
+                myListItems.style.display = 'none';
+
+                // ボタンのアクティブ状態を変更
+                recommendsButton.classList.add('active');
+                myListButton.classList.remove('active');
+            });
+
+            // 「マイリスト」ボタンのクリックイベント
+            myListButton.addEventListener('click', function () {
+                console.log('マイリストボタンがクリックされました');
+
+                // マイリスト商品リストを表示
+                recommendedItems.style.display = 'none';
+                myListItems.style.display = 'block';
+
+                // ボタンのアクティブ状態を変更
+                myListButton.classList.add('active');
+                recommendsButton.classList.remove('active');
+            });
+
+            // 初期状態で「おすすめ」を選択状態にする
+            if (recommendsButton && recommendedItems) {
+                console.log('初期状態でおすすめを表示します');
+                recommendsButton.click();  // 初期表示で「おすすめ」をクリック
+            }
+        });
+    </script>
+@endsection

@@ -12,7 +12,6 @@ class MainPageController extends Controller
     {
         // 初回ログインならprofileページ、そうでない場合はメインページに遷移
         if (Auth::check() && Auth::user()->is_first_login) {
-            // 初回ログインの場合、is_first_login を false にして mypage にリダイレクト
             $user = Auth::user(); // 現在のユーザーを取得
             $user->update(['is_first_login' => false]); // フラグを false に更新
 
@@ -26,7 +25,7 @@ class MainPageController extends Controller
         if ($query) {
             // 検索クエリがある場合、その条件で商品を絞り込み
             $recommendedItems = Item::where('is_active', true)
-                ->where('item_name', 'LIKE', "%{$query}%") // 商品名に部分一致
+                ->where('item_name', 'LIKE', "%{$query}%")
                 ->get();
         } else {
             // 検索クエリがない場合、すべての商品を表示
@@ -35,23 +34,25 @@ class MainPageController extends Controller
 
         // ログインユーザーのお気に入り商品
         if (auth()->check()) {
-            // お気に入り商品も検索条件を適用する
-            $favoriteQuery = $query; // お気に入り商品にも検索条件を適用
-            if ($favoriteQuery) {
-                // お気に入り商品の検索
-                $favoriteItems = auth()->user()->favorites()
-                    ->whereHas('item', function ($query) use ($favoriteQuery) {
-                        $query->where('item_name', 'LIKE', "%{$favoriteQuery}%");
-                    })
-                    ->get();
+            // お気に入り商品の検索
+            $favoriteItemsQuery = auth()->user()->favorites(); // favoritesリレーションを取得
+
+            if ($query) {
+                // `favorites` テーブルを経由して `Item` モデルの絞り込みを行う
+                $favoriteItems = $favoriteItemsQuery->whereHas('item', function ($itemQuery) use ($query) {
+                    // `item` リレーションを使って `item_name` をLIKE検索
+                    $itemQuery->where('item_name', 'LIKE', "%{$query}%");
+                })->get();
             } else {
-                // お気に入り商品があれば全件取得
-                $favoriteItems = auth()->user()->favorites;
+                // 検索クエリがなければ、お気に入り商品の全件取得
+                $favoriteItems = $favoriteItemsQuery->get();
             }
         } else {
-            $favoriteItems = collect(); // ログインしていない場合は空のコレクションを返す
+            // ログインしていない場合は空のコレクションを返す
+            $favoriteItems = collect();
         }
 
+        // ビューにデータを渡す
         return view('mainPage', compact('recommendedItems', 'favoriteItems', 'query'));
     }
 }
