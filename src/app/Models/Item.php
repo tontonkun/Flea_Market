@@ -12,15 +12,15 @@ class Item extends Model
     protected $table = 'items';
 
     protected $fillable = [
-        'user_id',
-        'condition_id',
+        'seller_id',
         'item_name',
         'price',
-        'condition_id',
         'brand_name',
         'item_img_pass',
         'description',
-        'is_active'
+        'condition_id',
+        'is_active',
+        'purchaser_id'
     ];
 
     public function user()
@@ -43,8 +43,13 @@ class Item extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function usersWhoFavorited()
+    public function favoritedBy()
     {
         return $this->belongsToMany(User::class, 'favorites', 'item_id', 'user_id');
+    }
+
+    public function purchaser()
+    {
+        return $this->belongsTo(User::class, 'purchaser_id'); 
     }
 }

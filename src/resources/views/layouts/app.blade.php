@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>COACHTECH</title>
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
@@ -13,13 +14,20 @@
 </head>
 
 <body>
+    {{-- フラッシュメッセージの表示 --}}
+    @if(session('success'))
+        <div class="postingAnnounce">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="header">
         <div class="headerlogo">
             <img src="/img/logo.svg" alt="coachtech" width="220" height="50">
         </div>
 
         <div class="searchBox">
-            <form action="/mainPage/search" method="GET">
+            <form action="/" method="GET">
                 <input type="text" name="query" value="{{ request()->query('query') }}" placeholder="何をお探しですか？"
                     class="searchInput">
                 <button type="submit" class="searchButton">検索</button>

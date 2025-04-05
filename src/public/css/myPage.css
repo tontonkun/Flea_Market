@@ -78,65 +78,57 @@
     /* ホバー時の色 */
 }
 
-.item{
+.displayArea {
     margin: 30px;
 }
 
 .itemList {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px;
-    /* アイテム間の隙間 */
-}
-
-.itemItemArea{
-    width: 200px;
 }
 
 .itemArea {
-    width: 200px;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    box-sizing: border-box;
+    text-align: center;
+    /* 商品画像と商品名を中央揃え */
+    margin: 30px;
+    /* 商品アイテムの間隔 */
+    display: inline-block;
+    /* アイテムを横並びに表示 */
+    width: 250px;
 }
 
-/* 画像のスタイルはそのままで調整 */
-.itemArea img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    max-width: 200px;
-    /* 画像の最大幅を設定 */
+.itemImageContainer {
+    width: 230px;
+    height: 250px;
+    overflow: hidden;
+    /* 画像がはみ出さないようにする */
+    margin-bottom: 8px;
+    /* 画像と商品名の間隔 */
 }
 
-/* 商品名のスタイル調整 */
-.itemItem div {
-    margin-top: 5px;
-    font-size: 18px;
-    color: #333;
-}
-
-/* 画像がない場合のデフォルト画像のスタイル */
-.defaultItemImage {
-    display: flex;
+.itemImage {
     width: 100%;
     height: 100%;
-    background-color: #D9D9D9;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    object-fit: cover;
+    /* 縦横比を保ちながらコンテナに収める */
+    border: 1px solid black;
 }
 
-/* 商品名のスタイル微調整 */
-.itemItemArea p {
-    font-size: 16px;
-    /* 少し大きめに設定 */
-    font-weight: bold;
-    /* 商品名に強調 */
-    color: #333;
-    /* 文字色 */
-    margin-top: 10px;
-    /* 商品画像との間隔 */
+.defaultItemImage {
+    width: 100%;
+    /* デフォルトの画像の幅を合わせる */
+    height: 100px;
+    /* 画像の高さ */
+    background-color: #ddd;
+    /* 画像がない場合の背景色 */
+}
+
+.itemName {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-left: 10px;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ItemPostingRequest;
-use Auth;
 use App\Models\Item;
 use App\Models\Condition;
 use App\Models\Category;
-use App\Models\ItemCategory; // 中間テーブルのモデルを追加
+use App\Models\ItemCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -15,19 +13,17 @@ class PostingController extends Controller
 {
     public function showPostingPage()
     {
-        // 商品状態のリストを取得
         $conditions = Condition::all();
 
         return view('postingPage', compact('conditions'));
     }
 
-    public function PostItems(Request $request)
+    public function postItems(Request $request)
     {
-        // 商品の状態を設定（先に取得してから使用）
         $condition = Condition::find($request->input('condition_id'));
 
         // 画像の保存処理（画像がアップロードされた場合のみ）
-        $imagePath = null; // 初期化
+        $imagePath = null;
 
         if ($request->hasFile('item_image')) {
             // 画像保存先ディレクトリ
@@ -42,11 +38,15 @@ class PostingController extends Controller
             $imagePath = $request->file('item_image')->store('item_images', 'public');
         }
 
+        // 商品データを保存する前に価格を半角に変換
+        $price = $request->input('item_cost');
+        $price = mb_convert_kana($price, 'n', 'UTF-8');
+
         // 新しい商品を保存
         $item = new Item();
-        $item->user_id = auth()->id(); // 現在ログインしているユーザーIDを保存
+        $item->seller_id = auth()->id();
         $item->item_name = $request->input('item_name');
-        $item->price = $request->input('item_cost');
+        $item->price = $price;
         $item->brand_name = $request->input('brand_name') ?? null;
         $item->item_img_pass = 'storage/' . $imagePath;
         $item->save();
@@ -55,10 +55,10 @@ class PostingController extends Controller
 
         // 商品の状態が設定されていれば、それも保存
         if ($condition) {
-            $item->condition_id = $condition->id; // 状態IDを設定
+            $item->condition_id = $condition->id;
         }
 
-        // 商品を保存（ここで保存）
+        // 商品を保存
         $item->save();
 
         // カテゴリの保存処理
@@ -74,8 +74,6 @@ class PostingController extends Controller
             }
         }
 
-        // '/'にリダイレクトし、フラッシュメッセージを設定
         return redirect('/')->with('success', '商品が出品されました。');
     }
-
 }

@@ -19,7 +19,6 @@ Route::post('register', [UserRegistrationController::class, 'store'])->name('reg
 
 // MainPageController
 Route::get('/', [MainPageController::class, 'showMainPage']);
-Route::get('/mainPage/search', [MainPageController::class, 'showMainPage']);
 
 // ItemController
 Route::get('/item/{id}', [ItemController::class, 'showDetail'])->name('item.showDetail');
@@ -27,8 +26,6 @@ Route::post('/item/{id}/favorite', [ItemController::class, 'addFavorite'])->name
 Route::post('/item/{id}/addComment', [ItemController::class, 'addComment'])->name('item.addComment');
 
 // 認証が必要なルート
-// Route::middleware(['auth', 'verified'])->group(function () {
-
 Route::middleware(['auth'])->group(function () {
 
     // ProfileController
@@ -40,13 +37,13 @@ Route::middleware(['auth'])->group(function () {
 
     // PostingController
     Route::get('/sell', [PostingController::class, 'showPostingPage']);
-    Route::get('/postItems', [PostingController::class, 'PostItems']);
-    Route::post('/postItems', [PostingController::class, 'PostItems'])->name('postItems');
+    Route::get('/postItems', [PostingController::class, 'postItems']);
+    Route::post('/postItems', [PostingController::class, 'postItems'])->name('postItems');
 
     // PurchaseController
     Route::get('/purchase', [PurchaseController::class, 'showPurchasePage']);
-    Route::post('/purchase/{itemId}/process', [PurchaseController::class, 'purchaseItem']);
-    Route::post('/purchase/{itemId}/complete', [PurchaseController::class, 'completePurchase'])->name('purchase.complete');
+    Route::post('/purchase/{itemId}/process', [PurchaseController::class, 'purchaseItem'])->name('purchase.process'); 
+    Route::get('/purchase/{itemId}/complete', [PurchaseController::class, 'completePurchase'])->name('purchase.complete');
 
     // AddressController
     Route::get('/purchase/address/{item_id}', [AddressController::class, 'showAdressChangePage']);
@@ -59,4 +56,3 @@ Route::middleware(['auth'])->group(function () {
 //         return view('auth.verify');
 //     })->name('verification.notice');
 // });
-

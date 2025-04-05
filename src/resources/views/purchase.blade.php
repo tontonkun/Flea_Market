@@ -85,7 +85,7 @@
                     <p id="paymentMethodDisplay">未選択</p>
                 </div>
             </div>
-            <form action="/purchase/{{ $item->id }}/process" method="POST">
+            <form id="purchaseForm" action="/purchase/{{ $item->id }}/process" method="POST">
                 @csrf
                 <button type="submit" class="finalPurchaseButton">
                     購入する
@@ -98,19 +98,47 @@
         document.addEventListener('DOMContentLoaded', function () {
             const paymentSelect = document.querySelector('select[name="payment_method"]'); // 支払い方法のプルダウン
             const paymentDisplay = document.getElementById('paymentMethodDisplay'); // 支払い方法を表示する<p>
-            const creditCardForm = document.getElementById('creditCardForm'); // カードフォーム
+            const submitButton = document.querySelector('.finalPurchaseButton');  // 購入するボタン
 
-            // プルダウンで選択が変更されたとき
+            // 支払い方法が選択されていない時にボタンを無効化
             paymentSelect.addEventListener('change', function () {
                 const selectedMethod = paymentSelect.options[paymentSelect.selectedIndex].text;
-
                 if (selectedMethod === "選択してください") {
                     paymentDisplay.textContent = "支払方法を選択してください";
-                    submitButton.disabled = true;  // 支払方法未選択時に購入ボタンを無効化
+                    submitButton.disabled = true;
                 } else {
                     paymentDisplay.textContent = selectedMethod;
-                    submitButton.disabled = false;  // 支払方法が選択された場合は購入ボタンを有効化
+                    submitButton.disabled = false;
                 }
+            });
+
+            // 購入するボタンがクリックされた時
+            submitButton.addEventListener('click', function (event) {
+                event.preventDefault();  // ページリロードを防ぐ
+
+                // 支払い方法が選ばれていない場合
+                if (paymentSelect.value === "") {
+                    alert("支払い方法を選択してください");
+                    return;
+                }
+
+                // 支払い方法が選択されている場合は、Stripeの決済画面へ遷移
+                fetch(`/purchase/${{{ $item->id }}}/process`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({ payment_method: paymentSelect.value })  // 支払い方法をサーバーに送信
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // StripeのCheckoutセッションURLにリダイレクト
+                        if (data.sessionUrl) {
+                            window.location.href = data.sessionUrl;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             });
         });
     </script>

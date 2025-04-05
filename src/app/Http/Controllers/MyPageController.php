@@ -16,17 +16,14 @@ class MyPageController extends Controller
         $profile = Profile::where('user_id', Auth::id())->orderBy('created_at', 'desc')->first();
 
         // ログインユーザーが出品した商品を取得
-        $postedItems = Item::where('user_id', Auth::id())
+        $postedItems = Item::where('seller_id', Auth::id())
             ->where('is_active', true)  // 出品中の商品を表示
             ->get();
 
         // ログインユーザーが購入した商品を取得
-        $purchasedItems = Item::where('user_id', Auth::id())
-            ->where('is_active', false) // 購入した商品（is_activeがfalse）を取得
-            ->get();
-
-        // おすすめ商品（全ユーザーが出品した商品を取得）
-        $recommendedItems = Item::where('is_active', true)->get(); // 出品中の商品を全て取得
+        // purchaser_id がログインユーザーのIDである商品を取得
+        $purchasedItems = Item::where('purchaser_id', Auth::id())
+            ->get(); // 購入した商品（purchaser_idがログインユーザーIDのもの）
 
         // ログインユーザーのお気に入り商品（マイリスト）
         // お気に入りの関係を取得（例: User と Item の多対多）
@@ -41,7 +38,6 @@ class MyPageController extends Controller
             'profile',
             'postedItems',
             'purchasedItems',
-            'recommendedItems',
             'favoriteItems'
         ));
     }

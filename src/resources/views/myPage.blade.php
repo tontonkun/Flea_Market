@@ -34,48 +34,51 @@
     </div>
 
     <!-- 出品した商品リスト -->
-    <div id="sell-items" class="item">
+    <div id="sell-items" class="displayArea">
         <h2>出品した商品</h2>
         <div class="itemList">
             @foreach($postedItems as $item) <!-- 変数名を変更 -->
                 <div class="itemArea">
+                    <div class="itemImageContainer">
                     <!-- 商品画像をクリックすると詳細ページへ遷移 -->
                     <a href="{{ route('item.showDetail', $item->id) }}">
                         <!-- 商品画像 -->
                         @if($item->item_img_pass)
-                            <img src="{{ asset('/' . $item->item_img_pass) }}" alt="{{ $item->item_name }}">
+                            <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
                         @else
                             <div class="defaultItemImage">
                                 画像なし
                             </div>
                         @endif
                     </a>
-                    <div>
-                        {{ $item->item_name }}
                     </div>
+                    <div class="itemName">{{ $item->item_name }}</div>
                 </div>
             @endforeach
         </div>
     </div>
 
     <!-- 購入した商品リスト -->
-    <div id="buy-items" class="item" style="display: none;">
+    <div id="buy-items" class="displayArea" style="display: none;">
         <h2>購入した商品</h2>
         <div class="itemList">
             @foreach($purchasedItems as $item)
-                <div class="itemItemArea">
-                    <div class="itemItem">
-                        <!-- 商品画像 -->
-                        @if($item->item_img_pass)
-                            <img src="{{ asset('storage/item_images/' . $item->item_img_pass) }}" alt="{{ $item->item_name }}">
-                        @else
-                            <div class="defaultItemImage">
-                                画像なし
-                            </div>
-                        @endif
-                    </div>
-                    <p>{{ $item->item_name }}</p>
-                </div>
+                <div class="itemArea">
+                    <div class="itemImageContainer">
+                        <!-- 商品画像をクリックすると詳細ページへ遷移 -->
+                        <a href="{{ route('item.showDetail', $item->id) }}">
+                            <!-- 商品画像 -->
+                            @if($item->item_img_pass)
+                                <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
+                            @else
+                                <div class="defaultItemImage">
+                                    画像なし
+                                </div>
+                            @endif
+                        </a>
+                        </div>
+                        <div class="itemName">{{ $item->item_name }}</div>
+                        </div>
             @endforeach
         </div>
     </div>

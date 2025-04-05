@@ -21,38 +21,56 @@ class MainPageController extends Controller
         // 検索クエリを受け取る
         $query = $request->input('query'); // 検索キーワード
 
-        // おすすめ商品（全ユーザーが出品した商品）
-        if ($query) {
-            // 検索クエリがある場合、その条件で商品を絞り込み
-            $recommendedItems = Item::where('is_active', true)
-                ->where('item_name', 'LIKE', "%{$query}%")
-                ->get();
-        } else {
-            // 検索クエリがない場合、すべての商品を表示
-            $recommendedItems = Item::where('is_active', true)->get();
-        }
+        // おすすめ商品（全ユーザーが出品した商品）を取得
+        $recommendedItems = $this->getRecommendedItems($query);
 
-        // ログインユーザーのお気に入り商品
-        if (auth()->check()) {
-            // お気に入り商品の検索
-            $favoriteItemsQuery = auth()->user()->favorites(); // favoritesリレーションを取得
-
-            if ($query) {
-                // `favorites` テーブルを経由して `Item` モデルの絞り込みを行う
-                $favoriteItems = $favoriteItemsQuery->whereHas('item', function ($itemQuery) use ($query) {
-                    // `item` リレーションを使って `item_name` をLIKE検索
-                    $itemQuery->where('item_name', 'LIKE', "%{$query}%");
-                })->get();
-            } else {
-                // 検索クエリがなければ、お気に入り商品の全件取得
-                $favoriteItems = $favoriteItemsQuery->get();
-            }
-        } else {
-            // ログインしていない場合は空のコレクションを返す
-            $favoriteItems = collect();
-        }
+        // ログインユーザーのお気に入り商品を取得
+        $favoriteItems = $this->getFavoriteItems($query);
 
         // ビューにデータを渡す
         return view('mainPage', compact('recommendedItems', 'favoriteItems', 'query'));
     }
+
+    /**
+     * 商品の検索処理を担当するメソッド
+     */
+    protected function getRecommendedItems($query = null)
+    {
+        $queryBuilder = Item::where('is_active', true);
+
+        if ($query) {
+            $queryBuilder->where('item_name', 'LIKE', "%{$query}%");
+        }
+
+        return $queryBuilder->get();
+    }
+
+    /**
+     * ログインユーザーのお気に入り商品を取得するメソッド
+     */
+    protected function getFavoriteItems($query = null)
+    {
+        if (!auth()->check()) {
+            return collect(); // ログインしていない場合は空のコレクションを返す
+        }
+
+        $favoriteItemsQuery = auth()->user()->favorites();
+
+        if ($favoriteItemsQuery->count() > 0) {
+            if ($query) {
+                // `favorites` テーブルを経由して `Item` モデルの絞り込みを行う
+                return $favoriteItemsQuery->whereHas('items', function ($itemQuery) use ($query) {
+                    // 'items' は `favorites` テーブルに関連するリレーション名
+                    $itemQuery->where('item_name', 'LIKE', "%{$query}%");
+                })->get();
+            } else {
+                // 検索クエリがなければ、お気に入り商品の全件取得
+                return $favoriteItemsQuery->get();
+            }
+        }
+
+        // お気に入りが空の場合は空のコレクションを返す
+        return collect();
+    }
+
 }

@@ -4,13 +4,6 @@
     <link rel="stylesheet" href="{{ asset('css/mainPage.css') }}">
 @endsection
 
-{{-- フラッシュメッセージの表示 --}}
-@if(session('success'))
-    <div class="postingAnnounce">
-        {{ session('success') }}
-    </div>
-@endif
-
 @section('content')
     <div class="displaySelectionArea">
         <button id="recommends" class="displaySelection active">おすすめ</button>
@@ -39,7 +32,7 @@
         </div>
 
         <!-- マイリストの商品リスト（非表示）-->
-        <div id="myListItems" class="itemList" style="display: none;">
+        <div id="myListItems" class="itemList" hidden>
             @foreach ($favoriteItems as $favorite)
                 <div class="itemArea">
                     <div class="itemImageContainer">
@@ -56,51 +49,60 @@
             @endforeach
         </div>
     </div>
+
+    <!-- メッセージ表示エリア -->
+    <div id="loginMessage" style="display: none; color: red; padding: 10px; border: 1px solid red;">
+        商品のお気に入り登録、およびマイリスト表示はログイン後に実施可能です
+    </div>
 @endsection
 
 @section('js')
     <script>
-        // DOMの読み込み完了後にスクリプトを実行
         window.addEventListener('DOMContentLoaded', function () {
             console.log("DOMが読み込まれました");
 
-            // ボタン要素を取得
             const recommendsButton = document.getElementById('recommends');
             const myListButton = document.getElementById('myList');
             const recommendedItems = document.getElementById('recommendedItems');
             const myListItems = document.getElementById('myListItems');
+            const loginMessage = document.getElementById('loginMessage');
 
-            // 「おすすめ」ボタンのクリックイベント
+            // isUserLoggedIn 変数でログイン状態を判定
+            const isUserLoggedIn = @json(auth()->check());
+
+            // おすすめボタン
             recommendsButton.addEventListener('click', function () {
                 console.log('おすすめボタンがクリックされました');
-
-                // おすすめ商品リストを表示
                 recommendedItems.style.display = 'block';
                 myListItems.style.display = 'none';
-
-                // ボタンのアクティブ状態を変更
                 recommendsButton.classList.add('active');
                 myListButton.classList.remove('active');
+
+                if (loginMessage) loginMessage.style.display = 'none';
             });
 
-            // 「マイリスト」ボタンのクリックイベント
+            // マイリストボタン
             myListButton.addEventListener('click', function () {
                 console.log('マイリストボタンがクリックされました');
 
-                // マイリスト商品リストを表示
+                if (!isUserLoggedIn) {
+                    if (loginMessage) loginMessage.style.display = 'block';
+                    return;
+                }
+
                 recommendedItems.style.display = 'none';
                 myListItems.style.display = 'block';
-
-                // ボタンのアクティブ状態を変更
                 myListButton.classList.add('active');
                 recommendsButton.classList.remove('active');
+                if (loginMessage) loginMessage.style.display = 'none';
             });
 
             // 初期状態で「おすすめ」を選択状態にする
             if (recommendsButton && recommendedItems) {
                 console.log('初期状態でおすすめを表示します');
-                recommendsButton.click();  // 初期表示で「おすすめ」をクリック
+                recommendsButton.click();
             }
         });
+
     </script>
 @endsection
