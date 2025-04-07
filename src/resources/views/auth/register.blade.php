@@ -5,8 +5,6 @@
 @endsection
 
 @section('content')
-
-
     <form class="form" action="register" method="POST">
         @csrf
         <div class="titleArea">
@@ -50,6 +48,9 @@
         </div>
         <div class="inputArea">
             <input class="password" type="password" name="password_confirmation">
+            @error('password_confirmation')
+                <div class="error">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="buttonArea">

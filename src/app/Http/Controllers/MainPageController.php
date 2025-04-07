@@ -36,7 +36,12 @@ class MainPageController extends Controller
      */
     protected function getRecommendedItems($query = null)
     {
-        $queryBuilder = Item::where('is_active', true);
+        $queryBuilder = Item::where('is_active', true)
+            ->where(function ($q) {
+                // seller_idがnullのものか、ログインユーザーが出品していないもの
+                $q->whereNull('seller_id')
+                    ->orWhere('seller_id', '!=', auth()->id());
+            });
 
         if ($query) {
             $queryBuilder->where('item_name', 'LIKE', "%{$query}%");

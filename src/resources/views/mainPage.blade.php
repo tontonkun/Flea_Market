@@ -25,6 +25,10 @@
                                 <div class="defaultItemImage">No Image</div>
                             @endif
                         </a>
+                        <!-- Soldラベルの表示（is_activeがfalseの場合） -->
+                        @if (!$item->is_active)
+                            <div class="sold-label">Sold</div>
+                        @endif
                     </div>
                     <div class="itemName">{{ $item->item_name }}</div>
                 </div>
@@ -35,14 +39,20 @@
         <div id="myListItems" class="itemList" hidden>
             @foreach ($favoriteItems as $favorite)
                 <div class="itemArea">
-                    <div class="itemImageContainer">
+                    <div class="itemImageContainer" style="position: relative;">
                         <a href="{{ route('item.showDetail', $favorite->id) }}">
+                            <!-- 商品画像 -->
                             @if ($favorite->item_img_pass)
                                 <img src="{{ asset($favorite->item_img_pass) }}" class="itemImage">
                             @else
                                 <div class="defaultItemImage">No Image</div>
                             @endif
                         </a>
+
+                        <!-- Soldラベルの表示（is_activeがfalseの場合） -->
+                        @if (!$favorite->is_active)
+                            <div class="sold-label">Sold</div>
+                        @endif
                     </div>
                     <div class="itemName">{{ $favorite->item_name }}</div>
                 </div>
@@ -59,8 +69,6 @@
 @section('js')
     <script>
         window.addEventListener('DOMContentLoaded', function () {
-            console.log("DOMが読み込まれました");
-
             const recommendsButton = document.getElementById('recommends');
             const myListButton = document.getElementById('myList');
             const recommendedItems = document.getElementById('recommendedItems');
@@ -72,7 +80,6 @@
 
             // おすすめボタン
             recommendsButton.addEventListener('click', function () {
-                console.log('おすすめボタンがクリックされました');
                 recommendedItems.style.display = 'block';
                 myListItems.style.display = 'none';
                 recommendsButton.classList.add('active');
@@ -83,7 +90,6 @@
 
             // マイリストボタン
             myListButton.addEventListener('click', function () {
-                console.log('マイリストボタンがクリックされました');
 
                 if (!isUserLoggedIn) {
                     if (loginMessage) loginMessage.style.display = 'block';
@@ -99,7 +105,6 @@
 
             // 初期状態で「おすすめ」を選択状態にする
             if (recommendsButton && recommendedItems) {
-                console.log('初期状態でおすすめを表示します');
                 recommendsButton.click();
             }
         });
