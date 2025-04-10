@@ -16,19 +16,16 @@
                     @endif
                 </div>
                 <div class="itemInfoArea">
-                    <div class="itemName">
-                        {{ $item->item_name }}
-                    </div>
+                    <div class="itemName">{{ $item->item_name }}</div>
                     <div class="itemCost">
                         <p>￥</p>
                         <p>{{ number_format($item->price) }}</p>
                     </div>
                 </div>
             </div>
+
             <div class="paymentSelectionArea">
-                <div class="sectionTitle">
-                    支払い方法
-                </div>
+                <div class="sectionTitle">支払い方法</div>
                 <select name="payment_method" class="paymentSelect" required>
                     <option value="" disabled selected>選択してください</option>
                     <option value="convenience_store">コンビニ払い</option>
@@ -37,9 +34,7 @@
             </div>
 
             <div id="creditCardForm" style="display:none;">
-                <div id="card-element">
-                    <!-- Stripe's card input field will be inserted here. -->
-                </div>
+                <div id="card-element"></div>
                 <div id="card-errors" role="alert"></div>
             </div>
 
@@ -71,7 +66,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="pageRightSide">
@@ -85,9 +79,11 @@
                     <p id="paymentMethodDisplay">未選択</p>
                 </div>
             </div>
-            <form id="purchaseForm" action="/purchase/{{ $item->id }}/process" method="POST">
+
+            <form id="purchaseForm" action="{{ route('purchase.process', ['item' => $item->id]) }}" method="POST">
                 @csrf
-                <button type="submit" class="finalPurchaseButton">
+                <input type="hidden" name="payment_method" id="paymentMethodHidden">
+                <button type="submit" class="finalPurchaseButton" disabled>
                     購入する
                 </button>
             </form>
@@ -96,49 +92,23 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const paymentSelect = document.querySelector('select[name="payment_method"]'); // 支払い方法のプルダウン
-            const paymentDisplay = document.getElementById('paymentMethodDisplay'); // 支払い方法を表示する<p>
-            const submitButton = document.querySelector('.finalPurchaseButton');  // 購入するボタン
+            const paymentSelect = document.querySelector('select[name="payment_method"]');
+            const paymentDisplay = document.getElementById('paymentMethodDisplay');
+            const submitButton = document.querySelector('.finalPurchaseButton');
+            const hiddenInput = document.getElementById('paymentMethodHidden');
 
-            // 支払い方法が選択されていない時にボタンを無効化
             paymentSelect.addEventListener('change', function () {
                 const selectedMethod = paymentSelect.options[paymentSelect.selectedIndex].text;
-                if (selectedMethod === "選択してください") {
+                const selectedValue = paymentSelect.value;
+
+                if (selectedValue === "") {
                     paymentDisplay.textContent = "支払方法を選択してください";
                     submitButton.disabled = true;
                 } else {
                     paymentDisplay.textContent = selectedMethod;
+                    hiddenInput.value = selectedValue;
                     submitButton.disabled = false;
                 }
-            });
-
-            // 購入するボタンがクリックされた時
-            submitButton.addEventListener('click', function (event) {
-                event.preventDefault();  // ページリロードを防ぐ
-
-                // 支払い方法が選ばれていない場合
-                if (paymentSelect.value === "") {
-                    alert("支払い方法を選択してください");
-                    return;
-                }
-
-                // 支払い方法が選択されている場合は、Stripeの決済画面へ遷移
-                fetch(`/purchase/${{{ $item->id }}}/process`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    },
-                    body: JSON.stringify({ payment_method: paymentSelect.value })  // 支払い方法をサーバーに送信
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        // StripeのCheckoutセッションURLにリダイレクト
-                        if (data.sessionUrl) {
-                            window.location.href = data.sessionUrl;
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
             });
         });
     </script>

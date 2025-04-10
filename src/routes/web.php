@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserRegistrationController;
+use App\Http\Controllers\Auth\UserLoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostingController;
 use App\Http\Controllers\MyPageController;
@@ -16,6 +17,11 @@ use App\Http\Controllers\AddressController;
 // UserRegistrationController
 Route::get('register', [UserRegistrationController::class, 'create'])->name('register.form');
 Route::post('register', [UserRegistrationController::class, 'store'])->name('register.submit');
+
+// UserLoginController
+Route::get('login', [UserLoginController::class, 'showLoginForm'])->name('login.form');
+Route::post('login', [UserLoginController::class, 'login'])->name('login.submit');
+Route::post('logout', [UserLoginController::class, 'logout'])->name('logout.submit');
 
 // MainPageController
 Route::get('/', [MainPageController::class, 'showMainPage']);
@@ -42,8 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
     // PurchaseController
     Route::get('/purchase', [PurchaseController::class, 'showPurchasePage']);
-    Route::post('/purchase/{itemId}/process', [PurchaseController::class, 'purchaseItem'])->name('purchase.process'); 
-    Route::get('/purchase/{itemId}/complete', [PurchaseController::class, 'completePurchase'])->name('purchase.complete');
+    Route::post('/purchase/{item}/process', [PurchaseController::class, 'process'])->name('purchase.process');
 
     // AddressController
     Route::get('/purchase/address/{item_id}', [AddressController::class, 'showAdressChangePage']);

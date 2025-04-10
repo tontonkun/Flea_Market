@@ -91,32 +91,46 @@ class ItemSeeder extends Seeder
 
         // 各アイテムに対して処理を行う
         foreach ($items as $item) {
-            // 画像保存先ディレクトリ
-            $directory = storage_path('app/public/item_images');
+        // 画像保存先ディレクトリ
+        $directory = storage_path('app/public/item_images');
 
-            // ディレクトリが存在しない場合に作成
-            if (!File::exists($directory)) {
-                File::makeDirectory($directory, 0755, true); // 0755 はディレクトリのパーミッション
-            }
+        // ディレクトリが存在しない場合に作成
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true); // 0755 はディレクトリのパーミッション
+        }
 
-            // 画像のURLを取得して、画像のコンテンツをダウンロード
-            $imageContent = file_get_contents($item['image_url']);
-            $imageName = basename($item['image_url']); // 画像ファイル名（URLの最後の部分を使用）
-            $encodedImageName = urlencode($imageName);  // URLエンコード
-            $imagePath = 'item_images/' . $encodedImageName;
+        // 画像のURLを取得して、画像のコンテンツをダウンロード
+        $imageContent = @file_get_contents($item['image_url']); // エラー抑制
+        if ($imageContent === false) {
+            \Log::error("画像のダウンロードに失敗: " . $item['image_url']);
+            continue; // 失敗した場合はスキップ
+        }
 
-            // publicディスクに画像を保存
-            Storage::disk('public')->put($imagePath, $imageContent);
+        $imageName = basename($item['image_url']); // ファイル名を取得
 
-            // アイテムを作成
-            \App\Models\Item::create([
-                'item_name' => $item['item_name'],
-                'price' => $item['price'],
-                'description' => $item['description'],
-                'item_img_pass' => 'storage/' . $imagePath, // 保存した画像のパス（公開用のURL）
-                'condition_id' => $item['condition_id'],
-                'created_at' => now(),
-                'updated_at' => now(),
+        // すでにエンコードされているかチェックし、必要な場合のみエンコード
+        if (preg_match('/%[0-9A-F]{2}/', $imageName)) {
+            // すでにエンコードされたファイル名はデコードして使用
+            $encodedImageName = urldecode($imageName);
+        } else {
+            // エンコードされていない場合はエンコード
+            $encodedImageName = urlencode($imageName);
+        }
+
+        $imagePath = 'item_images/' . $encodedImageName; // ファイル名をパスに追加
+
+        // publicディスクに画像を保存
+        Storage::disk('public')->put($imagePath, $imageContent);
+
+        // アイテムを作成
+        \App\Models\Item::create([
+            'item_name' => $item['item_name'],
+            'price' => $item['price'],
+            'description' => $item['description'],
+            'item_img_pass' => 'storage/' . $imagePath, // 保存した画像のパス（公開用のURL）
+            'condition_id' => $item['condition_id'],
+            'created_at' => now(),
+            'updated_at' => now(),
             ]);
         }
     }

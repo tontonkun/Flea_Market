@@ -1,8 +1,28 @@
-body{
+body {
     min-width: 1500px;
 }
 
+/* フラッシュメッセージのスタイル */
+.postingAnnounce {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.postingErrorAnnounce {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
 .header {
+    height: 80px;
     font-size: 20px;
     align-items: center;
     font-weight: bold;
@@ -12,29 +32,34 @@ body{
     background-color: black;
 }
 
-.headerlogo {
+.headerlogo img {
     width: 300px;
     margin-left: 10px;
     color: white;
 }
 
-.searchBox form input{
+.searchBox form input {
     width: 400px;
-    height: 40px;
+    height: 50px;
     border-radius: 3px;
 }
 
 .searchButton {
-    height: 40px;
+    width: 60px;
+    height: 50px;
+    font-size: 15px;
     border-radius: 3px;
     cursor: pointer;
 }
 
 .headerLinks {
+    font-size: 15px;
+    width: 600px;
     align-items: center;
     gap: 15px;
     display: flex;
     margin-right: 10px;
+    justify-content: right;
 }
 
 .headerLinks form {
@@ -42,7 +67,7 @@ body{
     align-items: center;
 }
 
-.headerLinks form button{
+.headerLinks form button {
     background: none;
     border: none;
     color: white;
@@ -51,11 +76,10 @@ body{
     padding: 5px;
 }
 
-.headerLinks form button.sell{
+.headerLinks form button.sell {
     background-color: white;
     color: black;
     font-weight: normal;
     width: 60px;
     border-radius: 2px
 }
-

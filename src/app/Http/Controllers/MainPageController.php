@@ -12,10 +12,11 @@ class MainPageController extends Controller
     {
         // 初回ログインならprofileページ、そうでない場合はメインページに遷移
         if (Auth::check() && Auth::user()->is_first_login) {
-            $user = Auth::user(); // 現在のユーザーを取得
-            $user->update(['is_first_login' => false]); // フラグを false に更新
+            $user = Auth::user();
+            $user->update(['is_first_login' => false]);
 
-            return redirect('/myPage/profile');
+            // セッションに入ってる "status" を再度 with で渡す
+            return redirect('/myPage/profile')->with('status', session('status'));
         }
 
         // 検索クエリを受け取る

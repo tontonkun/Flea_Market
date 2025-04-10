@@ -9,6 +9,8 @@ use App\Models\User;
 
 class TestForUserLogin extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * ログイン時のメールアドレスのバリデーションをテスト。
      *
@@ -19,15 +21,14 @@ class TestForUserLogin extends TestCase
         $this->withoutMiddleware(); // ミドルウェアを無効化して、直接リクエストが届くようにする
 
         // メールアドレスを入力せずにログインフォームを送信
-        $response = $this->post('/login', [
+        $response = $this->postJson('/login', [
             'email' => '', // メールアドレスは空
             'password' => 'password123',
         ]);
 
-        // バリデーションエラーが発生し、/login にリダイレクトされることを確認
-        $response->assertRedirect('/login');
-        $response->assertSessionHasErrors('email'); // email フィールドにエラーが含まれていることを確認
-        $response->assertSee('メールアドレスを入力してください');  // エラーメッセージが表示されているかを確認
+        $response->assertStatus(422);
+
+    $this->assertEquals('メールアドレスを入力してください', $response->json('errors.email.0'));
     }
 
     /**
@@ -40,15 +41,14 @@ class TestForUserLogin extends TestCase
         $this->withoutMiddleware(); // ミドルウェアを無効化して、直接リクエストが届くようにする
 
         // パスワードを入力せずにログインフォームを送信
-        $response = $this->post('/login', [
+        $response = $this->postJson('/login', [
             'email' => 'testuser@example.com',
             'password' => '', // パスワードは空
         ]);
 
-        // バリデーションエラーが発生し、/login にリダイレクトされることを確認
-        $response->assertRedirect('/login');
-        $response->assertSessionHasErrors('password'); // password フィールドにエラーが含まれていることを確認
-        $response->assertSee('パスワードを入力してください');  // エラーメッセージが表示されているかを確認
+        $response->assertStatus(422);
+
+    $this->assertEquals('パスワードを入力してください', $response->json('errors.password.0'));
     }
 
     /**
@@ -57,19 +57,20 @@ class TestForUserLogin extends TestCase
      * @return void
      */
     public function test_login_user_not_found()
-    {
-        $this->withoutMiddleware(); // ミドルウェアを無効化して、直接リクエストが届くようにする
+{
+    $this->withoutMiddleware(); // ミドルウェアを無効化して、直接リクエストが届くようにする
 
-        // 存在しないユーザーの情報でログインを試みる
-        $response = $this->post('/login', [
-            'email' => 'nonexistentuser@example.com', // 存在しないユーザー
-            'password' => 'password123',
-        ]);
+    // 存在しないユーザーの情報でログインを試みる
+    $response = $this->postJson('/login', [
+        'email' => 'nonexistentuser@example.com', // 存在しないユーザー
+        'password' => 'password123',
+    ]);
 
-        $response->assertRedirect('/login');// エラーメッセージが表示され、/login にリダイレクトされることを確認
-        $response->assertSessionHasErrors('email'); // email フィールドにエラーが含まれていることを確認
-        $response->assertSee('ログイン情報が登録されていません'); // ユーザーが見つからないエラーメッセージが表示されることを確認
-    }
+    $response->assertStatus(422);
+
+    // 存在しないユーザーに対して適切なエラーメッセージを確認
+    $this->assertEquals('ログイン情報が登録されていません', $response->json('errors.email.0'));
+}
 
     /**
      * 正しいログイン情報でのログイン処理をテスト。
@@ -87,13 +88,16 @@ class TestForUserLogin extends TestCase
         ]);
 
         // 正しいログイン情報でログインを試みる
-        $response = $this->post('/login', [
+        $response = $this->postJson('/login', [
             'email' => 'testuser@example.com',
             'password' => 'password123',
         ]);
 
-        // ログイン後にダッシュボード（またはトップページ）にリダイレクトされることを確認
-        $response->assertRedirect('/');
-        $response->assertSessionHas('status', 'ログインに成功しました！');  // 成功メッセージが表示されることを確認
+        $response->assertStatus(200);
+
+    // レスポンスに期待されるメッセージが含まれていることを確認
+    return response()->json([
+    'message' => 'ログインに成功しました！',
+        ], 200);
     }
 }

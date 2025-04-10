@@ -20,6 +20,11 @@
             {{ session('success') }}
         </div>
     @endif
+    @if (session('error'))
+    <div class="postingErrorAnnounce">
+        {{ session('error') }}
+    </div>
+    @endif
 
     <div class="header">
         <div class="headerlogo">

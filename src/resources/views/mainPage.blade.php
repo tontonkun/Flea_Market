@@ -20,7 +20,7 @@
                         <a href="{{ route('item.showDetail', $item->id) }}">
                             <!-- 商品画像 -->
                             @if ($item->item_img_pass)
-                                <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
+                                <img src="{{ asset(urldecode($item->item_img_pass)) }}" class="itemImage">
                             @else
                                 <div class="defaultItemImage">No Image</div>
                             @endif

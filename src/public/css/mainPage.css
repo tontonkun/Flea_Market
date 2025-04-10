@@ -1,13 +1,3 @@
-/* フラッシュメッセージのスタイル */
-.postingAnnounce {
-    background-color: #dff0d8;
-    color: #3c763d;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 16px;
-}
-
 .displaySelectionArea{
     display: flex;
     align-items: center;

@@ -39,12 +39,13 @@ class UserRegistrationController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        event(new Registered($user)); // メール認証イベントを発行
+        // event(new Registered($user)); // メール認証イベントを発行
 
         // ユーザー登録後に自動的にログイン
         Auth::login($user);
 
         // 登録成功後のリダイレクト
-        return redirect('/')->with('status', '会員登録が完了しました！');
+        return redirect('/myPage/profile')->with('status', session('status'));
+
     }
 }
