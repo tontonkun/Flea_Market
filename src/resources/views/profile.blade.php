@@ -51,7 +51,7 @@
         </div>
         <div class="inputArea">
             <input class="postal_code" type="tel" name="postal_code" pattern="\d{3}-\d{4}"
-                value="{{ $profile->post_code ?? '' }}">
+                value="{{ $profile->postal_code ?? '' }}">
             @error('postal_code')
                 <div class="error">{{ $message }}</div>
             @enderror

@@ -1,27 +1,44 @@
-.alert {
-    background-color: #dff0d8;
-    color: #3c763d;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.separatedContent{
+.separatedContent {
     margin: 80px 200px;
     display: flex;
 }
 
-.imageArea,
+.imageArea {
+    position: relative;
+    height: 100%;
+    width: 700px;
+    margin-left: 50px;
+}
+
 .itemDetailArea {
     height: 100%;
     width: 700px;
     margin-left: 100px;
 }
 
-.itemImage{
+.itemImage {
     width: 550px;
     height: auto;
+}
+
+/* Soldラベル */
+.sold-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+/* 売り切れアイテムにグレー処理を加えたいとき（任意） */
+.imageArea.sold-out img {
+    filter: grayscale(100%);
+    opacity: 0.6;
 }
 
 .defaultItemImage,
@@ -33,19 +50,19 @@
     align-items: center;
 }
 
-.itemName{
+.itemName {
     font-size: 30px;
     font-weight: bold;
 }
 
-.brandArea{
+.brandArea {
     display: flex;
     font-size: 15px;
     margin-top: 1px;
     margin-bottom: 1px;
 }
 
-.brandArea p{
+.brandArea p {
     margin-top: 1px;
     margin-bottom: 1px;
 }
@@ -75,7 +92,7 @@
     text-align: center;
 }
 
-.favoriteIcon{
+.favoriteIcon {
     color: #ddd;
     background: none;
     border: none;
@@ -87,7 +104,7 @@
     color: gold;
 }
 
-.commentIcon{
+.commentIcon {
     font-size: 30px;
     color: #ddd;
 }
@@ -110,7 +127,13 @@
     cursor: pointer;
 }
 
-.itemInfo{
+.purchaseButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.itemInfo {
     width: 400px;
     margin-top: 40px;
     margin-bottom: 20px;
@@ -123,22 +146,22 @@
     font-size: 20px;
 }
 
-.subSectionTitle{
+.subSectionTitle {
     min-width: 150px;
     font-weight: bold;
     font-size: 15px;
 }
 
-.itemDescription p{
+.itemDescription p {
     font-size: 18px;
 }
 
-.categoryArea{
+.categoryArea {
     display: flex;
     gap: 3px;
 }
 
-.category{
+.category {
     font-size: 10px;
     background-color: #ddd;
     border-radius: 25px;
@@ -147,11 +170,11 @@
     text-align: center;
 }
 
-.conditionArea{
+.conditionArea {
     display: flex;
 }
 
-.condition{
+.condition {
     font-size: 15px;
 }
 
@@ -182,18 +205,18 @@
     margin-left: 20px;
 }
 
-.comment{
+.comment {
     width: 400px;
     align-items: center;
     background-color: #ddd;
 }
 
-.comment p{
+.comment p {
     height: 30px;
     margin: 10px;
 }
 
-.inputAreaDescription{
+.inputAreaDescription {
     margin-top: 20px;
     margin-bottom: 10px;
     font-weight: bold;
@@ -205,11 +228,11 @@
     margin-bottom: 10px;
 }
 
-.inputArea form{
+.inputArea form {
     height: 200px;
 }
 
-.submitCommentButton{
+.submitCommentButton {
     width: 400px;
     height: 35px;
     color: white;

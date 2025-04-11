@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form class="form" action="/postItems" method="POST" enctype="multipart/form-data">
+    <form class="form" action="{{ route('postItems') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mainTitleArea">
             商品の出品
@@ -19,9 +19,11 @@
                 <!-- 画像が選択されていない場合のデフォルトの表示 -->
                 <div class="defaultDisplay">
                     <div class="uploadButtonArea">
-                        <input type="file" id="item_image" name="item_image" class="fileInput"
-                            onchange="previewImage(event)">
+                        <input type="file" id="item_image" name="item_img_pass" class="fileInput" onchange="previewImage(event)">
                         <label for="item_image">画像を選択する</label>
+                        @error('item_img_pass')
+                            <div class="error">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -138,10 +140,10 @@
 
         <div class="subTitle">
             販売価格
-            <div class="inputAreaForCost">
-                <input class="item_cost" type="text" name="item_cost" value="{{ old('item_cost') }}">
+            <div class="inputAreaForPrice">
+                <input class="price" type="text" name="price" value="{{ old('price') }}">
                 <span class="currency-symbol">￥</span>
-                @error('item_cost')
+                @error('price')
                     <div class="error">{{ $message }}</div>
                 @enderror
             </div>

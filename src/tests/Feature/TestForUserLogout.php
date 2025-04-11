@@ -9,6 +9,8 @@ use App\Models\User;
 
 class TestForUserLogout extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * ログアウト処理が正常に動作するかをテスト。
      *
@@ -29,7 +31,7 @@ class TestForUserLogout extends TestCase
         $response = $this->post('/logout');
 
         // ログアウト後にホームページまたはログインページにリダイレクトされることを確認
-        $response->assertRedirect('/login'); // ログアウト後、ログインページにリダイレクトされることを確認
+        $response->assertRedirect('/'); 
         $this->assertGuest(); // ログアウト後、ゲスト状態であることを確認
     }
 }

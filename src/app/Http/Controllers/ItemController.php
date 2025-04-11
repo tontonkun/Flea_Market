@@ -8,6 +8,7 @@ use App\Models\Favorite;
 use App\Models\Comment;
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use App\Http\Requests\CommentRequest; 
 
 class ItemController extends Controller
 {
@@ -54,20 +55,15 @@ class ItemController extends Controller
         return redirect()->route('item.showDetail', ['id' => $itemId]);
     }
 
-    public function addComment(Request $request, $id)
+    public function addComment(CommentRequest $request, $id)
     {
-        // ユーザーがログインしていない場合
-        if (!auth()->check()) {
-            return redirect()->back()->with('error', 'コメントするにはログインが必要です');
-        }
-
-        // コメントを保存
-        $item = Item::findOrFail($id); // 商品情報の取得
+        // バリデーションが自動的に適用される
+        $item = Item::findOrFail($id);
         $comment = new Comment();
         $comment->item_id = $item->id;
-        $comment->user_id = auth()->id(); // 現在ログイン中のユーザーIDを取得
-        $comment->comment = $request->input('comment'); // コメント内容
-        $comment->save(); // 保存
+        $comment->user_id = auth()->id();
+        $comment->comment = $request->input('comment');
+        $comment->save();
 
         return redirect()->route('item.showDetail', ['id' => $id])->with('success', 'コメントが送信されました');
     }

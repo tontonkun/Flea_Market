@@ -16,15 +16,21 @@
 <body>
     {{-- フラッシュメッセージの表示 --}}
     @if(session('success'))
-        <div class="postingAnnounce">
+        <div class="alert-success">
             {{ session('success') }}
         </div>
     @endif
-    @if (session('error'))
-    <div class="postingErrorAnnounce">
-        {{ session('error') }}
-    </div>
+
+    @if(session('error'))
+        <div class="alert-danger">
+            {{ session('error') }}
+        </div>
     @endif
+
+    <!-- 商品詳細画面のコメントエラー表示 -->
+    @error('comment')
+        <div class="alert-danger">{{ $message }}</div>
+    @enderror
 
     <div class="header">
         <div class="headerlogo">

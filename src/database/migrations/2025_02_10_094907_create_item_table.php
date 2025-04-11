@@ -23,7 +23,6 @@ class CreateItemTable extends Migration
             $table->string('description', 255)->nullable();
             $table->foreignId('condition_id')->nullable()->constrained('conditions')->onDelete('set null');
             $table->boolean('is_active')->default(true);
-            $table->foreignId('purchaser_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });
@@ -40,7 +39,6 @@ class CreateItemTable extends Migration
             // 外部キー制約を削除
             $table->dropForeign(['seller_id']);
             $table->dropForeign(['condition_id']);
-            $table->dropForeign(['purchaser_id']);
         });
 
         // テーブル削除

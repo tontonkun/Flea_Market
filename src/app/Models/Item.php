@@ -20,7 +20,10 @@ class Item extends Model
         'description',
         'condition_id',
         'is_active',
-        'purchaser_id'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean', 
     ];
 
     public function user()

@@ -61,7 +61,7 @@
     color: #5F5F5F;
 }
 
-.categorySelectionArea{
+.categorySelectionArea {
     width: 100%;
     display: flex;
     margin-bottom: 40px;
@@ -109,7 +109,7 @@
     color: white;
 }
 
-.inputArea input{
+.inputArea input {
     width: 100%;
     height: 30px;
 }
@@ -119,16 +119,20 @@
     height: 30px;
 }
 
-.inputArea{
+.inputArea {
     margin-bottom: 20px;
 }
 
-.item_description{
+.item_description {
     height: 80px;
 }
 
-.inputAreaForCost {
+.inputAreaForPrice {
     position: relative;
+    width: 100%;
+}
+
+.inputAreaForPrice input {
     width: 100%;
 }
 
@@ -140,7 +144,7 @@
     color: #333;
 }
 
-.item_cost {
+.price {
     width: 100%;
     height: 30px;
     padding-left: 25px;
@@ -149,11 +153,11 @@
     box-sizing: border-box;
 }
 
-.buttonArea{
+.buttonArea {
     margin-top: 30px;
 }
 
-.postingButton{
+.postingButton {
     padding: 10px;
     width: 100%;
     background-color: #FF5555;
@@ -161,6 +165,13 @@
     border: none;
     border-radius: 2px;
     cursor: pointer;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 /* 画像変更ボタンのデザイン */

@@ -33,16 +33,26 @@ class MainPageController extends Controller
     }
 
     /**
-     * 商品の検索処理を担当するメソッド
+     * 商品一覧を取得するメソッド
      */
     protected function getRecommendedItems($query = null)
     {
-        $queryBuilder = Item::where('is_active', true)
-            ->where(function ($q) {
-                // seller_idがnullのものか、ログインユーザーが出品していないもの
+        $queryBuilder = Item::query();
+
+        if (auth()->check()) {
+            // ログイン中：is_active が true で、自分が出品していない商品（seller_idがnullの商品も含める）
+            $queryBuilder->where('is_active', true)
+                ->where(function ($q) {
+                    $q->whereNull('seller_id')   
+                    ->orWhere('seller_id', '!=', auth()->id());  
+                });
+        } else {
+            // 未ログイン：出品者関係なし（全てのseller_idの商品）
+            $queryBuilder->where(function ($q) {
                 $q->whereNull('seller_id')
-                    ->orWhere('seller_id', '!=', auth()->id());
+                ->orWhereNotNull('seller_id'); // 実質全て
             });
+        }
 
         if ($query) {
             $queryBuilder->where('item_name', 'LIKE', "%{$query}%");
@@ -52,7 +62,7 @@ class MainPageController extends Controller
     }
 
     /**
-     * ログインユーザーのお気に入り商品を取得するメソッド
+     * お気に入り商品を取得するメソッド
      */
     protected function getFavoriteItems($query = null)
     {

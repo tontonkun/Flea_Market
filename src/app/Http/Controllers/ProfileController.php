@@ -40,7 +40,7 @@ class ProfileController extends Controller
 
         // プロフィール情報の更新
         $profile->user_id = Auth::id(); // ユーザーIDをセット
-        $profile->post_code = $request->input('postal_code');
+        $profile->postal_code = $request->input('postal_code');
         $profile->user_name = $request->input('user_name');
         $profile->address = $request->input('address');
         $profile->building_name = $request->input('building_name');

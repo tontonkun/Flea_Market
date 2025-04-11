@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\Condition;
 use App\Models\Category;
 use App\Models\ItemCategory;
+use App\Http\Requests\ItemPostingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -18,57 +19,52 @@ class PostingController extends Controller
         return view('postingPage', compact('conditions'));
     }
 
-    public function postItems(Request $request)
+    public function postItems(ItemPostingRequest $request)
     {
-        $condition = Condition::find($request->input('condition_id'));
+        // 商品の状態（条件）を取得
+        $condition = Condition::find($request->input('condition_id')); 
 
         // 画像の保存処理（画像がアップロードされた場合のみ）
         $imagePath = null;
 
-        if ($request->hasFile('item_image')) {
-            // 画像保存先ディレクトリ
+        if ($request->hasFile('item_img_pass')) {
             $directory = storage_path('app/public/item_images');
-
-            // ディレクトリが存在しない場合に作成
             if (!File::exists($directory)) {
-                File::makeDirectory($directory, 0755, true); // 0755 はディレクトリのパーミッション
+                File::makeDirectory($directory, 0755, true);
             }
-
-            // 画像を指定したディレクトリに保存
-            $imagePath = $request->file('item_image')->store('item_images', 'public');
+            $imagePath = $request->file('item_img_pass')->store('item_images', 'public');
         }
 
-        // 商品データを保存する前に価格を半角に変換
-        $price = $request->input('item_cost');
-        $price = mb_convert_kana($price, 'n', 'UTF-8');
+        // 商品データの保存
+        $price = mb_convert_kana($request->input('price'), 'n'); // 半角に変換
 
-        // 新しい商品を保存
+        if (!is_numeric($price) || $price < 1) {
+            return back()->withErrors(['price' => '価格は1円以上である必要があります。'])->withInput();
+        }
+
         $item = new Item();
         $item->seller_id = auth()->id();
         $item->item_name = $request->input('item_name');
         $item->price = $price;
         $item->brand_name = $request->input('brand_name') ?? null;
-        $item->item_img_pass = 'storage/' . $imagePath;
-        $item->save();
-        $item->description = $request->input('item_description') ?? null;
+        $item->description = $request->input('description') ?? null;
+        $item->item_img_pass = $imagePath ? asset('storage/' . $imagePath) : null;
         $item->is_active = true;
 
-        // 商品の状態が設定されていれば、それも保存
         if ($condition) {
             $item->condition_id = $condition->id;
         }
 
-        // 商品を保存
         $item->save();
 
         // カテゴリの保存処理
         if ($request->has('selected_category')) {
             foreach ($request->input('selected_category') as $categoryName) {
-                $category = Category::firstOrCreate(['category' => $categoryName]); // 存在しないカテゴリは作成
+                $category = Category::firstOrCreate(['category' => $categoryName]);
 
-                // 中間テーブルにカテゴリを関連付け
+                // item_category テーブルに保存
                 ItemCategory::create([
-                    'item_id' => $item->id, // 保存した後にIDを使う
+                    'item_id' => $item->id,
                     'category_id' => $category->id,
                 ]);
             }

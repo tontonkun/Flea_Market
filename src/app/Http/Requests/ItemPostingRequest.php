@@ -24,15 +24,15 @@ class ItemPostingRequest extends FormRequest
     public function rules()
     {
         return [
-            'item_img_pass' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_name' => 'nullable|exists:categories,name',
-            'condition_name' => 'nullable|array',
-            'condition_name.*' => 'exists:conditions,name',
-            'item_name' => 'required|string|max:255',
-            'brand_name' => 'nullable|string|max:255',
-            'description' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:1',
-        ];
+        'item_name' => 'required|string|max:255',
+        'price' => ['required', 'regex:/^[０-９0-9]+$/'],
+        'brand_name' => 'nullable|string|max:255',
+        'item_img_pass' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'description' => 'nullable|string|max:255',
+        'condition_id' => 'nullable|exists:conditions,id',
+        'selected_category' => 'nullable|array',
+        'selected_category.*' => 'exists:categories,category',     
+    ];
     }
 
     public function messages()

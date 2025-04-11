@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ChangeAddressRequest;
 use App\Models\Item;
 
 class AddressController extends Controller
@@ -21,25 +22,19 @@ class AddressController extends Controller
         return view('addressChange', compact('item'));
     }
 
-    public function changeAddress(Request $request, $item_id)
+    public function changeAddress(ChangeAddressRequest $request, $itemId)
     {
-        // フォームの入力値をバリデーション
-        $validated = $request->validate([
-            'postal_code' => 'required|regex:/^\d{3}-\d{4}$/',
-            'address' => 'required|string|max:255',
-            'building_name' => 'nullable|string|max:255',
-        ]);
+        $validated = $request->validated();
 
-        // セッションに住所情報を保存
-        session([
-            'temp_postal_code' => $validated['postal_code'],
-            'temp_address' => $validated['address'],
-            'temp_building_name' => $validated['building_name'],
-        ]);
+    session([
+        'temporary_address' => [
+            'postal_code' => $request->postal_code,
+            'address' => $request->address,
+            'building_name' => $request->building_name,
+        ]
+    ]);
 
-        // 購入ページにリダイレクト
-        return redirect()->route('purchasePage', ['item_id' => $item_id])
-            ->with('success', '配送先住所が変更されました！');
+    return redirect()->route('showPurchasePage', ['item' => $itemId])
+                     ->with('success', '住所が一時的に変更されました');
     }
-
 }

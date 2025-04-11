@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Conditionテーブルのデータを先に作成
-        $this->call(ConditionSeeder::class);
-
-        // 商品データを挿入
-        $this->call(ItemSeeder::class);
+        $this->call([
+            ConditionSeeder::class,
+            CategorySeeder::class, 
+            ItemSeeder::class,
+        ]);
     }
 }

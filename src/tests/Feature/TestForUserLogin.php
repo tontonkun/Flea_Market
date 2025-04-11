@@ -57,7 +57,7 @@ class TestForUserLogin extends TestCase
      * @return void
      */
     public function test_login_user_not_found()
-{
+    {
     $this->withoutMiddleware(); // ミドルウェアを無効化して、直接リクエストが届くようにする
 
     // 存在しないユーザーの情報でログインを試みる
@@ -70,7 +70,7 @@ class TestForUserLogin extends TestCase
 
     // 存在しないユーザーに対して適切なエラーメッセージを確認
     $this->assertEquals('ログイン情報が登録されていません', $response->json('errors.email.0'));
-}
+    }
 
     /**
      * 正しいログイン情報でのログイン処理をテスト。
@@ -88,16 +88,15 @@ class TestForUserLogin extends TestCase
         ]);
 
         // 正しいログイン情報でログインを試みる
-        $response = $this->postJson('/login', [
+        $response = $this->post('/login', [
             'email' => 'testuser@example.com',
             'password' => 'password123',
         ]);
 
-        $response->assertStatus(200);
+        // 302リダイレクトが返るはずなので、リダイレクト先を検証
+        $response->assertRedirect('/');
 
-    // レスポンスに期待されるメッセージが含まれていることを確認
-    return response()->json([
-    'message' => 'ログインに成功しました！',
-        ], 200);
+        // ユーザーが認証されていることを確認
+        $this->assertAuthenticatedAs($user);
     }
 }

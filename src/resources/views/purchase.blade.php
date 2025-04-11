@@ -45,24 +45,17 @@
                         <button type="submit" class="addressChange">変更する</button>
                     </form>
                 </div>
+
+                @php
+                    $tempAddress = session('temporary_address');
+                @endphp
+
                 <div class="addressInfo">
-                    @if ($profile && $profile->post_code)
-                        <p><strong>〒 </strong> {{ $profile->post_code }}</p>
-                    @else
-                        <p>郵便番号：未登録</p>
-                    @endif
+                    <p><strong>〒 </strong> {{ $tempAddress['postal_code'] ?? $profile->postal_code ?? '未登録' }}</p>
                     <div class="addressAndBuilding">
-                        @if ($profile && $profile->address)
-                            <p>{{ $profile->address }}</p>
-                        @else
-                            <p>住所：未登録</p>
-                        @endif
-                        <p>&nbsp;</p>
-                        @if ($profile && $profile->building_name)
-                            <p>{{ $profile->building_name }}</p>
-                        @else
-                            <p>建物名：未登録</p>
-                        @endif
+                        <p>{{ $tempAddress['address'] ?? $profile->address ?? '未登録' }}</p>
+                        <p>　</p>
+                        <p>{{ $tempAddress['building_name'] ?? $profile->building_name ?? '未登録' }}</p>
                     </div>
                 </div>
             </div>

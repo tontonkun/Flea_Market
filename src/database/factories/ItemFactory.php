@@ -23,6 +23,8 @@ class ItemFactory extends Factory
      */
     public function definition()
     {
+        $condition = Condition::inRandomOrder()->first() ?? Condition::factory()->create();
+
         return [
             'seller_id' => User::factory(), 
             'item_name' => $this->faker->word(), 
@@ -30,9 +32,10 @@ class ItemFactory extends Factory
             'brand_name' => $this->faker->company(), 
             'item_img_pass' => 'storage/item_images/sample.jpg', 
             'description' => $this->faker->text(255),
-            'condition_id' => Condition::factory(),
+             'condition_id' => $condition->id,
             'is_active' => $this->faker->boolean(80), 
-            'purchaser_id' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

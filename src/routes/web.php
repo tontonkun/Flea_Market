@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\UserRegistrationController;
-use App\Http\Controllers\Auth\UserLoginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostingController;
 use App\Http\Controllers\MyPageController;
@@ -18,10 +18,11 @@ use App\Http\Controllers\AddressController;
 Route::get('register', [UserRegistrationController::class, 'create'])->name('register.form');
 Route::post('register', [UserRegistrationController::class, 'store'])->name('register.submit');
 
-// UserLoginController
-Route::get('login', [UserLoginController::class, 'showLoginForm'])->name('login.form');
-Route::post('login', [UserLoginController::class, 'login'])->name('login.submit');
-Route::post('logout', [UserLoginController::class, 'logout'])->name('logout.submit');
+// LoginController
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login'); ;
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // MainPageController
 Route::get('/', [MainPageController::class, 'showMainPage']);
@@ -43,16 +44,16 @@ Route::middleware(['auth'])->group(function () {
 
     // PostingController
     Route::get('/sell', [PostingController::class, 'showPostingPage']);
-    Route::get('/postItems', [PostingController::class, 'postItems']);
-    Route::post('/postItems', [PostingController::class, 'postItems'])->name('postItems');
+    Route::post('/postItems', [PostingController::class, 'postItems'])->name('postItems'); // POSTのみ
+
 
     // PurchaseController
-    Route::get('/purchase', [PurchaseController::class, 'showPurchasePage']);
+    Route::get('/purchase/{item}', [PurchaseController::class, 'showPurchasePage'])->name('showPurchasePage');
     Route::post('/purchase/{item}/process', [PurchaseController::class, 'process'])->name('purchase.process');
 
     // AddressController
     Route::get('/purchase/address/{item_id}', [AddressController::class, 'showAdressChangePage']);
-    Route::get('/changeAddress/{item_id}', [AddressController::class, 'changeAddress']);
+    Route::post('/changeAddress/{item_id}', [AddressController::class, 'changeAddress']);
 });
 
 // メール認証が必要な場合に表示されるルート

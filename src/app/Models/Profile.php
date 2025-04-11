@@ -15,7 +15,7 @@ class Profile extends Model
         'user_id',
         'user_image_pass',
         'user_name',
-        'post_code',
+        'postal_code',
         'address',
         'building_name',
         'profile_image',

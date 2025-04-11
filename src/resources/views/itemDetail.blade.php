@@ -4,24 +4,14 @@
     <link rel="stylesheet" href="{{ asset('css/itemDetail.css') }}">
 @endsection
 
-{{-- フラッシュメッセージの表示 --}}
-@if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
-
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
 @section('content')
     <div class="separatedContent">
-        <div class="imageArea">
+        <div class="imageArea {{ !$item->is_active ? 'sold-out' : '' }}">
             @if ($item->item_img_pass)
                 <img class="itemImage" src="{{ asset('/' . $item->item_img_pass) }}" alt="{{ $item->item_name }}">
+                @if (!$item->is_active)
+                    <div class="sold-label">Sold</div>
+                @endif
             @else
                 <div class="defaultItemImage">No Image</div>
             @endif
@@ -63,9 +53,10 @@
                 </div>
             </div>
 
-            <form action="/purchase" method="GET">
-                <input type="hidden" name="itemId" value="{{ $item->id }}">
-                <button class="purchaseButton">
+           <form action="{{ route('showPurchasePage', ['item' => $item->id]) }}" method="GET">
+                <button class="purchaseButton"
+                    type="submit"
+                    {{ !$item->is_active ? 'disabled' : '' }}>
                     購入手続きへ
                 </button>
             </form>
