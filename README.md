@@ -27,39 +27,25 @@ cd your-repository
 
 ３，環境設定ファイルのコピー
 
-```
-docker-compose exec php bash
-```
+`docker-compose exec php bash`
+
 実行後、
-```
+
 `cp .env.example .env`
 ※環境変数は適宜変更
-```
 
 ４，アプリケーションキー作成
 
-```
-docker-compose exec php bash
-```
+`docker-compose exec php bash`
 実行後、
-```
-php artisan key:generate
-```
+`php artisan key:generate`
 
 ５，データベースのマイグレーションと初期データのシーディング
 
-```
-docker-compose exec php bash
-```
+`docker-compose exec php bash`
 実行後、
-```
-php artisan migrate
-
-php artisan db: seed
-
-```
-
-
+`php artisan migrate`
+`php artisan db: seed`
 
 ※MySQLの接続設定
 
