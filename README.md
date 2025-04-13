@@ -43,14 +43,16 @@ docker-compose exec php bash
 ```
 実行後、
 ```
-php artisan key:generate`
+php artisan key:generate
 ```
 
 ５，データベースのマイグレーションと初期データのシーディング
 
 ```
 docker-compose exec php bash
-
+```
+実行後、
+```
 php artisan migrate
 
 php artisan db: seed
