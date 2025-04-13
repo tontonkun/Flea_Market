@@ -29,15 +29,22 @@ cd your-repository
 
 ```
 docker-compose exec php bash
-
+```
+実行後、
+```
 `cp .env.example .env`
 ※環境変数は適宜変更
-
 ```
 
 ４，アプリケーションキー作成
 
-`docker-compose exec app php artisan key:generate`
+```
+docker-compose exec php bash
+```
+実行後、
+```
+php artisan key:generate`
+```
 
 ５，データベースのマイグレーションと初期データのシーディング
 
