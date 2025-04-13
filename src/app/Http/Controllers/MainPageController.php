@@ -75,7 +75,7 @@ class MainPageController extends Controller
         if ($favoriteItemsQuery->count() > 0) {
             if ($query) {
                 // `favorites` テーブルを経由して `Item` モデルの絞り込みを行う
-                return $favoriteItemsQuery->whereHas('items', function ($itemQuery) use ($query) {
+                return $favoriteItemsQuery->whereHas('favoritedBy', function ($itemQuery) use ($query) {
                     // 'items' は `favorites` テーブルに関連するリレーション名
                     $itemQuery->where('item_name', 'LIKE', "%{$query}%");
                 })->get();
