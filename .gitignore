@@ -1,0 +1,8 @@
+# Laravel
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+.env
+/.idea
+*.log

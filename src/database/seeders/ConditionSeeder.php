@@ -16,10 +16,9 @@ class ConditionSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Condition::create(['condition' => '良好']);
-        \App\Models\Condition::create(['condition' => '目立った傷や汚れなし']);
-        \App\Models\Condition::create(['condition' => 'やや傷や汚れあり']);
-        \App\Models\Condition::create(['condition' => '状態が悪い']);
-
+        \App\Models\Condition::create(['id' => 1, 'condition' => '良好']);
+        \App\Models\Condition::create(['id' => 2, 'condition' => '目立った傷や汚れなし']);
+        \App\Models\Condition::create(['id' => 3, 'condition' => 'やや傷や汚れあり']);
+        \App\Models\Condition::create(['id' => 4, 'condition' => '状態が悪い']);
     }
 }

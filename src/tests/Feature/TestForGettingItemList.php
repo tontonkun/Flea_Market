@@ -36,31 +36,47 @@ class TestForGettingItemList extends TestCase
     /** @test */
     public function it_displays_sold_label_for_sold_items()
     {
-        // 売却済みの商品を作成（Seederで挿入されたデータを使用）
-        $soldItem = Item::where('is_active', false)->first();
+        // is_active = false の商品を1つ作成
+        $soldItem = Item::factory()->create([
+            'is_active' => false,
+        ]);
 
         // 商品詳細ページにアクセス
-        $response = $this->get('/items/' . $soldItem->id);
+        $response = $this->get('/item/' . $soldItem->id);
 
         // レスポンスに「売却済み」ラベルが含まれていることを確認
         $response->assertStatus(200); // ステータスコードが200であることを確認
-        $response->assertSee('売却済み'); // 「売却済み」というラベルが表示されるか確認
+        $response->assertSee('Sold'); // 「売却済み」というラベルが表示されるか確認
     }
 
 
     /** @test */
-    // public function it_does_not_display_items_user_has_sold()
-    // {
-    //     // 売却済み商品（is_activeがfalse）のデータをシーダーで挿入されたデータから取得
-    //     $soldItem = Item::where('is_active', false)->first();
+    public function it_does_not_display_items_user_has_sold()
+    {
+        // ユーザー作成してログイン
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
 
-    //     // 商品一覧ページにアクセス
-    //     $response = $this->get('/');
+        // ログインユーザーが出品した商品
+        $myItem = \App\Models\Item::factory()->create([
+            'seller_id' => $user->id,
+            'is_active' => true,
+            'item_name' => 'My Test Item'
+        ]);
 
-    //     // 売却済み商品の名前が含まれていないことを確認
-    //     $response->assertDontSee($soldItem->item_name);
+        // 他人が出品した商品
+        $otherItem = \App\Models\Item::factory()->create([
+            'is_active' => true,
+            'item_name' => 'Other User Item'
+        ]);
 
-    //     // "Sold" ラベルが含まれていないことを確認
-    //     $response->assertSee('Sold');
-    // }
+        // トップページにアクセス
+        $response = $this->get('/');
+
+        // 自分の出品した商品は表示されない
+        $response->assertDontSee('My Test Item');
+
+        // 他人の出品は表示される
+        $response->assertSee('Other User Item');
+    }
 }

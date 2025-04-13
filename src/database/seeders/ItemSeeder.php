@@ -106,32 +106,23 @@ class ItemSeeder extends Seeder
             continue; // 失敗した場合はスキップ
         }
 
-        $imageName = basename($item['image_url']); // ファイル名を取得
+        $imageName = urldecode(basename($item['image_url'])); // ファイル名をURLデコード
 
-        // すでにエンコードされているかチェックし、必要な場合のみエンコード
-        if (preg_match('/%[0-9A-F]{2}/', $imageName)) {
-            // すでにエンコードされたファイル名はデコードして使用
-            $encodedImageName = urldecode($imageName);
-        } else {
-            // エンコードされていない場合はエンコード
-            $encodedImageName = urlencode($imageName);
-        }
-
-        $imagePath = 'item_images/' . $encodedImageName; // ファイル名をパスに追加
+        $imagePath = 'item_images/' . $imageName;
 
         // publicディスクに画像を保存
         Storage::disk('public')->put($imagePath, $imageContent);
 
-        // アイテムを作成
+        // アイテムを作成（item_img_pass はデコード後のパスでOK）
         \App\Models\Item::create([
             'item_name' => $item['item_name'],
             'price' => $item['price'],
             'description' => $item['description'],
-            'item_img_pass' => 'storage/' . $imagePath, // 保存した画像のパス（公開用のURL）
+            'item_img_pass' => 'storage/' . $imagePath,
             'condition_id' => $item['condition_id'],
             'created_at' => now(),
             'updated_at' => now(),
-            ]);
+        ]);
         }
     }
 }
