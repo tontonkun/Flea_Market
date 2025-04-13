@@ -50,7 +50,7 @@ cd your-repository
 
 `php artisan migrate`
 
-`php artisan db: seed`
+`php artisan db:seed`
 
 ※MySQLの接続設定
 
