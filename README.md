@@ -27,10 +27,13 @@ cd your-repository
 
 ３，環境設定ファイルのコピー
 
+```
 docker-compose exec php bash
 
 `cp .env.example .env`
 ※環境変数は適宜変更
+
+```
 
 ４，アプリケーションキー作成
 
