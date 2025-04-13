@@ -48,7 +48,7 @@ class PostingController extends Controller
         $item->price = $price;
         $item->brand_name = $request->input('brand_name') ?? null;
         $item->description = $request->input('description') ?? null;
-        $item->item_img_pass = $imagePath ? asset('storage/' . $imagePath) : null;
+        $item->item_img_pass = $imagePath ? 'storage/' . $imagePath : null;
         $item->is_active = true;
 
         if ($condition) {

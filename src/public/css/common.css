@@ -1,9 +1,5 @@
-body {
-    min-width: 1500px;
-}
-
 /* フラッシュメッセージのスタイル */
-.alert-success{
+.alert-success {
     background-color: #dff0d8;
     color: #3c763d;
     padding: 10px 20px;
@@ -26,16 +22,18 @@ body {
     font-size: 20px;
     align-items: center;
     font-weight: bold;
-    padding: 5px;
+    padding: 20px;
     display: flex;
-    justify-content: space-between;
     background-color: black;
 }
 
 .headerlogo img {
     width: 300px;
-    margin-left: 10px;
     color: white;
+}
+
+.searchBox {
+    margin-left: 100px;
 }
 
 .searchBox form input {
@@ -54,12 +52,11 @@ body {
 
 .headerLinks {
     font-size: 15px;
-    width: 600px;
     align-items: center;
     gap: 15px;
     display: flex;
-    margin-right: 10px;
     justify-content: right;
+    margin-left: auto;
 }
 
 .headerLinks form {
@@ -82,4 +79,68 @@ body {
     font-weight: normal;
     width: 60px;
     border-radius: 2px
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .header {
+        height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 15px;
+        font-size: 18px;
+    }
+
+    .headerlogo img {
+        width: 200px;
+        margin-bottom: 10px;
+    }
+
+    .searchBox {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .searchBox form {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .searchBox form input {
+        flex: 1;
+        width: 90%;
+    }
+
+    .searchButton {
+        width: 10%;
+    }
+
+    .headerLinks {
+        display: flex;
+        justify-content: right;
+        gap: 10px;
+        margin-top: 20px;
+        width: 45%;
+    }
+
+    .headerLinks form {
+        width: 80%;
+        display: flex;
+        justify-content: right;
+    }
+
+    .headerLinks form button {
+        padding: 5px 5px;
+        justify-content: right;
+    }
+
+    .headerLinks form button.sell {
+        width: 80%;
+    }
+
+    .alert-success,
+    .alert-danger {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
 }

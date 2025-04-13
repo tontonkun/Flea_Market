@@ -25,14 +25,14 @@
                         <!-- 商品画像をクリックすると詳細ページへ遷移 -->
                         <a href="{{ route('item.showDetail', $item->id) }}">
                             <!-- 商品画像 -->
-                             <!-- Soldラベルの表示（is_activeがfalseの場合） -->
                             @if ($item->item_img_pass)
-                                <img src="{{ asset(urldecode($item->item_img_pass)) }}" class="itemImage">
+                                <img src="{{ asset(urldecode($item->item_img_pass)) }}" class="itemImage" 
+                                    onerror="this.style.display='none'; this.previousElementSibling.style.display='block';">
                                 @if (!$item->is_active)
                                     <div class="sold-label">Sold</div>
                                 @endif
                             @else
-                                <div class="defaultItemImage">No Image</div>
+                                <div class="defaultItemImage" style="display: block;">No Image</div>
                             @endif
                         </a>
                     </div>

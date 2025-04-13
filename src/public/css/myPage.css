@@ -1,4 +1,3 @@
-
 .upperArea {
     display: flex;
     align-items: center;
@@ -35,7 +34,7 @@
     /* 丸型にする */
 }
 
-.userName{
+.userName {
     font-weight: bold;
     font-size: 20px;
     margin-left: 100px;
@@ -54,7 +53,7 @@
     margin-left: 200px;
 }
 
-.displaySelection{
+.displaySelection {
     display: flex;
     align-items: center;
     height: 30px;
@@ -131,4 +130,27 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+    .upperArea {
+        display: flex;
+        align-items: center;
+        margin: 30px;
+        text-align: center;
+    }
+
+    .userName {
+        font-size: 18px;
+        margin-left: 5%;
+        margin-right: 20%;
+        margin-top: 10px;
+    }
+
+    .editProfile {
+        margin-left: 0;
+        margin-top: 10px;
+        padding: 6px 15px;
+        font-size: 14px;
+    }
 }
