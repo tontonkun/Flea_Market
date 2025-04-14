@@ -1,49 +1,50 @@
-.entire{
+.entire {
     display: flex;
     padding: 100px;
 }
 
 .pageLeftSide {
-    width: 1300px;
+    width: 65%;
 }
 
-.itemDescriptionArea{
+.itemDescriptionArea {
     display: flex;
     height: 300px;
     border-bottom: 1px solid black;
 }
 
-.itemImage{
+.itemImage {
     width: 250px;
 }
 
-.defaultItemImage{
+.defaultItemImage {
     width: 100%;
     background-color: #ddd;
 }
 
-.itemInfoArea{
+.itemInfoArea {
     margin-left: 40px;
 }
 
-.itemName{
+.itemName {
     font-size: 30px;
     font-weight: bold;
 }
 
-.itemCost{
+.itemCost {
     display: flex;
     font-size: 30px;
     margin-top: -20px;
 }
 
-.paymentSelectionArea, .deliveryInfoArea{
+.paymentSelectionArea,
+.deliveryInfoArea {
     height: 200px;
     padding: 20px;
     border-bottom: 1px solid black;
 }
 
-.sectionTitle{
+.sectionTitle {
     font-size: 20px;
     font-weight: bold;
 }
@@ -61,7 +62,7 @@
     margin-top: 30px;
 }
 
-.titleAndButtonArea{
+.titleAndButtonArea {
     display: flex;
     width: 100%;
     height: 50px;
@@ -69,7 +70,7 @@
     align-items: center;
 }
 
-.addressChange{
+.addressChange {
     color: #0073ce;
     font-size: 18px;
     background-color: transparent;
@@ -77,27 +78,27 @@
     cursor: pointer;
 }
 
-.addressInfo{
+.addressInfo {
     margin-top: -20px;
     margin-left: 100px;
     font-weight: bold;
     font-size: 18px;
 }
 
-.addressAndBuilding{
+.addressAndBuilding {
     display: flex;
 }
 
 .pageRightSide {
     margin-left: 80px;
-    width: 700px;
+    width: 35%;
 }
 
-.summaryBox{
+.summaryBox {
     border: 1px solid black;
 }
 
-.lowerArea{
+.lowerArea {
     border-top: 1px solid black;
 }
 
@@ -112,7 +113,7 @@
     padding-right: 50px;
 }
 
-.finalPurchaseButton{
+.finalPurchaseButton {
     width: 100%;
     margin-top: 50px;
     padding: 10px;
@@ -123,3 +124,38 @@
     cursor: pointer;
 }
 
+@media (min-width: 768px) and (max-width: 1399px) {
+    .entire {
+        display: block;
+        padding: 100px;
+    }
+
+    .pageLeftSide,
+    .pageRightSide {
+        width: 100%;
+        margin: auto;
+    }
+
+    .itemDescriptionArea {
+        width: 100%;
+        height: 350px;
+        display: block;
+    }
+
+    .itemImage {
+        margin: auto;
+        width: auto;
+        height: 250px;
+    }
+
+    .itemInfoArea {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-top: 15px;
+    }
+
+    .summaryBox {
+        margin: 20px auto;
+    }
+}

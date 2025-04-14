@@ -1,23 +1,23 @@
 .separatedContent {
-    margin: 80px 200px;
+    padding: 80px;
     display: flex;
 }
 
 .imageArea {
     position: relative;
     height: 100%;
-    width: 700px;
-    margin-left: 50px;
+    width: 50%;
+    padding: 0 5%;
 }
 
 .itemDetailArea {
     height: 100%;
-    width: 700px;
-    margin-left: 100px;
+    width: 50%;
+    padding: 0 10%;
 }
 
 .itemImage {
-    width: 550px;
+    width: 600px;
     height: auto;
 }
 
@@ -51,13 +51,13 @@
 }
 
 .itemName {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bold;
 }
 
 .brandArea {
     display: flex;
-    font-size: 15px;
+    font-size: 20px;
     margin-top: 1px;
     margin-bottom: 1px;
 }
@@ -72,17 +72,22 @@
     display: flex;
     gap: 10px;
     width: 100%;
+    height: 70px;
+    margin-bottom: 10px;
     align-items: center;
 }
 
+.priceArea {
+    margin: auto 5px;
+}
+
 .yen,
-.price,
 .tax {
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .price {
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .favoriteIconArea,
@@ -96,7 +101,7 @@
     color: #ddd;
     background: none;
     border: none;
-    font-size: 30px;
+    font-size: 35px;
     cursor: pointer;
 }
 
@@ -105,7 +110,7 @@
 }
 
 .commentIcon {
-    font-size: 30px;
+    font-size: 35px;
     color: #ddd;
 }
 
@@ -240,4 +245,44 @@
     border: none;
     border-radius: 3px;
     margin-bottom: 40px;
+}
+
+@media (min-width: 768px) and (max-width: 1399px) {
+    .separatedContent {
+        display: block;
+    }
+
+    .imageArea {
+        width: 100%;
+        height: auto;
+        text-align: center;
+    }
+
+    .itemDetailArea {
+        height: 100%;
+        width: 100%;
+        padding: 0 10%;
+    }
+
+    .itemImage {
+        width: 90%;
+        height: auto;
+    }
+
+    .priceArea {
+        width: 100%;
+        margin: auto 5px;
+    }
+
+    .purchaseButton {
+        width: 100%;
+    }
+
+    .inputArea {
+        width: 100%;
+    }
+
+    .submitCommentButton {
+        width: 100%;
+    }
 }
