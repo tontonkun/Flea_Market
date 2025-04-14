@@ -73,20 +73,24 @@ class MainPageController extends Controller
         $favoriteItemsQuery = auth()->user()->favorites();
 
         if ($favoriteItemsQuery->count() > 0) {
-            if ($query) {
-                // `favorites` テーブルを経由して `Item` モデルの絞り込みを行う
-                return $favoriteItemsQuery->whereHas('favoritedBy', function ($itemQuery) use ($query) {
-                    // 'items' は `favorites` テーブルに関連するリレーション名
-                    $itemQuery->where('item_name', 'LIKE', "%{$query}%");
-                })->get();
-            } else {
-                // 検索クエリがなければ、お気に入り商品の全件取得
-                return $favoriteItemsQuery->get();
-            }
-        }
+            // お気に入り商品の中で、自分が出品していない商品をフィルタリング
+            $favoriteItemsQuery = $favoriteItemsQuery->whereHas('user', function ($itemQuery) {
+                // 'items' テーブルを経由して seller_id が現在のユーザーの ID と一致しない商品を絞り込み
+                $itemQuery->where(function ($q) {
+                    $q->whereNull('seller_id')   
+                    ->orWhere('seller_id', '!=', auth()->id());
+                });
+            });
 
+            // 検索クエリがあれば絞り込み
+            if ($query) {
+                $favoriteItemsQuery->whereHas('user', function ($itemQuery) use ($query) {
+                    $itemQuery->where('item_name', 'LIKE', "%{$query}%");
+                });
+            }
+             return $favoriteItemsQuery->get();
+        }
         // お気に入りが空の場合は空のコレクションを返す
         return collect();
     }
-
-}
+    }

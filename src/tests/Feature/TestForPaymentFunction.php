@@ -7,7 +7,7 @@ use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
-class PaymentMethodDisplayTest extends DuskTestCase
+class TestForPaymentFunction extends DuskTestCase
 {
     public function test_payment_method_selection_reflects_in_display()
     //このテストのみ実行コマンドは'php artisan dusk'

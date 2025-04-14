@@ -28,9 +28,9 @@
     @endif
 
     <!-- 商品詳細画面のコメントエラー表示 -->
-    @error('comment')
+    <!-- @error('comment')
         <div class="alert-danger">{{ $message }}</div>
-    @enderror
+    @enderror -->
 
     <div class="header">
         <div class="headerlogo">

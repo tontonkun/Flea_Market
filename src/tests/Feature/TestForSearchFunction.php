@@ -33,4 +33,27 @@ class TestForSearchFunction extends TestCase
         $response->assertDontSee('スポーツバッグ');
     }
 
+    /** @test */
+    public function search_box_retains_query_parameter()
+    {
+        // 検索クエリをつけてページにアクセス
+        $response = $this->get('/?query=テスト商品');
+
+        // 正常なステータスコード
+        $response->assertStatus(200);
+
+        // 検索フォーム内に値が保持されているか確認
+        $response->assertSee('name="query" value="テスト商品"', false); // false でHTMLエスケープ無視
+    }
+
+    /** @test */
+    public function search_box_is_empty_when_no_query_parameter()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+
+        // 空の状態を確認
+        $response->assertSee('name="query" value=""', false);
+    }
 }

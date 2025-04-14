@@ -94,61 +94,73 @@ class TestForGettingFavoriteList extends TestCase
     }
 
     /** @test */
-    // public function it_does_not_show_own_items_in_favorite_list()
-    // {
-    //     // ログインユーザーを作成
-    //     $this->user = User::factory()->create();
-
-    //     // 他のユーザー（出品者）を作成
-    //     $anotherUser = User::factory()->create();
-
-    //     // ユーザーが出品した商品を作成（自分が出品した商品）
-    //     $this->userItem = Item::factory()->create([
-    //         'seller_id' => $this->user->id,  // 出品者は自分
-    //         'item_name' => 'My Item',
-    //         'is_active' => true,
-    //     ]);
-
-    //     // 他のユーザーが出品した商品を作成
-    //     $this->anotherUserItem = Item::factory()->create([
-    //         'seller_id' => $anotherUser->id,  // 出品者は別のユーザー
-    //         'item_name' => 'Other Item',
-    //         'is_active' => true,
-    //     ]);
-
-    //     // 「いいね」した商品を作成
-    //     Favorite::create([
-    //         'user_id' => $this->user->id,
-    //         'item_id' => $this->userItem->id, // 自分の出品した商品
-    //     ]);
-    //     Favorite::create([
-    //         'user_id' => $this->user->id,
-    //         'item_id' => $this->anotherUserItem->id, // 他のユーザーの出品した商品
-    //     ]);
-
-    //     // ログイン状態でリクエストを送る
-    //     $response = $this->actingAs($this->user)
-    //                     ->get('/'); // トップページまたは対象ページにアクセス
-
-    //     // 自分が出品した商品は「マイリスト」に表示されないことを確認
-    //     $response->assertDontSee($this->userItem->item_name); // "My Item" は表示されない
-
-    //     // 他のユーザーが出品した商品は表示されることを確認
-    //     $response->assertSee($this->anotherUserItem->item_name); // "Other Item" は表示されるべき
-    // }
-
-    public function it_does_not_show_any_favorite_items_for_logged_out_users()
+    public function it_does_not_show_own_items_in_favorite_list()
     {
-        $response = $this->get('/'); 
+        // ログインユーザーを作成
+        $this->user = User::factory()->create();
 
-        // マイリストの商品リストが表示されていないことを確認
-        $response->assertDontSee('itemName');  // 商品名が表示されていないことを確認
-        $response->assertDontSee('itemImage'); // 商品画像が表示されていないことを確認
-        $response->assertDontSee('sold-label'); // Soldラベルが表示されていないことを確認
+        // 他のユーザー（出品者）を作成
+        $anotherUser = User::factory()->create();
 
-        // `myListItems`セクションがhidden状態であることを確認（表示されていないこと）
-        $response->assertSeeInOrder([
-            '<div id="myListItems" class="itemList" hidden></div>',  // `myListItems`がhiddenであることを確認
+        // ユーザーが出品した商品を作成（自分が出品した商品）
+        $this->userItem = Item::factory()->create([
+            'seller_id' => $this->user->id,  // 出品者は自分
+            'item_name' => 'My Item',
+            'is_active' => true,
         ]);
+
+        // 他のユーザーが出品した商品を作成
+        $this->anotherUserItem = Item::factory()->create([
+            'seller_id' => $anotherUser->id,  // 出品者は別のユーザー
+            'item_name' => 'Other Item',
+            'is_active' => true,
+        ]);
+
+        // 「いいね」した商品を作成
+        Favorite::create([
+            'user_id' => $this->user->id,
+            'item_id' => $this->userItem->id, // 自分の出品した商品
+        ]);
+        Favorite::create([
+            'user_id' => $this->user->id,
+            'item_id' => $this->anotherUserItem->id, // 他のユーザーの出品した商品
+        ]);
+
+        // ログイン状態でリクエストを送る
+        $response = $this->actingAs($this->user)
+                        ->get('/'); // トップページまたは対象ページにアクセス
+
+        // 自分が出品した商品は「マイリスト」に表示されないことを確認
+        $response->assertDontSee($this->userItem->item_name); // "My Item" は表示されない
+
+        // 他のユーザーが出品した商品は表示されることを確認
+        $response->assertSee($this->anotherUserItem->item_name); // "Other Item" は表示されるべき
+    }
+
+     /** @test */
+    public function guest_cannot_see_any_favorite_items()
+    {
+        // 未ログイン状態でトップページにアクセス
+        $response = $this->get('/');
+
+        // ステータスコード確認
+        $response->assertStatus(200);
+
+        // レスポンスから myListItems 部分だけ抜き出す
+        $html = $response->getContent();
+
+        // DOMとして解析
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html);
+        $xpath = new \DOMXPath($dom);
+
+        // id="myListItems" の中身を取得
+        $myListItems = $xpath->query('//*[@id="myListItems"]')->item(0);
+
+        // nullチェック（存在しているか）
+        $this->assertNotNull($myListItems, '#myListItems が存在しません');
+
+        // 中身が空（または itemArea を含まない）ことを検証
+        $this->assertStringNotContainsString('itemArea', $myListItems->C14N());
     }
 }

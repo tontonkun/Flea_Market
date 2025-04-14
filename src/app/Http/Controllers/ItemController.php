@@ -57,7 +57,6 @@ class ItemController extends Controller
 
     public function addComment(CommentRequest $request, $id)
     {
-        // バリデーションが自動的に適用される
         $item = Item::findOrFail($id);
         $comment = new Comment();
         $comment->item_id = $item->id;

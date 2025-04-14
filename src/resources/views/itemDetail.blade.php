@@ -114,8 +114,12 @@
                 <div class="inputArea">
                     <form action="{{ route('item.addComment', ['id' => $item->id])}}" method="POST">
                         @csrf
-                        <textarea class="inputArea" name="comment" rows="4" placeholder="商品へのコメントを入力してください..."
-                            required></textarea>
+                        <textarea class="inputArea" name="comment" rows="4" placeholder="商品へのコメントを入力してください..." required>{{ old('comment') }}</textarea>
+
+                        @error('comment')
+                            <div class="alert-danger">{{ $message }}</div>
+                        @enderror
+
                         <button type="submit" class="submitCommentButton">
                             コメントを送信する
                         </button>
