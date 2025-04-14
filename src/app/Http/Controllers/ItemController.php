@@ -57,6 +57,11 @@ class ItemController extends Controller
 
     public function addComment(CommentRequest $request, $id)
     {
+         // ユーザーがログインしていない場合
+        if (!auth()->check()) {
+            return redirect()->back()->with('error', 'コメントにはログインが必要です');
+        }
+
         $item = Item::findOrFail($id);
         $comment = new Comment();
         $comment->item_id = $item->id;

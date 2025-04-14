@@ -210,14 +210,14 @@
     margin-left: 20px;
 }
 
-.comment {
+.commentArea {
     width: 400px;
     align-items: center;
     background-color: #ddd;
 }
 
-.comment p {
-    height: 30px;
+.comment {
+    height: auto;
     margin: 10px;
 }
 

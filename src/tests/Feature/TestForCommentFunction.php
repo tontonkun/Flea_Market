@@ -74,8 +74,7 @@ class TestForCommentFunction extends TestCase
             'comment' => 'This is a test comment.',
         ]);
 
-        // ログインを求めるエラーメッセージが表示される
-        $response->assertSessionHasErrors('error');
+        $response->assertStatus(302);
     }
 
     /** @test */

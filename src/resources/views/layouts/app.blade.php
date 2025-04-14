@@ -27,10 +27,10 @@
         </div>
     @endif
 
-    <!-- 商品詳細画面のコメントエラー表示 -->
-    <!-- @error('comment')
+    {{--コメント送信エラー用--}}
+    @error('comment')
         <div class="alert-danger">{{ $message }}</div>
-    @enderror -->
+    @enderror
 
     <div class="header">
         <div class="headerlogo">

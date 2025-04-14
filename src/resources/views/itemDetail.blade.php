@@ -102,8 +102,8 @@
                             </div>
                         </div>
 
-                        <div class="comment">
-                            <p>{{ $comment->comment ?? '' }}</p>
+                        <div class="commentArea">
+                            <div class="comment">{{ $comment->comment ?? '' }}</div>
                         </div>
                     @endforeach
                 </div>
@@ -114,11 +114,7 @@
                 <div class="inputArea">
                     <form action="{{ route('item.addComment', ['id' => $item->id])}}" method="POST">
                         @csrf
-                        <textarea class="inputArea" name="comment" rows="4" placeholder="商品へのコメントを入力してください..." required>{{ old('comment') }}</textarea>
-
-                        @error('comment')
-                            <div class="alert-danger">{{ $message }}</div>
-                        @enderror
+                        <textarea class="inputArea" name="comment" rows="4" placeholder="商品へのコメントを入力してください...">{{ old('comment') }}</textarea>
 
                         <button type="submit" class="submitCommentButton">
                             コメントを送信する
@@ -128,4 +124,5 @@
             </div>
         </div>
     </div>
+
 @endsection
