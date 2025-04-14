@@ -31,6 +31,26 @@ class PurchaseController extends Controller
         return view('purchase', compact('item', 'profile'));
     }
 
+    public function updatePaymentMethod(Request $request)
+    {
+        $paymentMethodValue = $request->input('payment_method');
+
+        $paymentMethodLabels = [
+            'convenience_store' => 'コンビニ払い',
+            'credit_card' => 'カード決済',
+        ];
+
+        $displayName = $paymentMethodLabels[$paymentMethodValue] ?? $paymentMethodValue;
+
+        // フラッシュセッションで表示用のテキスト
+        session()->flash('payment_method_display', $displayName);
+        // フラッシュセッションで選択状態を保持する
+        session()->flash('payment_method_selected', $paymentMethodValue);
+
+        return redirect()->back();
+    }
+
+
 
     public function process(Request $request, Item $item)
     {

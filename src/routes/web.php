@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
 
     // PurchaseController
     Route::get('/purchase/{item}', [PurchaseController::class, 'showPurchasePage'])->name('showPurchasePage');
+    Route::post('/purchase/update-payment', [PurchaseController::class, 'updatePaymentMethod'])->name('purchase.updatePayment');
     Route::post('/purchase/{item}/process', [PurchaseController::class, 'process'])->name('purchase.process');
 
     // AddressController

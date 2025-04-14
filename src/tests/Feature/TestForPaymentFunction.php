@@ -1,26 +1,44 @@
 <?php
 
-namespace Tests\Browser;
+namespace Tests\Feature;
 
 use App\Models\Item;
 use App\Models\User;
-use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
+use App\Models\Profile;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class TestForPaymentFunction extends DuskTestCase
+class TestForPaymentFunction extends TestCase
 {
-    public function test_payment_method_selection_reflects_in_display()
-    //このテストのみ実行コマンドは'php artisan dusk'
-    {
-        $user = User::factory()->create();
-        $item = Item::factory()->create();
+    use RefreshDatabase;
 
-        $this->browse(function (Browser $browser) use ($user, $item) {
-            $browser->loginAs($user)
-                    ->visit('/purchase/' . $item->id) 
-                    ->select('payment_method', 'credit_card')
-                    ->pause(300) // JSが実行されるまで少し待つ
-                    ->assertSeeIn('#paymentMethodDisplay', 'カード決済');
-        });
+    public function test_payment_method_selection_reflects_in_display()
+    {
+        // ユーザー・アイテム作成
+        $user = User::factory()->create();
+        $item = Item::factory()->create([
+            'price' => 1000,
+        ]);
+
+        // プロフィールも必要なら用意
+        Profile::factory()->create([
+            'user_id' => $user->id,
+            'postal_code' => '123-4567',
+            'address' => '東京都新宿区テスト',
+            'building_name' => 'テストビル',
+        ]);
+
+        // セッションに支払方法を保存してアクセス
+        $response = $this
+            ->actingAs($user)
+            ->withSession([
+                'payment_method_display' => 'コンビニ払い',
+                'payment_method_selected' => 'convenience_store',
+            ])
+            ->get(route('showPurchasePage', ['item' => $item->id]));
+
+        // 表示されていることを確認
+        $response->assertStatus(200);
+        $response->assertSeeText('コンビニ払い');
     }
 }

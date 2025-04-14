@@ -24,14 +24,17 @@
                 </div>
             </div>
 
-            <div class="paymentSelectionArea">
-                <div class="sectionTitle">支払い方法</div>
-                <select name="payment_method" class="paymentSelect" required>
-                    <option value="" disabled selected>選択してください</option>
-                    <option value="convenience_store">コンビニ払い</option>
-                    <option value="credit_card">カード決済</option>
-                </select>
-            </div>
+            <form id="paymentForm" action="{{ route('purchase.updatePayment') }}" method="POST">
+                @csrf
+                <div class="paymentSelectionArea">
+                    <div class="sectionTitle">支払い方法</div>
+                    <select name="payment_method" class="paymentSelect" required onchange="this.form.submit()">
+                        <option value="" disabled {{ session('payment_method_selected') ? '' : 'selected' }}>選択してください</option>
+                        <option value="convenience_store" {{ session('payment_method_selected') == 'convenience_store' ? 'selected' : '' }}>コンビニ払い</option>
+                        <option value="credit_card" {{ session('payment_method_selected') == 'credit_card' ? 'selected' : '' }}>カード決済</option>
+                    </select>
+                </div>
+            </form>
 
             <div id="creditCardForm" style="display:none;">
                 <div id="card-element"></div>
@@ -69,7 +72,8 @@
                 </div>
                 <div class="lowerArea">
                     <p>支払方法</p>
-                    <p id="paymentMethodDisplay">未選択</p>
+                    <!-- <p id="paymentMethodDisplay">未選択</p> -->
+                    <p id="paymentMethodDisplay"> {{ session('payment_method_display') ?? '未選択' }}</p>
                 </div>
             </div>
 
@@ -83,26 +87,29 @@
         </div>
     </div>
 
-    <script>
+   <script>
         document.addEventListener('DOMContentLoaded', function () {
             const paymentSelect = document.querySelector('select[name="payment_method"]');
             const paymentDisplay = document.getElementById('paymentMethodDisplay');
-            const submitButton = document.querySelector('.finalPurchaseButton');
             const hiddenInput = document.getElementById('paymentMethodHidden');
+            const submitButton = document.querySelector('.finalPurchaseButton');
 
+            // 初期状態のhiddenInputを更新
+            if (paymentSelect.value) {
+                hiddenInput.value = paymentSelect.value;
+                submitButton.disabled = false;
+            }
+
+            // セレクト変更時にも更新
             paymentSelect.addEventListener('change', function () {
-                const selectedMethod = paymentSelect.options[paymentSelect.selectedIndex].text;
-                const selectedValue = paymentSelect.value;
+                const selectedValue = this.value;
+                const selectedText = this.options[this.selectedIndex].text;
 
-                if (selectedValue === "") {
-                    paymentDisplay.textContent = "支払方法を選択してください";
-                    submitButton.disabled = true;
-                } else {
-                    paymentDisplay.textContent = selectedMethod;
-                    hiddenInput.value = selectedValue;
-                    submitButton.disabled = false;
-                }
+                paymentDisplay.textContent = selectedText;
+                hiddenInput.value = selectedValue;
+                submitButton.disabled = false;
             });
         });
     </script>
+
 @endsection
