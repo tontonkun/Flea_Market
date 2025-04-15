@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Profile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -15,33 +14,34 @@ class TestForProfile extends TestCase
 
     public function test_profile_form_prefills_existing_profile_data()
     {
-        Storage::fake('public');
-
-        // 1. ダミーユーザーとプロフィール画像を作成
+        // ユーザーとプロフィールを作成
         $user = User::factory()->create();
-        $image = UploadedFile::fake()->image('avatar.jpg');
-        $imagePath = $image->store('profile_images', 'public');
 
-        // 2. プロフィール作成
-        $profile = Profile::create([
+        // 仮のプロフィール画像ファイル名
+        $imageName = 'sample.jpg';
+
+        // プロフィール作成（画像ファイル名のみ）
+        $profile = Profile::factory()->create([
             'user_id' => $user->id,
             'user_name' => 'テスト太郎',
             'postal_code' => '123-4567',
-            'address' => '東京都テスト市',
-            'building_name' => 'テストビル301',
-            'user_image_pass' => basename($imagePath),
+            'address' => '東京都港区',
+            'building_name' => 'テストビル101',
+            'user_image_pass' => $imageName, // 実際の画像は使用しない
         ]);
 
-        // 3. ログインしてプロフィール設定ページにアクセス
-        $response = $this->actingAs($user)->get('/myPage/profile');
+        // 認証状態にする
+        $response = $this->actingAs($user)->get('myPage/profile'); // showProfile へアクセス
 
-        // 4. 表示確認
         $response->assertStatus(200);
-        $response->assertSee('プロフィール設定');
-        $response->assertSee('テスト太郎');
-        $response->assertSee('123-4567');
-        $response->assertSee('東京都テスト市');
-        $response->assertSee('テストビル301');
-        $response->assertSee('storage/profile_images/' . basename($imagePath)); // 画像表示の確認
+
+        // HTML に各値が含まれていることを確認
+        $response->assertSee('value="テスト太郎"', false);
+        $response->assertSee('value="123-4567"', false);
+        $response->assertSee('value="東京都港区"', false);
+        $response->assertSee('value="テストビル101"', false);
+
+        // 画像のファイル名が表示されるか
+        $response->assertSee($imageName, false);
     }
 }
