@@ -90,7 +90,7 @@ javascript
 MailHog
 
 
-##MailHogに関して
+## MailHogに関して
 
 メール認証実装のために使用しています。メール認証を行う際は、
 
