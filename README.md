@@ -90,7 +90,9 @@ javascript
 MailHog
 
 
-※MailHogはメール認証実装のために使用しています。メール認証を行う際は、
+##MailHogに関して
+
+メール認証実装のために使用しています。メール認証を行う際は、
 
 `http://localhost:8025/#`
 
