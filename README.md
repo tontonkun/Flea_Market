@@ -87,7 +87,10 @@ PHP
 
 javascript
 
-Mailhog
+MailHog
+※メール認証実装のために使用しています。メール認証の際にMailHog画面にアクセスする必要がありますので、
+`http://localhost:8025/#`
+にアクセスしてください
 
 ## ER図
 
