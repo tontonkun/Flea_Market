@@ -87,6 +87,8 @@ PHP
 
 javascript
 
+Mailhog
+
 ## ER図
 
 ![image](https://github.com/user-attachments/assets/4a5c9dcc-633a-4e7c-b414-3d3a1c8906c2)
