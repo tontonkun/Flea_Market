@@ -28,7 +28,8 @@
 .defaultProfileIcon {
     width: 100%;
     height: 100%;
-    background-color: #D9D9D9;
+    text-align: center;
+    background-color: #ddd;
     /* 背景色を #D9D9D9 に */
     border-radius: 50%;
     /* 丸型にする */
@@ -100,26 +101,24 @@
     width: 230px;
     height: 250px;
     overflow: hidden;
-    /* 画像がはみ出さないようにする */
     margin-bottom: 8px;
-    /* 画像と商品名の間隔 */
 }
 
 .itemImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* 縦横比を保ちながらコンテナに収める */
     border: 1px solid black;
 }
 
 .defaultItemImage {
     width: 100%;
-    /* デフォルトの画像の幅を合わせる */
-    height: 100px;
-    /* 画像の高さ */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     background-color: #ddd;
-    /* 画像がない場合の背景色 */
 }
 
 .itemName {

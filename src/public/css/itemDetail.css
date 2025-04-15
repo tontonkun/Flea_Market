@@ -17,7 +17,7 @@
 }
 
 .itemImage {
-    width: 600px;
+    width: 100%;
     height: auto;
 }
 
@@ -41,13 +41,24 @@
     opacity: 0.6;
 }
 
-.defaultItemImage,
 .profileIcon {
     display: flex;
     margin: 5px;
     width: 100%;
     height: 50px;
     align-items: center;
+}
+
+.defaultItemImage {
+    width: 500px;
+    height: 500px;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 30px;
+    border: 1px solid black;
 }
 
 .itemName {
@@ -254,8 +265,9 @@
 
     .imageArea {
         width: 100%;
-        height: auto;
-        text-align: center;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
     }
 
     .itemDetailArea {
@@ -265,8 +277,25 @@
     }
 
     .itemImage {
-        width: 90%;
+        width: 100%;
         height: auto;
+    }
+
+    .defaultItemImage {
+        width: 500px;
+        height: 500px;
+        background-color: #ddd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        text-align: center;
+        border: 1px solid black;
+        margin: 0 auto;
+    }
+
+    .itemName {
+        margin-top: 20px;
     }
 
     .priceArea {

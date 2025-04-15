@@ -47,7 +47,7 @@
                             <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
                         @else
                             <div class="defaultItemImage">
-                                画像なし
+                                No Image
                             </div>
                         @endif
                     </a>
@@ -62,23 +62,21 @@
     <div id="buy-items" class="displayArea" style="display: none;">
         <h2>購入した商品</h2>
         <div class="itemList">
-            @foreach($purchasedItems as $item)
+           @foreach($purchasedItems as $item)
                 <div class="itemArea">
                     <div class="itemImageContainer">
-                        <!-- 商品画像をクリックすると詳細ページへ遷移 -->
-                        <a href="{{ route('item.showDetail', $item->id) }}">
-                            <!-- 商品画像 -->
-                            @if($item->item_img_pass)
-                                <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
+                        <a href="{{ route('item.showDetail', $item->item->id) }}">
+                            @if($item->item && $item->item->item_img_pass)
+                                <img src="{{ asset('/' . $item->item->item_img_pass) }}" class="itemImage">
                             @else
                                 <div class="defaultItemImage">
-                                    画像なし
+                                    No Image
                                 </div>
                             @endif
                         </a>
-                        </div>
-                        <div class="itemName">{{ $item->item_name }}</div>
-                        </div>
+                    </div>
+                    <div class="itemName">{{ $item->item->item_name ?? '商品名不明' }}</div>
+                </div>
             @endforeach
         </div>
     </div>
