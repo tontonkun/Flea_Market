@@ -6,52 +6,66 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\UnauthorizedException;
 
 class LoginController extends Controller
 {
     /**
-     * ログインフォームの表示
+     * ログイン後のリダイレクト先
      *
-     * @return \Illuminate\View\View
+     * @var string
+     */
+    protected $redirectTo = '/'; // RouteServiceProvider::HOME でも可
+
+    /**
+     * コンストラクタ
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * ログインフォームの表示
      */
     public function showLoginForm()
     {
-        return view('auth.login');  // ログインフォームを表示する
+        return view('auth.login');
     }
 
     /**
      * ログイン処理
-     *
-     * @param  \App\Http\Requests\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function login(LoginRequest $request)
     {
-        // バリデーション済みのデータを取得
         $validatedData = $request->validated();
 
-        // メールアドレスとパスワードで認証を試みる
-        if (Auth::attempt(['email' => $validatedData['email'], 'password' => $validatedData['password']])) {
-            // 認証成功した場合は、トップページにリダイレクト
-            return redirect('/');
-        } else {
-            // 認証失敗した場合
-            return redirect()->back()->withErrors([
-                'email' => 'ログイン情報が正しくありません。',
-            ]);
+        if (Auth::attempt([
+            'email' => $validatedData['email'],
+            'password' => $validatedData['password']
+        ])) {
+            // ✅ メール認証されてないユーザーを拒否する場合
+            if (!Auth::user()->hasVerifiedEmail()) {
+                Auth::logout();
+                return redirect()->back()->withErrors([
+                    'email' => 'メール認証が完了していません。メールをご確認ください。',
+                ]);
+            }
+
+            return redirect($this->redirectTo);
         }
+
+        return redirect()->back()->withErrors([
+            'email' => 'ログイン情報が正しくありません。',
+        ]);
     }
 
     /**
      * ログアウト処理
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout()
     {
-        Auth::logout();  // ログアウト処理
-        Session::invalidate();  // セッションを無効化
-        return redirect('/');  // ログインページにリダイレクト
+        Auth::logout();
+        Session::invalidate();
+        return redirect('/');
     }
 }

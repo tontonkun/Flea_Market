@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Mail\Mailable;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
@@ -103,20 +106,24 @@ class TestForUserRegistration extends TestCase
 
     public function test_registration_success()
     {
-        // 正常なデータを使って登録を試みる
-        $response = $this->followingRedirects()->postJson('/register', [
+        // ユーザー登録のデータを準備
+        $userData = [
             'name' => 'Test User',
             'email' => 'testuser@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
+        ];
+
+        // POSTリクエストでユーザー登録をシミュレート
+        $response = $this->post(route('register'), $userData);
+
+        // ユーザーがデータベースに保存されたことを確認
+        $this->assertDatabaseHas('users', [
+            'name' => 'Test User',
+            'email' => 'testuser@example.com',
         ]);
 
-        // ステータスコードが成功であることを確認
-    $response->assertStatus(200);
-
-    // レスポンスに期待されるメッセージが含まれていることを確認
-    return response()->json([
-    'message' => '会員登録が完了しました！',
-        ], 200);
+        // ユーザーがメインページにリダイレクトされることを確認
+        $response->assertRedirect('/'); 
     }
 }

@@ -12,7 +12,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AddressController;
 
 // Auth::routes(['verify' => true]); を追加して、認証とメール認証を有効化
-// Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true]);
 
 // UserRegistrationController
 Route::get('register', [UserRegistrationController::class, 'create'])->name('register.form');
@@ -33,7 +33,8 @@ Route::post('/item/{id}/favorite', [ItemController::class, 'addFavorite'])->name
 Route::post('/item/{id}/addComment', [ItemController::class, 'addComment'])->name('item.addComment');
 
 // 認証が必要なルート
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     // ProfileController
     Route::get('/myPage/profile', [ProfileController::class, 'showProfile']);
@@ -58,8 +59,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // メール認証が必要な場合に表示されるルート
-// Route::middleware('guest')->group(function () {
-//     Route::get('/email/verify', function () {
-//         return view('auth.verify');
-//     })->name('verification.notice');
-// });
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', function () {
+        return view('auth.verify');
+    })->name('verification.notice');
+});
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -37,8 +37,7 @@
             <img src="/img/logo.svg" alt="coachtech" width="220" height="50">
         </div>
 
-        @unless(request()->is('login') || request()->is('register'))
-
+        @unless(request()->is('login') || request()->is('register') || (auth()->check() && !auth()->user()->hasVerifiedEmail()))
             <div class="searchBox">
                 <form action="/" method="GET">
                     <input type="text" name="query" value="{{ request()->query('query') }}" placeholder="何をお探しですか？"
