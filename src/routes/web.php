@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\UserRegistrationController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PostingController;
-use App\Http\Controllers\MyPageController;
-use App\Http\Controllers\MainPageController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\UserRegistrationController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MainPageController;
+use App\Http\Controllers\MyPageController;
+use App\Http\Controllers\PostingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
 
 // Auth::routes(['verify' => true]); を追加して、認証とメール認証を有効化
 Auth::routes(['verify' => true]);
@@ -21,7 +21,6 @@ Route::post('register', [UserRegistrationController::class, 'store'])->name('reg
 // LoginController
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login'); ;
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // MainPageController
@@ -32,8 +31,10 @@ Route::get('/item/{id}', [ItemController::class, 'showDetail'])->name('item.show
 Route::post('/item/{id}/favorite', [ItemController::class, 'addFavorite'])->name('item.addFavorite');
 Route::post('/item/{id}/addComment', [ItemController::class, 'addComment'])->name('item.addComment');
 
+// PurchaseController(カスタムミドルウェア分)
+Route::get('/purchase/{item}', [PurchaseController::class, 'showPurchasePage'])->name('showPurchasePage')->middleware('custom.auth');
+
 // 認証が必要なルート
-// Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // ProfileController
@@ -47,9 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sell', [PostingController::class, 'showPostingPage']);
     Route::post('/postItems', [PostingController::class, 'postItems'])->name('postItems'); // POSTのみ
 
-
     // PurchaseController
-    Route::get('/purchase/{item}', [PurchaseController::class, 'showPurchasePage'])->name('showPurchasePage');
     Route::post('/purchase/update-payment', [PurchaseController::class, 'updatePaymentMethod'])->name('purchase.updatePayment');
     Route::post('/purchase/{item}/process', [PurchaseController::class, 'process'])->name('purchase.process');
 
@@ -58,12 +57,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/changeAddress/{item_id}', [AddressController::class, 'changeAddress']);
 });
 
-// メール認証が必要な場合に表示されるルート
-Route::middleware('auth')->group(function () {
-    Route::get('/email/verify', function () {
-        return view('auth.verify');
-    })->name('verification.notice');
-});
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -14,15 +14,6 @@ class PurchaseController extends Controller
 {
     public function showPurchasePage(Request $request, Item $item)
     {
-        // 未ログインの場合は itemDetail にリダイレクト
-        if (!Auth::check()) {
-            $errorMessage = 'ログインしてください';
-
-            $profile = null; // 非ログインなのでプロフィールは null
-
-            return view('itemDetail', compact('item', 'profile', 'errorMessage'));
-        }
-
         // ログイン済みユーザーのプロフィールを取得
         $profile = Profile::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
