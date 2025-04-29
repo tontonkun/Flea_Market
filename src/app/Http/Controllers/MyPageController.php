@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Models\Profile;
 use App\Models\Favorite;
-use App\Models\PurchasedItem; 
+use App\Models\PurchasedItem;
 use Illuminate\Http\Request;
 
 class MyPageController extends Controller
@@ -30,9 +30,15 @@ class MyPageController extends Controller
         $favoriteItemIds = Favorite::where('user_id', $userId)->pluck('item_id');
         $favoriteItems = Item::whereIn('id', $favoriteItemIds)->get();
 
-        $tradingItems = Item::where('seller_id', $userId)
-        ->where('in_trade', true)
-        ->get();
+        $tradingItems = Item::where('in_trade', true)
+            ->where(function ($query) use ($userId) {
+                $query->where('seller_id', $userId)
+                    ->orWhereHas('purchasedItem', function ($q) use ($userId) {
+                        $q->where('purchaser_id', $userId);
+                    });
+            })
+            ->get();
+
 
         return view('myPage', compact(
             'profile',

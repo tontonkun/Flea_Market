@@ -33,8 +33,8 @@ class ChatController extends Controller
         }
 
         $partnerProfile = $chatPartner
-        ? Profile::where('user_id', $chatPartner->id)->first()
-        : null;
+            ? Profile::where('user_id', $chatPartner->id)->first()
+            : null;
 
         return view('chat', compact('item', 'messages', 'chatPartner', 'partnerProfile'));
     }
@@ -48,7 +48,7 @@ class ChatController extends Controller
         $message->user_id = auth()->id(); // ログインユーザーのID
         $message->item_id = $itemId;
         $message->content = $request->message;
-        
+
         // 画像ファイルがアップロードされていれば保存
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('chat_images', 'public'); // chat_imagesフォルダに保存
@@ -58,6 +58,26 @@ class ChatController extends Controller
         $message->save();
 
         // チャット画面にリダイレクト
-        return redirect()->route('chat', $itemId);
+        return redirect()->route('chat.show', $itemId);
+    }
+
+    // 編集メソッド
+    public function edit($messageId)
+    {
+        $message = Message::find($messageId);
+
+        // 編集画面に遷移する
+        return view('chat.edit', compact('message'));
+    }
+
+    // 削除メソッド
+    public function destroy($messageId)
+    {
+        $message = Message::find($messageId);
+        if ($message->user_id === auth()->id()) {
+            $message->delete();
+        }
+
+        return redirect()->route('chat.show', $message->item_id); // チャット画面にリダイレクト
     }
 }

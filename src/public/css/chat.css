@@ -6,20 +6,23 @@
 
 .itemList-container {
     width: 15%;
-    font-size: 20px;
     background: #868686;
     color: white;
     text-align: center;
 }
 
+.itemList-container h2 {
+    font-size: 30px;
+}
+
 .chat-container {
-    width: 75%;
+    width: 85%;
     background: #fff;
     padding: 20px;
 }
 
 .headerSection {
-    height: 60px;
+    height: 100px;
     align-items: center;
     display: flex;
     padding: 20px;
@@ -27,8 +30,8 @@
 }
 
 .profileIcon {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -51,13 +54,14 @@
 }
 
 .headerSection h2 {
-    font-size: 30px;
+    font-size: 36px;
     margin: 10px;
 }
 
 .itemSection {
     display: flex;
     padding: 20px;
+    align-items: center;
     border-bottom: 1px solid black;
 }
 
@@ -66,30 +70,34 @@
     height: 200px;
 }
 
-.messages {
+.itemInfo {
+    padding: 10px;
+    margin-left: 20px;
+}
+
+.itemInfo h2 {
+    font-size: 48px
+}
+
+.itemInfo h3 {
+    font-size: 36px
+}
+
+.messageSection {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 30px;
     margin-bottom: 20px;
-}
-
-.message {
-    max-width: 60%;
-    padding: 10px 15px;
-    border-radius: 15px;
-    word-break: break-word;
-    position: relative;
 }
 
 .my-message {
     align-self: flex-end;
-    background-color: #dcf8c6;
     text-align: right;
 }
 
 .other-message {
     align-self: flex-start;
-    background-color: #f1f0f0;
     text-align: left;
 }
 
@@ -99,14 +107,42 @@
     gap: 5px;
 }
 
-.message-meta {
-    font-size: 0.85rem;
-    color: #555;
+.message-content p {
+    background-color: #D9D9D9;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    max-width: 200px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    word-break: break-word;
 }
 
-.timestamp {
-    font-size: 0.75rem;
-    color: #999;
+.message-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.message-meta strong {
+    font-size: 20px;
+}
+
+.mini-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 8px;
+}
+
+.mini-default-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: inline-block;
+    margin-left: 8px;
 }
 
 .chat-image {
@@ -116,36 +152,73 @@
     margin: 5px 0;
 }
 
+.message-actions {
+    display: flex;
+    justify-content: flex-start;
+    /* ボタンを左寄せ */
+    gap: 10px;
+    /* ボタン間の隙間 */
+    margin-top: 10px;
+    /* メッセージとボタンの間に隙間を追加 */
+}
+
+.edit-message,
+.delete-message {
+    color: #5F5F5F;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 4px 0px #00000040;
+}
+
 .message-form {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
 }
 
 textarea[name="message"] {
-    width: 100%;
-    height: 80px;
+    width: 1350px;
+    height: 40px;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     resize: vertical;
 }
 
-input[type="file"] {
-    margin-top: 5px;
-}
-
-.sendMessage {
-    align-self: flex-end;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
+/* ファイル選択ボタンのカスタムラベル */
+.custom-file-label {
+    display: inline-block;
+    width: 120px;
+    height: 40px;
+    color: red;
+    border: 2px solid red;
+    background-color: white;
     cursor: pointer;
+    font-weight: bold;
+    margin-left: 15px;
+    text-align: center;
+    align-items: center;
+    padding: 5px;
+    border-radius: 10px;
 }
 
-button[type="submit"]:hover {
-    background-color: #45a049;
+/* 実際のinput[type="file"]は非表示に */
+.custom-file-input {
+    display: none;
+}
+
+/* 送信ボタンを画像で表示 */
+.sendMessage {
+    width: 50px;
+    height: 40px;
+    background-image: url('/img/messageSendButton.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
 }

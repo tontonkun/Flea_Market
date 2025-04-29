@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Auth\LoginController;
@@ -20,7 +21,7 @@ Route::get('register', [UserRegistrationController::class, 'create'])->name('reg
 Route::post('register', [UserRegistrationController::class, 'store'])->name('register.submit');
 
 // LoginController
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login'); ;
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');;
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -60,6 +61,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ChatController
     Route::get('/chat/{itemId}', [ChatController::class, 'showChat'])->name('chat.show');
     Route::post('/chat/{itemId}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('chat/{message}/edit', [ChatController::class, 'edit'])->name('chat.edit');
+    Route::delete('chat/{message}', [ChatController::class, 'destroy'])->name('chat.delete');
 });
-
-

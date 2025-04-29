@@ -6,5 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
 {
-    protected $fillable = ['user_id', 'item_id', 'content', 'image_path'];
+    protected $fillable = [
+        'user_id',
+        'item_id',
+        'content',
+        'image_path',
+    ];
+
+    // ユーザーとのリレーション
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // 必要に応じてアイテムともリレーションを定義
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }

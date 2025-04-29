@@ -40,7 +40,7 @@
     <div id="sell-items" class="displayArea">
         <h2>出品した商品</h2>
         <div class="itemList">
-            @foreach($postedItems as $item) <!-- 変数名を変更 -->
+            @foreach($postedItems as $item) 
                 <div class="itemArea">
                     <div class="itemImageContainer">
                     <!-- 商品画像をクリックすると詳細ページへ遷移 -->
