@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <!-- メッセージ表示エリア -->
     <div id="loginMessage" style="display: none; color: red; padding: 10px; border: 1px solid red;">
         商品のお気に入り登録、およびマイリスト表示はログイン後に実施可能です

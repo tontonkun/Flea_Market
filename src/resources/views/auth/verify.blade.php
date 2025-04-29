@@ -21,14 +21,14 @@
         @endif
 
         <div class="inputAreaTitle">
-            {{ __('ご自身のメール受信ボックスをご確認ください') }}
+            {{ __('ご登録されたメールアドレスに、認証用メールを送信します') }}
         </div>
         <div class="inputAreaTitle">
-            {{ __('メールが届かない場合、') }}
+            {{ __('以下ボタンを押してください') }}
         </div>
 
         <div class="buttonArea">
-            <button type="submit" class="loginButton">{{ __('こちらで再送信できます') }}</button>
+            <button type="submit" class="loginButton">{{ __('メールを送信') }}</button>
         </div>
     </form>
 @endsection

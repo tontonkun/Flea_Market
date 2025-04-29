@@ -30,11 +30,16 @@ class MyPageController extends Controller
         $favoriteItemIds = Favorite::where('user_id', $userId)->pluck('item_id');
         $favoriteItems = Item::whereIn('id', $favoriteItemIds)->get();
 
+        $tradingItems = Item::where('seller_id', $userId)
+        ->where('in_trade', true)
+        ->get();
+
         return view('myPage', compact(
             'profile',
             'postedItems',
             'purchasedItems',
-            'favoriteItems'
+            'favoriteItems',
+            'tradingItems'
         ));
     }
 }

@@ -20,6 +20,7 @@ class Item extends Model
         'description',
         'condition_id',
         'is_active',
+        'in_trade',
     ];
 
     protected $casts = [
@@ -49,5 +50,10 @@ class Item extends Model
     public function purchaser()
     {
         return $this->belongsTo(User::class, 'purchaser_id'); 
+    }
+
+    public function purchasedItem()
+    {
+        return $this->hasOne(PurchasedItem::class);
     }
 }

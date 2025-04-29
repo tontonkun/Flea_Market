@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <form class="form" action="/setUpProfiles" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="titleArea">

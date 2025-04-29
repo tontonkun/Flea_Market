@@ -10,6 +10,7 @@ use App\Http\Controllers\MyPageController;
 use App\Http\Controllers\PostingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ChatController;
 
 // Auth::routes(['verify' => true]); を追加して、認証とメール認証を有効化
 Auth::routes(['verify' => true]);
@@ -55,6 +56,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // AddressController
     Route::get('/purchase/address/{item_id}', [AddressController::class, 'showAdressChangePage']);
     Route::post('/changeAddress/{item_id}', [AddressController::class, 'changeAddress']);
+
+    // ChatController
+    Route::get('/chat/{itemId}', [ChatController::class, 'showChat'])->name('chat.show');
+    Route::post('/chat/{itemId}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
 });
 
 

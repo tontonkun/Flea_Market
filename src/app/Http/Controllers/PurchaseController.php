@@ -57,6 +57,7 @@ class PurchaseController extends Controller
 
         // アイテムのステータス更新
         $item->is_active = false;
+        $item->in_trade = true;
         $item->save();
 
         // セッション or プロフィールから配送先情報を取得

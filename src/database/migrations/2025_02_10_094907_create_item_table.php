@@ -23,6 +23,7 @@ class CreateItemTable extends Migration
             $table->string('description', 255)->nullable();
             $table->foreignId('condition_id')->nullable()->constrained('conditions')->onDelete('set null');
             $table->boolean('is_active')->default(true);
+            $table->boolean('in_trade')->default(false);
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });
