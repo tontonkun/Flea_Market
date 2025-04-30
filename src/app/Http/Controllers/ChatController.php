@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Message;
 use App\Models\Profile;
+use App\Models\Rating;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\EndChatRequest;
 
 class ChatController extends Controller
 {
@@ -20,7 +23,7 @@ class ChatController extends Controller
         $myId = auth()->id();
         $sellerId = $item->seller_id;
 
-        $purchase = $item->purchasedItem()->first(); 
+        $purchase = $item->purchasedItem()->first();
         $buyerId = $purchase ? $purchase->purchaser_id : null;
 
         $chatPartner = null;
@@ -89,5 +92,42 @@ class ChatController extends Controller
         }
 
         return redirect()->route('chat.show', $message->item_id); // チャット画面にリダイレクト
+    }
+
+    public function endchat(EndChatRequest $request, $itemId)
+    {
+        $validated = $request->validated();
+
+        $item = Item::findOrFail($itemId);
+        $userId = auth()->id();
+
+        // 出品者・購入者の判定（ここでは purchasedItem 経由と仮定）
+        $purchase = $item->purchasedItem()->first();
+        $sellerId = $item->seller_id;
+        $buyerId = $purchase ? $purchase->purchaser_id : null;
+
+        // 相手ユーザーを特定（評価対象）
+        if ($userId === $sellerId && $buyerId) {
+            $evaluatedUserId = $buyerId;
+        } elseif ($userId === $buyerId) {
+            $evaluatedUserId = $sellerId;
+        } else {
+            return back()->withErrors('取引関係にないユーザーです');
+        }
+
+        DB::transaction(function () use ($item, $userId, $evaluatedUserId, $request) {
+            // 評価登録
+            Rating::create([
+                'evaluator_id' => $userId,
+                'evaluated_user_id' => $evaluatedUserId,
+                'rating_value' => $request->input('rating'),
+                'item_id' => $item->id,
+            ]);
+
+            // 取引完了（in_trade を false に）
+            $item->update(['in_trade' => false]);
+        });
+
+        return redirect()->route('chat.show', $item->id)->with('status', '取引を完了しました');
     }
 }

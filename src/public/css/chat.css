@@ -87,7 +87,7 @@
     margin: 10px;
 }
 
-.completeTransactionBtn {
+.endChatBtn {
     background-color: #FF5555;
     color: white;
     padding: 10px 20px;
@@ -98,7 +98,7 @@
     transition: background-color 0.3s;
 }
 
-.completeTransactionBtn:hover {
+.endChatBtn:hover {
     background-color: #FF3333;
 }
 

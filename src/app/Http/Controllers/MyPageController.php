@@ -8,6 +8,7 @@ use App\Models\Profile;
 use App\Models\Favorite;
 use App\Models\PurchasedItem;
 use Illuminate\Http\Request;
+use App\Models\Rating;
 
 class MyPageController extends Controller
 {
@@ -39,13 +40,18 @@ class MyPageController extends Controller
             })
             ->get();
 
+        // 平均評価（評価された側として）
+        $averageRating = Rating::where('evaluated_user_id', $userId)->avg('rating_value');
+        $roundedRating = round($averageRating);
+
 
         return view('myPage', compact(
             'profile',
             'postedItems',
             'purchasedItems',
             'favoriteItems',
-            'tradingItems'
+            'tradingItems',
+            'roundedRating',
         ));
     }
 }

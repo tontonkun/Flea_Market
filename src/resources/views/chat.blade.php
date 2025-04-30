@@ -43,7 +43,7 @@
 
             <!-- 取引完了ボタン -->
             @if ($item->in_trade && $myId === $item->seller_id || $myId === $item->buyer_id)
-            <button id="completeTransactionBtn" class="completeTransactionBtn">
+            <button id="endChatBtn" class="endChatBtn">
                 取引を完了する
             </button>
             @endif
@@ -52,7 +52,7 @@
         <!-- 取引完了モーダル -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
             <div class="modal-content">
-                <form action="{{ route('chat.completeTransaction', $item->id) }}" method="POST">
+                <form action="{{ route('chat.endChat', $item->id) }}" method="POST">
                     @csrf
                     <div class="topPart">取引が完了しました。</div>
                     <div class="middlePart">
@@ -144,7 +144,7 @@
 @section('js')
 <script>
     // モーダル表示切替
-    document.getElementById('completeTransactionBtn')?.addEventListener('click', function() {
+    document.getElementById('endChatBtn')?.addEventListener('click', function() {
         document.getElementById('transactionModal').style.display = 'flex';
     });
 

@@ -30,15 +30,26 @@
     height: 100%;
     text-align: center;
     background-color: #ddd;
-    /* 背景色を #D9D9D9 に */
     border-radius: 50%;
-    /* 丸型にする */
+}
+
+.nameAndRate {
+    margin-left: 100px;
 }
 
 .userName {
     font-weight: bold;
-    font-size: 20px;
-    margin-left: 100px;
+    font-size: 30px;
+}
+
+.filled-star {
+    color: #FFD700;
+    font-size: 24px;
+}
+
+.empty-star {
+    color: #DDD;
+    font-size: 24px;
 }
 
 .editProfile {
