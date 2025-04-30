@@ -2,6 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
+<link rel="stylesheet" href="{{ asset('css/modalInChat.css') }}">
 @endsection
 
 @section('content')
@@ -12,7 +13,6 @@
             @forelse($otherItems as $otherItem)
             <div class="item-card">
                 <a href="{{ route('chat.show', $otherItem->id) }}">
-                    <img src="{{ asset($otherItem->item_img_pass) }}" alt="{{ $otherItem->item_name }}" class="item-thumb">
                     <div class="item-name">{{ $otherItem->item_name }}</div>
                 </a>
             </div>
@@ -33,16 +33,16 @@
                     @endif
                 </div>
                 <h2>
-                    @if ($chatPartner)
-                    「{{ $chatPartner->name }}」さんとの取引履歴
+                    @if ($chatPartner && $chatPartner->profile)
+                    「{{ $chatPartner->profile->user_name }}」さんとの取引履歴
                     @else
-                    チャット相手が不明です
+                    「{{ $chatPartner->name }}」さんとの取引履歴
                     @endif
                 </h2>
             </div>
 
             <!-- 取引完了ボタン -->
-            @if ($item->in_trade && $myId === $item->seller_id || $myId === $item->buyer_id)
+            @if ($item->in_trade && $myId === $buyerId)
             <button id="endChatBtn" class="endChatBtn">
                 取引を完了する
             </button>
@@ -51,7 +51,7 @@
 
         <!-- 取引完了モーダル -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
-            <div class="modal-content">
+            <div class="transaction-modal-content">
                 <form action="{{ route('chat.endChat', $item->id) }}" method="POST">
                     @csrf
                     <div class="topPart">取引が完了しました。</div>
@@ -105,16 +105,16 @@
                     <img src="{{ asset('storage/' . $message->image_path) }}" class="chat-image" alt="画像">
                     @endif
 
-                    <p>{{ $message->content }}</p>
+                    <p class="message-text">{{ $message->content }}</p>
 
                     @if ($isMine)
                     <!-- 編集・削除ボタンを追加 -->
                     <div class="message-actions">
-                        <a href="{{ route('chat.edit', $message->id) }}" class="edit-message">編集</a>
+                        <button class="edit-message-btn" data-message-id="{{ $message->id }}" data-message-content="{{ $message->content }}">編集</button>
                         <form action="{{ route('chat.delete', $message->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="delete-message">削除</button>
+                            <button type="submit" class="delete-message-btn">削除</button>
                         </form>
                     </div>
                     @endif
@@ -123,11 +123,34 @@
             @endforeach
         </div>
 
+        <!-- メッセージ編集モーダル -->
+        <div id="editMessageModal" class="edit-message-modal" style=" display: none;">
+            <div class="edit-message-modal-content">
+                <form id="editMessageForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <textarea name="content" id="editMessageTextarea" required></textarea>
+                    <div class="buttonArea">
+                        <button type="submit">更新</button>
+                        <button type="button" id="closeModalBtn">閉じる</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- メッセージ送信フォーム -->
         <form action="{{ route('chat.send', $item->id) }}" method="POST" enctype="multipart/form-data" class="message-form">
             @csrf
 
-            <textarea name="message" placeholder="取引メッセージを入力してください" required>{{ old('message') }}</textarea>
+            <!-- テキストメッセージ入力欄 -->
+            <div id="textAreaWrapper" class="textBoxArea">
+                <textarea name="message" placeholder="取引メッセージを入力してください" required>{{ old('message') }}</textarea>
+            </div>
+
+            <!-- 画像プレビュー用のimgタグ -->
+            <div id="imagePreviewWrapper" style="display: none;">
+                <img id="imagePreview" src="#" alt="画像プレビュー" style="max-width: 100%; max-height: 200px;">
+            </div>
 
             <label for="image-upload" class="custom-file-label">画像を追加</label>
             <input type="file" name="image" id="image-upload" accept="image/*" class="custom-file-input">
@@ -143,7 +166,7 @@
 
 @section('js')
 <script>
-    // モーダル表示切替
+    // チャット完了モーダル表示切替
     document.getElementById('endChatBtn')?.addEventListener('click', function() {
         document.getElementById('transactionModal').style.display = 'flex';
     });
@@ -171,6 +194,66 @@
                 }
             });
         });
+    });
+
+    // メッセージ編集ボタンをクリックしたときの処理
+    document.querySelectorAll('.edit-message-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const messageId = this.getAttribute('data-message-id');
+            const messageContent = this.getAttribute('data-message-content');
+
+            document.getElementById('editMessageTextarea').value = messageContent;
+            document.getElementById('editMessageForm').action = `/chat/${messageId}/edit`;
+
+            document.getElementById('editMessageModal').style.display = 'flex';
+        });
+    });
+
+
+    // メッセージ編集モーダルを閉じる処理
+    document.getElementById('closeModalBtn').addEventListener('click', function() {
+        document.getElementById('editMessageModal').style.display = 'none';
+    });
+
+    document.getElementById('image-upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
+        const textAreaWrapper = document.getElementById('textAreaWrapper');
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreviewWrapper.style.display = 'block';
+                textAreaWrapper.style.display = 'none'; // テキストエリアを非表示
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            // ファイル未選択時のリセット処理
+            imagePreview.src = '';
+            imagePreviewWrapper.style.display = 'none';
+            textAreaWrapper.style.display = 'block';
+        }
+    });
+
+    //選択画像プレビュー
+    document.getElementById('image-upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block'; // プレビューを表示する
+            }
+
+            reader.readAsDataURL(file);
+        }
     });
 </script>
 @endsection

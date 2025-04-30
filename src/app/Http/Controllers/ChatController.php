@@ -29,10 +29,11 @@ class ChatController extends Controller
         $chatPartner = null;
 
         if ($myId === $sellerId && $buyerId) {
-            $chatPartner = \App\Models\User::find($buyerId);
+            $chatPartner = \App\Models\User::with('profile')->find($buyerId);
         } elseif ($myId === $buyerId) {
-            $chatPartner = \App\Models\User::find($sellerId);
+            $chatPartner = \App\Models\User::with('profile')->find($sellerId);
         }
+
 
         $partnerProfile = $chatPartner
             ? Profile::where('user_id', $chatPartner->id)->first()
@@ -49,7 +50,15 @@ class ChatController extends Controller
             ->where('id', '!=', $itemId) // 今開いているアイテムは除く
             ->get();
 
-        return view('chat', compact('item', 'messages', 'chatPartner', 'partnerProfile', 'otherItems', 'myId'));
+        return view('chat', compact(
+            'item',
+            'messages',
+            'chatPartner',
+            'partnerProfile',
+            'otherItems',
+            'myId',
+            'buyerId'
+        ));
     }
 
     public function sendMessage(MessageRequest $request, $itemId)
@@ -75,12 +84,22 @@ class ChatController extends Controller
     }
 
     // 編集メソッド
-    public function edit($messageId)
+    public function edit(Request $request, $messageId)
     {
-        $message = Message::find($messageId);
+        // メッセージを取得
+        $message = Message::findOrFail($messageId);
 
-        // 編集画面に遷移する
-        return view('chat.edit', compact('message'));
+        // バリデーション
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        // メッセージの内容を更新
+        $message->content = $request->input('content');
+        $message->save();
+
+        // 更新後、同じチャット画面にリダイレクト
+        return redirect()->route('chat.show', $message->item_id);
     }
 
     // 削除メソッド
