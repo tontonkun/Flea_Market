@@ -20,8 +20,7 @@ class ChatController extends Controller
         $myId = auth()->id();
         $sellerId = $item->seller_id;
 
-        // 仮に purchased_item テーブルで購入者情報があるとする
-        $purchase = $item->purchasedItem()->first(); // リレーションがある場合
+        $purchase = $item->purchasedItem()->first(); 
         $buyerId = $purchase ? $purchase->purchaser_id : null;
 
         $chatPartner = null;
@@ -36,7 +35,18 @@ class ChatController extends Controller
             ? Profile::where('user_id', $chatPartner->id)->first()
             : null;
 
-        return view('chat', compact('item', 'messages', 'chatPartner', 'partnerProfile'));
+        // その他の取引情報を取得
+        $otherItems = Item::where('in_trade', true)
+            ->where(function ($query) use ($myId) {
+                $query->where('seller_id', $myId)
+                    ->orWhereHas('purchasedItem', function ($q) use ($myId) {
+                        $q->where('purchaser_id', $myId);
+                    });
+            })
+            ->where('id', '!=', $itemId) // 今開いているアイテムは除く
+            ->get();
+
+        return view('chat', compact('item', 'messages', 'chatPartner', 'partnerProfile', 'otherItems', 'myId'));
     }
 
     public function sendMessage(MessageRequest $request, $itemId)

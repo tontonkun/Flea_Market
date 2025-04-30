@@ -20,16 +20,16 @@ class MyPageController extends Controller
 
         // 出品中の商品取得
         $postedItems = Item::where('seller_id', $userId)
-            ->where('is_active', true)
             ->get();
 
         // 購入済みの商品を purchased_items テーブルから取得
         $purchasedItems = PurchasedItem::where('purchaser_id', $userId)->with('item')->get();
 
-        // お気に入りアイテム取得
+        // お気に入り商品取得
         $favoriteItemIds = Favorite::where('user_id', $userId)->pluck('item_id');
         $favoriteItems = Item::whereIn('id', $favoriteItemIds)->get();
 
+        // 取引中の商品取得
         $tradingItems = Item::where('in_trade', true)
             ->where(function ($query) use ($userId) {
                 $query->where('seller_id', $userId)

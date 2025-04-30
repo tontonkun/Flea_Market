@@ -8,24 +8,69 @@
 <div class="entire">
     <div class="itemList-container">
         <h2>その他の取引</h2>
+        <div class="item-list">
+            @forelse($otherItems as $otherItem)
+            <div class="item-card">
+                <a href="{{ route('chat.show', $otherItem->id) }}">
+                    <img src="{{ asset($otherItem->item_img_pass) }}" alt="{{ $otherItem->item_name }}" class="item-thumb">
+                    <div class="item-name">{{ $otherItem->item_name }}</div>
+                </a>
+            </div>
+            @empty
+            <p>取引中の商品はありません。</p>
+            @endforelse
+        </div>
     </div>
 
     <div class="chat-container">
         <div class="headerSection">
-            <div class="profileIcon">
-                @if($partnerProfile && $partnerProfile->user_image_pass)
-                <img src="{{ asset('storage/profile_images/' . $partnerProfile->user_image_pass) }}" class="profileIconImage">
-                @else
-                <div class="defaultProfileIcon"></div>
-                @endif
+            <div class="partnerInfo">
+                <div class="profileIcon">
+                    @if($partnerProfile && $partnerProfile->user_image_pass)
+                    <img src="{{ asset('storage/profile_images/' . $partnerProfile->user_image_pass) }}" class="profileIconImage">
+                    @else
+                    <div class="defaultProfileIcon"></div>
+                    @endif
+                </div>
+                <h2>
+                    @if ($chatPartner)
+                    「{{ $chatPartner->name }}」さんとの取引履歴
+                    @else
+                    チャット相手が不明です
+                    @endif
+                </h2>
             </div>
-            <h2>
-                @if ($chatPartner)
-                「{{ $chatPartner->name }}」さんとの取引履歴
-                @else
-                チャット相手が不明です
-                @endif
-            </h2>
+
+            <!-- 取引完了ボタン -->
+            @if ($item->in_trade && $myId === $item->seller_id || $myId === $item->buyer_id)
+            <button id="completeTransactionBtn" class="completeTransactionBtn">
+                取引を完了する
+            </button>
+            @endif
+        </div>
+
+        <!-- 取引完了モーダル -->
+        <div id="transactionModal" class="transaction-modal" style="display: none;">
+            <div class="modal-content">
+                <form action="{{ route('chat.completeTransaction', $item->id) }}" method="POST">
+                    @csrf
+                    <div class="topPart">取引が完了しました。</div>
+                    <div class="middlePart">
+                        <p>今回の取引相手はどうでしたか？</p>
+                        <div class="rating" id="ratingStars">
+                            <span data-value="1">★</span>
+                            <span data-value="2">★</span>
+                            <span data-value="3">★</span>
+                            <span data-value="4">★</span>
+                            <span data-value="5">★</span>
+                        </div>
+                        <input type="hidden" name="rating" id="ratingInput" value="">
+                    </div>
+                    <div class="lowerPart">
+                        <button type="submit" class="submit-rating">送信する</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="itemSection">
@@ -95,4 +140,39 @@
         </form>
     </div>
 </div>
+
+@section('js')
+<script>
+    // モーダル表示切替
+    document.getElementById('completeTransactionBtn')?.addEventListener('click', function() {
+        document.getElementById('transactionModal').style.display = 'flex';
+    });
+
+    document.getElementById('closeModalBtn')?.addEventListener('click', function() {
+        document.getElementById('transactionModal').style.display = 'none';
+    });
+
+    // 星評価のクリック処理
+    const stars = document.querySelectorAll('#ratingStars span');
+    const ratingInput = document.getElementById('ratingInput');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = parseInt(star.getAttribute('data-value'));
+
+            ratingInput.value = value;
+
+            stars.forEach(s => {
+                const starValue = parseInt(s.getAttribute('data-value'));
+                if (starValue <= value) {
+                    s.classList.add('selected');
+                } else {
+                    s.classList.remove('selected');
+                }
+            });
+        });
+    });
+</script>
+@endsection
+
 @endsection

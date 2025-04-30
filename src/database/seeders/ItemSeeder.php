@@ -5,7 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use App\Models\Item;
 
 class ItemSeeder extends Seeder
 {
@@ -16,6 +18,15 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
+        // 出品者ユーザーを取得
+        $seller1 = User::where('name', '出品者1')->first();
+        $seller2 = User::where('name', '出品者2')->first();
+
+        if (!$seller1 || !$seller2) {
+            Log::error('出品者ユーザーが見つかりません。UserSeeder が先に実行されているか確認してください。');
+            return;
+        }
+
         $items = [
             [
                 'item_name' => '腕時計',
@@ -90,39 +101,43 @@ class ItemSeeder extends Seeder
         ];
 
         // 各アイテムに対して処理を行う
-        foreach ($items as $item) {
-        // 画像保存先ディレクトリ
-        $directory = storage_path('app/public/item_images');
+        foreach ($items as $index => $item) {
+            // 画像保存先ディレクトリ
+            $directory = storage_path('app/public/item_images');
 
-        // ディレクトリが存在しない場合に作成
-        if (!File::exists($directory)) {
-            File::makeDirectory($directory, 0755, true); // 0755 はディレクトリのパーミッション
-        }
+            // ディレクトリが存在しない場合に作成
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true); // 0755 はディレクトリのパーミッション
+            }
 
-        // 画像のURLを取得して、画像のコンテンツをダウンロード
-        $imageContent = @file_get_contents($item['image_url']); // エラー抑制
-        if ($imageContent === false) {
-            \Log::error("画像のダウンロードに失敗: " . $item['image_url']);
-            continue; // 失敗した場合はスキップ
-        }
+            // 画像のURLを取得して、画像のコンテンツをダウンロード
+            $imageContent = @file_get_contents($item['image_url']); // エラー抑制
+            if ($imageContent === false) {
+                \Log::error("画像のダウンロードに失敗: " . $item['image_url']);
+                continue; // 失敗した場合はスキップ
+            }
 
-        $imageName = urldecode(basename($item['image_url'])); // ファイル名をURLデコード
+            $imageName = urldecode(basename($item['image_url'])); // ファイル名をURLデコード
 
-        $imagePath = 'item_images/' . $imageName;
+            $imagePath = 'item_images/' . $imageName;
 
-        // publicディスクに画像を保存
-        Storage::disk('public')->put($imagePath, $imageContent);
+            // publicディスクに画像を保存
+            Storage::disk('public')->put($imagePath, $imageContent);
 
-        // アイテムを作成（item_img_pass はデコード後のパスでOK）
-        \App\Models\Item::create([
-            'item_name' => $item['item_name'],
-            'price' => $item['price'],
-            'description' => $item['description'],
-            'item_img_pass' => 'storage/' . $imagePath,
-            'condition_id' => $item['condition_id'],
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+            // 商品と出品者の紐づけ
+            $seller = $index < 5 ? $seller1 : $seller2;
+
+            // アイテムを作成（item_img_pass はデコード後のパスでOK）
+            \App\Models\Item::create([
+                'item_name' => $item['item_name'],
+                'price' => $item['price'],
+                'description' => $item['description'],
+                'item_img_pass' => 'storage/' . $imagePath,
+                'condition_id' => $item['condition_id'],
+                'seller_id' => $seller->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

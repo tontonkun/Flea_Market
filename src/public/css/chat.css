@@ -15,6 +15,30 @@
     font-size: 30px;
 }
 
+.item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.item-name {
+    font-weight: bold;
+}
+
 .chat-container {
     width: 85%;
     background: #fff;
@@ -25,8 +49,13 @@
     height: 100px;
     align-items: center;
     display: flex;
+    justify-content: space-between;
     padding: 20px;
     border-bottom: 1px solid black;
+}
+
+.partnerInfo {
+    display: flex;
 }
 
 .profileIcon {
@@ -56,6 +85,94 @@
 .headerSection h2 {
     font-size: 36px;
     margin: 10px;
+}
+
+.completeTransactionBtn {
+    background-color: #FF5555;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.completeTransactionBtn:hover {
+    background-color: #FF3333;
+}
+
+.transaction-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #FDFCE6;
+    border-radius: 10px;
+    width: 600px;
+    height: 360px;
+}
+
+.topPart {
+    display: block;
+    font-size: 30px;
+    padding: 15px;
+    margin: 10px 0;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.middlePart p {
+    font-size: 20px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.rating {
+    text-align: center;
+    align-items: center;
+    display: block;
+    height: 150px;
+    border-bottom: 1px solid black;
+    margin-top: -40px;
+}
+
+.rating span {
+    font-size: 100px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.rating .selected {
+    color: #FFD700;
+}
+
+.lowerPart {
+    display: flex;
+    justify-content: right;
+    padding: 15px;
+}
+
+.submit-rating {
+    background-color: #FF5555;
+    color: white;
+    font-size: 25px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-rating:hover {
+    background-color: #FF3333;
 }
 
 .itemSection {
@@ -213,8 +330,8 @@ textarea[name="message"] {
 
 /* 送信ボタンを画像で表示 */
 .sendMessage {
-    width: 50px;
-    height: 40px;
+    width: 45px;
+    height: 30px;
     background-image: url('/img/messageSendButton.jpg');
     background-size: contain;
     background-repeat: no-repeat;

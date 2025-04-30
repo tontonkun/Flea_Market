@@ -63,4 +63,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/chat/{itemId}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('chat/{message}/edit', [ChatController::class, 'edit'])->name('chat.edit');
     Route::delete('chat/{message}', [ChatController::class, 'destroy'])->name('chat.delete');
+    Route::post('/items/{itemId}/complete', [ChatController::class, 'completeTrade'])->name('chat.completeTransaction');
 });
