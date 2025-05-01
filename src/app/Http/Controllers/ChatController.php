@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MessageRequest;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Message;
@@ -10,6 +9,8 @@ use App\Models\Profile;
 use App\Models\Rating;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\EndChatRequest;
+use App\Http\Requests\SendMessageRequest;
+use App\Http\Requests\EditMessageRequest;
 
 class ChatController extends Controller
 {
@@ -50,6 +51,22 @@ class ChatController extends Controller
             ->where('id', '!=', $itemId) // 今開いているアイテムは除く
             ->get();
 
+        // 各商品に未読メッセージ数を付加（相手 → 自分 の未読）
+        foreach ($otherItems as $otherItem) {
+            $unreadCount = Message::where('item_id', $otherItem->id)
+                ->where('user_id', '!=', $myId) // 相手のメッセージ
+                ->whereNull('read_at') // 未読
+                ->count();
+
+            $otherItem->unread_count = $unreadCount;
+        }
+
+        // 開いているチャットのメッセージを既読にする
+        Message::where('item_id', $itemId)
+            ->where('user_id', '!=', $myId)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         return view('chat', compact(
             'item',
             'messages',
@@ -61,15 +78,13 @@ class ChatController extends Controller
         ));
     }
 
-    public function sendMessage(MessageRequest $request, $itemId)
+    public function sendMessage(sendMessageRequest $request, $itemId)
     {
-        // バリデーションが成功すると、このコードが実行される
-
         // メッセージの保存
         $message = new Message();
         $message->user_id = auth()->id(); // ログインユーザーのID
         $message->item_id = $itemId;
-        $message->content = $request->message;
+        $message->message = $request->message;
 
         // 画像ファイルがアップロードされていれば保存
         if ($request->hasFile('image')) {
@@ -84,26 +99,22 @@ class ChatController extends Controller
     }
 
     // 編集メソッド
-    public function edit(Request $request, $messageId)
+    public function editMessage(editMessageRequest $request, $messageId)
     {
-        // メッセージを取得
         $message = Message::findOrFail($messageId);
 
-        // バリデーション
-        $request->validate([
-            'content' => 'required|string|max:255',
-        ]);
-
-        // メッセージの内容を更新
+        // 保存せずにバリデーションが通らないと戻る（sendMessageRequestで処理済み）
         $message->content = $request->input('content');
         $message->save();
 
-        // 更新後、同じチャット画面にリダイレクト
-        return redirect()->route('chat.show', $message->item_id);
+        return redirect()
+            ->route('chat.show', $message->item_id)
+            ->with('editedMessageId', $messageId); // モーダル再表示用
     }
 
+
     // 削除メソッド
-    public function destroy($messageId)
+    public function deleteMessage($messageId)
     {
         $message = Message::find($messageId);
         if ($message->user_id === auth()->id()) {

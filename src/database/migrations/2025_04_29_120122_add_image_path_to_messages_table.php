@@ -14,7 +14,7 @@ class AddImagePathToMessagesTable extends Migration
     public function up(): void
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->string('image_path')->nullable()->after('content');
+            $table->string('image_path')->nullable()->after('message');
         });
     }
 
@@ -24,5 +24,4 @@ class AddImagePathToMessagesTable extends Migration
             $table->dropColumn('image_path');
         });
     }
-
 }

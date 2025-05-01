@@ -16,20 +16,25 @@
 <body>
     {{-- フラッシュメッセージの表示 --}}
     @if(session('success'))
-        <div class="alert-success">
-            {{ session('success') }}
-        </div>
+    <div class="alert-success">
+        {{ session('success') }}
+    </div>
     @endif
 
     @if(session('error'))
-        <div class="alert-danger">
-            {{ session('error') }}
-        </div>
+    <div class="alert-danger">
+        {{ session('error') }}
+    </div>
     @endif
 
     {{--コメント送信エラー用--}}
     @error('comment')
-        <div class="alert-danger">{{ $message }}</div>
+    <div class="alert-danger">{{ $message }}</div>
+    @enderror
+
+    {{--チャットメッセージ送信エラー用--}}
+    @error('message')
+    <div class="alert-danger">{{ $message }}</div>
     @enderror
 
     <div class="header">
@@ -38,46 +43,46 @@
         </div>
 
         @unless(request()->is('login') || request()->is('register') || (auth()->check() && !auth()->user()->hasVerifiedEmail()))
-            <div class="searchBox">
-                <form action="/" method="GET">
-                    <input type="text" name="query" value="{{ request()->query('query') }}" placeholder="何をお探しですか？"
-                        class="searchInput">
-                    <button type="submit" class="searchButton">検索</button>
-                </form>
-            </div>
+        <div class="searchBox">
+            <form action="/" method="GET">
+                <input type="text" name="query" value="{{ request()->query('query') }}" placeholder="何をお探しですか？"
+                    class="searchInput">
+                <button type="submit" class="searchButton">検索</button>
+            </form>
+        </div>
 
-            <div class="headerLinks">
-                @auth
-                    <!-- ログイン中 -->
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button class="logout">ログアウト</button>
-                    </form>
-                @endauth
+        <div class="headerLinks">
+            @auth
+            <!-- ログイン中 -->
+            <form action="/logout" method="POST">
+                @csrf
+                <button class="logout">ログアウト</button>
+            </form>
+            @endauth
 
-                @guest
-                    <!-- ログアウト中 -->
-                    <form action="/login" method="GET">
-                        @csrf
-                        <button class="login">ログイン</button>
-                    </form>
-                @endguest
+            @guest
+            <!-- ログアウト中 -->
+            <form action="/login" method="GET">
+                @csrf
+                <button class="login">ログイン</button>
+            </form>
+            @endguest
 
-                @auth
-                    <form action="/myPage" method="GET">
-                        @csrf
-                        <button class="myPage">マイページ</button>
-                    </form>
+            @auth
+            <form action="/myPage" method="GET">
+                @csrf
+                <button class="myPage">マイページ</button>
+            </form>
 
-                    <form action="/sell" method="GET">
-                        @csrf
-                        <button class="sell">出品</button>
-                    </form>
-                @endauth
-            </div>
+            <form action="/sell" method="GET">
+                @csrf
+                <button class="sell">出品</button>
+            </form>
+            @endauth
+        </div>
         @endunless
     </div>
-    @yield('content')
+    @yield('mainContents')
 
     <script src="{{ asset('js/app.js') }}"></script>
 

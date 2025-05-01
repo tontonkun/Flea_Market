@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/myPage.css') }}">
 @endsection
 
-@section('content')
+@section('mainContents')
 <form action="/myPage/profile" method="GET">
     </div>
     <div class="upperArea">
@@ -100,7 +100,16 @@
             <div class="itemImageContainer">
                 <a href="{{ route('chat.show', $item->id) }}">
                     @if($item->item_img_pass)
-                    <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
+                    <div class="itemImageWrapper">
+                        <img src="{{ asset('/' . $item->item_img_pass) }}" class="itemImage">
+
+                        <!-- 未読メッセージ数を赤丸で表示 -->
+                        @if($item->unread_count > 0)
+                        <div class="unread-count">
+                            {{ $item->unread_count }}
+                        </div>
+                        @endif
+                    </div>
                     @else
                     <div class="defaultItemImage">No Image</div>
                     @endif

@@ -111,8 +111,8 @@ class ItemSeeder extends Seeder
             }
 
             // 画像のURLを取得して、画像のコンテンツをダウンロード
-            $imageContent = @file_get_contents($item['image_url']); // エラー抑制
-            if ($imageContent === false) {
+            $imagemessage = @file_get_contents($item['image_url']);
+            if ($imagemessage === false) {
                 \Log::error("画像のダウンロードに失敗: " . $item['image_url']);
                 continue; // 失敗した場合はスキップ
             }
@@ -122,7 +122,7 @@ class ItemSeeder extends Seeder
             $imagePath = 'item_images/' . $imageName;
 
             // publicディスクに画像を保存
-            Storage::disk('public')->put($imagePath, $imageContent);
+            Storage::disk('public')->put($imagePath, $imagemessage);
 
             // 商品と出品者の紐づけ
             $seller = $index < 5 ? $seller1 : $seller2;

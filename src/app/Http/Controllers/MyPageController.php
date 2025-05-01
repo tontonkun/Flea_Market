@@ -40,10 +40,19 @@ class MyPageController extends Controller
             })
             ->get();
 
+        // 各取引中の商品に未読メッセージ数を追加
+        foreach ($tradingItems as $item) {
+            $unreadCount = \App\Models\Message::where('item_id', $item->id)
+                ->where('user_id', '!=', $userId) // 相手のメッセージ
+                ->whereNull('read_at') // 未読
+                ->count();
+
+            $item->unread_count = $unreadCount;
+        }
+
         // 平均評価（評価された側として）
         $averageRating = Rating::where('evaluated_user_id', $userId)->avg('rating_value');
         $roundedRating = round($averageRating);
-
 
         return view('myPage', compact(
             'profile',

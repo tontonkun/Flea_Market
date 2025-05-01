@@ -1,0 +1,198 @@
+.itemSection {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.itemImage {
+    width: 200px;
+    height: 200px;
+}
+
+.itemInfo {
+    padding: 10px;
+    margin-left: 20px;
+}
+
+.itemInfo h2 {
+    font-size: 48px
+}
+
+.itemInfo h3 {
+    font-size: 36px
+}
+
+.messageSection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.my-message {
+    align-self: flex-end;
+    text-align: right;
+}
+
+.other-message {
+    align-self: flex-start;
+    text-align: left;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.message-content p {
+    background-color: #D9D9D9;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    width: auto;
+    max-width: 400px;
+    min-width: 17px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    word-break: break-word;
+}
+
+.message-meta {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 8px;
+}
+
+.message-meta strong {
+    font-size: 20px;
+}
+
+.mini-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 8px;
+}
+
+.mini-default-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.chat-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin: 5px 0;
+}
+
+.message-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-message-btn,
+.delete-message-btn {
+    color: #5F5F5F;
+    background-color: transparent;
+    border: none;
+    padding: 5px 10px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.edit-message-btn:hover,
+.delete-message-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+/* プレビュー画像ラッパー */
+#imagePreviewWrapper {
+    display: none;
+    margin-bottom: 10px;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+}
+
+/* テキスト、画像選択、送信ボタンの横並び */
+.message-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* テキストボックス */
+.message-input-row textarea {
+    flex: 1;
+    height: 40px;
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+}
+
+/* 画像選択ボタン */
+.custom-file-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 105px;
+    height: 40px;
+    color: red;
+    border: 2px solid red;
+    background-color: white;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* 非表示のファイル選択 */
+.custom-file-input {
+    display: none;
+}
+
+/* 送信ボタン（画像） */
+.sendMessage {
+    width: 40px;
+    height: 30px;
+    background-image: url('/img/messageSendButton.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.error-message {
+    color: red;
+}

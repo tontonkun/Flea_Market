@@ -1,7 +1,7 @@
 <!-- resources/views/purchase/stripe.blade.php -->
 @extends('layouts.app')
 
-@section('content')
+@section('mainContents')
 <div class="purchase-summary">
     <h2>購入処理</h2>
     <p>商品: {{ $item->item_name }}</p>
@@ -24,11 +24,14 @@
     card.mount('#card-element');
 
     var form = document.getElementById('payment-form');
-    form.addEventListener('submit', async function (event) {
+    form.addEventListener('submit', async function(event) {
         event.preventDefault();
 
         // 支払いを確認
-        const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+        const {
+            paymentIntent,
+            error
+        } = await stripe.confirmCardPayment(clientSecret, {
             payment_method: {
                 card: card,
             }
@@ -43,8 +46,8 @@
                 window.location.href = `/purchase/${{{ $item -> id }
             }
         }/complete?payment_intent=${paymentIntent.id}`;
-    }
             }
-        });
+        }
+    });
 </script>
 @endsection

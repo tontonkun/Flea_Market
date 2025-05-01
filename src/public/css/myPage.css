@@ -57,8 +57,6 @@
     color: #FF5555;
     background-color: white;
     border: 2px solid #FF5555;
-    padding: 5px 20px;
-    font-size: 15px;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
@@ -128,9 +126,32 @@
     margin-bottom: 8px;
 }
 
+.itemImageWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.unread-count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 20px;
+}
+
 .itemImage {
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
+    width: 230px;
+    height: 250px;
     object-fit: cover;
     border: 1px solid black;
 }
@@ -171,7 +192,7 @@
     }
 
     .editProfile {
-        margin-left: 0;
+        margin-left: 30px;
         margin-top: 10px;
         padding: 6px 15px;
         font-size: 14px;

@@ -9,8 +9,9 @@ class Message extends Model
     protected $fillable = [
         'user_id',
         'item_id',
-        'content',
+        'message',
         'image_path',
+        'read_at',
     ];
 
     // ユーザーとのリレーション
