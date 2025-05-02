@@ -150,10 +150,10 @@
 
             <!-- テキスト + 画像選択 + 送信 -->
             <div class="message-input-row">
-                <textarea name="message" placeholder="取引メッセージを入力してください">{{ old('message') }}</textarea>
+                <textarea name="message" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
 
                 <!-- 画像選択 -->
-                <label for="image-upload" class="custom-file-label">画像を選択</label>
+                <label for="image-upload" class="custom-file-label">画像を追加</label>
                 <input type="file" name="image" id="image-upload" accept="image/*" class="custom-file-input" style="display: none;">
 
                 <!-- 送信ボタン -->

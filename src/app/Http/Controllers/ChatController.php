@@ -35,7 +35,6 @@ class ChatController extends Controller
             $chatPartner = \App\Models\User::with('profile')->find($sellerId);
         }
 
-
         $partnerProfile = $chatPartner
             ? Profile::where('user_id', $chatPartner->id)->first()
             : null;
@@ -104,7 +103,7 @@ class ChatController extends Controller
         $message = Message::findOrFail($messageId);
 
         // 保存せずにバリデーションが通らないと戻る（sendMessageRequestで処理済み）
-        $message->content = $request->input('content');
+        $message->message = $request->input('message');
         $message->save();
 
         return redirect()

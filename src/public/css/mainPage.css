@@ -46,9 +46,8 @@
 
 .itemImageContainer {
     position: relative;
-    /* ラベルを重ねるために必要 */
-    width: 230px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
     overflow: hidden;
     margin-bottom: 8px;
 }
