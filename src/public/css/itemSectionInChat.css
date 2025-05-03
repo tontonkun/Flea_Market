@@ -162,6 +162,11 @@
     gap: 10px;
 }
 
+.chatButtons {
+    display: flex;
+    align-items: center;
+}
+
 /* テキストボックス */
 .message-input-row textarea {
     flex: 1;
@@ -209,4 +214,101 @@
 
 .error-message {
     color: red;
+}
+
+/* 768px から 1200px の画面幅に適用されるスタイル */
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    /* アイテムセクションの調整 */
+    .itemSection {
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .itemImage {
+        width: 50%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .itemInfo {
+        padding: 10px;
+        margin-left: 50px;
+        margin-top: 50px;
+    }
+
+    .itemInfo h2 {
+        font-size: 32px;
+        /* 少し小さめに調整 */
+    }
+
+    .itemInfo h3 {
+        font-size: 24px;
+        /* フォントサイズを少し調整 */
+    }
+
+    /* メッセージセクションの調整 */
+    .messageSection {
+        padding: 20px;
+        gap: 15px;
+        max-height: 450px;
+        overflow-y: auto;
+    }
+
+    /* メッセージ内容の調整 */
+    .message-text {
+        max-width: 100%;
+        /* 最大幅を100%にして、画面サイズに合わせる */
+    }
+
+    .message-meta strong {
+        font-size: 18px;
+        /* 少し小さめに */
+    }
+
+    .message-input-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .message-input-row textarea {
+        font-size: 18px;
+    }
+
+    .chatButtons {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .sendMessage {
+        width: 45px;
+        /* 少し大きめに調整 */
+        height: 35px;
+    }
+
+    /* ファイル選択ボタンの調整 */
+    .custom-file-label {
+        width: 100px;
+        height: 40px;
+    }
+
+    /* プレビュー画像の調整 */
+    #imagePreview {
+        max-width: 100%;
+        max-height: 180px;
+    }
+
+    /* メッセージアクションボタンの調整 */
+    .edit-message-btn,
+    .delete-message-btn {
+        padding: 8px 12px;
+        /* ボタンのサイズを少し大きく */
+    }
+
+    /* メッセージフォーム */
+    .message-form {
+        padding: 10px 15px;
+    }
 }

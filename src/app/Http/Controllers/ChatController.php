@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\Rating;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\EndChatRequest;
+use App\Http\Requests\EvaluationRequest;
 use App\Http\Requests\SendMessageRequest;
 use App\Http\Requests\EditMessageRequest;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TradeCompletedNotification;
 
 class ChatController extends Controller
 {
@@ -60,6 +61,15 @@ class ChatController extends Controller
             $otherItem->unread_count = $unreadCount;
         }
 
+        // 評価済みかどうかをチェック
+        $hasRated = false;
+        if ($buyerId && $myId === $buyerId) {
+            $hasRated = Rating::where('evaluator_id', $myId)
+                ->where('evaluated_user_id', $sellerId)
+                ->where('item_id', $itemId)
+                ->exists();
+        }
+
         // 開いているチャットのメッセージを既読にする
         Message::where('item_id', $itemId)
             ->where('user_id', '!=', $myId)
@@ -73,7 +83,8 @@ class ChatController extends Controller
             'partnerProfile',
             'otherItems',
             'myId',
-            'buyerId'
+            'buyerId',
+            'hasRated'
         ));
     }
 
@@ -111,7 +122,6 @@ class ChatController extends Controller
             ->with('editedMessageId', $messageId); // モーダル再表示用
     }
 
-
     // 削除メソッド
     public function deleteMessage($messageId)
     {
@@ -123,7 +133,7 @@ class ChatController extends Controller
         return redirect()->route('chat.show', $message->item_id); // チャット画面にリダイレクト
     }
 
-    public function endchat(EndChatRequest $request, $itemId)
+    public function evaluation(evaluationRequest $request, $itemId)
     {
         $validated = $request->validated();
 
@@ -157,6 +167,10 @@ class ChatController extends Controller
             $item->update(['in_trade' => false]);
         });
 
-        return redirect()->route('chat.show', $item->id)->with('status', '取引を完了しました');
+        // 出品者にメール送信
+        Mail::to($item->seller->email)->send(new TradeCompletedNotification($item));
+
+        // mainPage へリダイレクト
+        return redirect('/')->with('success', '取引を完了しました。');
     }
 }

@@ -39,7 +39,7 @@
     <button id="posted-sell" class="posted sold">出品した商品</button>
     <button id="posted-buy" class="posted bought">購入した商品</button>
     <button id="posted-trade" class="posted trading">
-        取引中の商品 <span class="item-count">{{ $tradingItems->count() }}</span>
+        取引中の商品 <span class="item-count">{{ $totalUnreadCount }}</span>
     </button>
 </div>
 

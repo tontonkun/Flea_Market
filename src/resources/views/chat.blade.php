@@ -8,6 +8,7 @@
 
 @section('mainContents')
 <div class="entire">
+    <!-- 取引中の商品リスト -->
     <div class="itemList-container">
         <h2>その他の取引</h2>
         <div class="item-list">
@@ -18,11 +19,12 @@
                 </a>
             </div>
             @empty
-            <p>取引中の商品はありません。</p>
+            <p>なし</p>
             @endforelse
         </div>
     </div>
 
+    <!-- チャットエリア -->
     <div class="chat-container">
         <div class="headerSection">
             <div class="partnerInfo">
@@ -36,15 +38,17 @@
                 <h2>
                     @if ($chatPartner && $chatPartner->profile)
                     「{{ $chatPartner->profile->user_name }}」さんとの取引履歴
-                    @else
+                    @elseif ($chatPartner)
                     「{{ $chatPartner->name }}」さんとの取引履歴
+                    @else
+                    取引相手情報が取得できませんでした。
                     @endif
                 </h2>
             </div>
 
             <!-- 取引完了ボタン -->
             @if ($item->in_trade && $myId === $buyerId)
-            <button id="endChatBtn" class="endChatBtn">
+            <button id="evaluationBtn" class="evaluationBtn">
                 取引を完了する
             </button>
             @endif
@@ -53,7 +57,7 @@
         <!-- 取引完了モーダル -->
         <div id="transactionModal" class="transaction-modal" style="display: none;">
             <div class="transaction-modal-content">
-                <form action="{{ route('chat.endChat', $item->id) }}" method="POST">
+                <form action="{{ route('chat.evaluation', $item->id) }}" method="POST">
                     @csrf
                     <div class="topPart">取引が完了しました。</div>
                     <div class="middlePart">
@@ -74,6 +78,7 @@
             </div>
         </div>
 
+        <!-- 商品情報セクション -->
         <div class="itemSection">
             <img class="itemImage" src="{{ asset('/' . $item->item_img_pass) }}" alt="{{ $item->item_name }}">
             <div class="itemInfo">
@@ -82,6 +87,7 @@
             </div>
         </div>
 
+        <!-- メッセージ表示エリア -->
         <div class="messageSection">
             @foreach ($messages as $message)
             @php
@@ -92,11 +98,9 @@
                 <div class="message-content">
                     <div class="message-meta {{ $isMine ? 'mine' : 'partner' }}">
                         @if (!$isMine)
-                        {{-- 相手：画像 → 名前 --}}
                         <img src="{{ asset('storage/profile_images/' . ($message->user->profile->user_image_pass ?? '')) }}" class="mini-profile-image" alt="プロフィール画像">
                         <strong>{{ $message->user->name }}</strong>
                         @else
-                        {{-- 自分：名前 → 画像 --}}
                         <strong>{{ $message->user->name }}</strong>
                         <img src="{{ asset('storage/profile_images/' . ($message->user->profile->user_image_pass ?? '')) }}" class="mini-profile-image" alt="プロフィール画像">
                         @endif
@@ -109,7 +113,7 @@
                     <p class="message-text">{{ $message->message }}</p>
 
                     @if ($isMine)
-                    <!-- 編集・削除ボタンを追加 -->
+                    <!-- 編集・削除ボタン -->
                     <div class="message-actions">
                         <button class="edit-message-btn" data-message-id="{{ $message->id }}" data-message-content="{{ $message->message }}">編集</button>
                         <form action="{{ route('chat.delete', $message->id) }}" method="POST" style="display:inline;">
@@ -125,7 +129,7 @@
         </div>
 
         <!-- メッセージ編集モーダル -->
-        <div id="editMessageModal" class="edit-message-modal" style=" display: none;">
+        <div id="editMessageModal" class="edit-message-modal" style="display: none;">
             <div class="edit-message-modal-content">
                 <form id="editMessageForm" method="POST">
                     @csrf
@@ -143,30 +147,40 @@
         <form action="{{ route('chat.send', $item->id) }}" method="POST" enctype="multipart/form-data" class="message-form">
             @csrf
 
-            <!-- プレビュー（画像がある場合のみ表示） -->
+            <!-- 画像プレビュー -->
             <div id="imagePreviewWrapper" style="display: none;">
                 <img id="imagePreview" src="#" alt="画像プレビュー" style="max-width: 100%; max-height: 200px;">
             </div>
 
-            <!-- テキスト + 画像選択 + 送信 -->
+            <!-- テキストエリア + 画像選択 + 送信ボタン -->
             <div class="message-input-row">
                 <textarea name="message" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
 
-                <!-- 画像選択 -->
-                <label for="image-upload" class="custom-file-label">画像を追加</label>
-                <input type="file" name="image" id="image-upload" accept="image/*" class="custom-file-input" style="display: none;">
+                <div class="chatButtons">
+                    <!-- 画像選択 -->
+                    <label for="image-upload" class="custom-file-label">画像を追加</label>
+                    <input type="file" name="image" id="image-upload" accept="image/*" class="custom-file-input" style="display: none;">
 
-                <!-- 送信ボタン -->
-                <button class="sendMessage" type="submit"></button>
-            </div>
+                    <!-- 送信ボタン -->
+                    <button class="sendMessage" type="submit"></button>
+                </div>
         </form>
     </div>
+
+    <div id="chatData"
+        data-in-trade="{{ $item->in_trade ? '1' : '0' }}"
+        data-my-id="{{ $myId }}"
+        data-seller-id="{{ $item->seller_id }}"
+        data-buyer-id="{{ $buyerId }}"
+        data-has-rated="{{ isset($hasRated) && $hasRated ? '1' : '0' }}">
+    </div>
+
 </div>
 
 @section('js')
 <script>
     // チャット完了モーダル表示切替
-    document.getElementById('endChatBtn')?.addEventListener('click', function() {
+    document.getElementById('evaluationBtn')?.addEventListener('click', function() {
         document.getElementById('transactionModal').style.display = 'flex';
     });
 
@@ -196,6 +210,46 @@
         });
     });
 
+    // 出品者向け：購入者が取引完了済みの場合、自動でモーダル表示
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatDataElement = document.getElementById('chatData');
+
+        const textarea = document.querySelector('textarea[name="message"]');
+        const storageKey = `chatMessageDraft_{{ $item->id }}`;
+
+        //入力テキスト復元
+        const savedMessage = localStorage.getItem(storageKey);
+        if (savedMessage && textarea && savedMessage.trim() !== '') {
+            textarea.value = savedMessage;
+        }
+
+        // 入力保存
+        textarea?.addEventListener('input', function() {
+            localStorage.setItem(storageKey, this.value);
+        });
+
+        // 送信時に削除
+        document.querySelector('.message-form')?.addEventListener('submit', function() {
+            localStorage.removeItem(storageKey);
+        });
+
+
+        const inTrade = chatDataElement.dataset.inTrade === '1';
+        const myId = parseInt(chatDataElement.dataset.myId);
+        const sellerId = parseInt(chatDataElement.dataset.sellerId);
+        const buyerId = parseInt(chatDataElement.dataset.buyerId);
+        const hasRated = chatDataElement.dataset.hasRated === '1';
+
+        // 出品者が取引完了後にチャットを開いたとき（通知や確認用途）
+        if (!inTrade && myId === sellerId) {
+            document.getElementById('transactionModal').style.display = 'flex';
+        }
+
+        // 購入者が取引完了後 & 未評価 ならモーダル表示
+        if (!inTrade && myId === buyerId && !hasRated) {
+            document.getElementById('transactionModal').style.display = 'flex';
+        }
+    });
     // メッセージ編集モーダルの表示処理
     document.querySelectorAll('.edit-message-btn').forEach(button => {
         button.addEventListener('click', function() {
@@ -261,8 +315,6 @@
         }
     });
 </script>
-
-
 @endsection
 
 @endsection

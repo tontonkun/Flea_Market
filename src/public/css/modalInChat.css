@@ -122,3 +122,86 @@
 .edit-message-modal-content button:hover {
     background-color: #f0f0f0;
 }
+
+/* 768px から 1200px の画面幅に適用されるスタイル */
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    /* トランザクションモーダル */
+    .transaction-modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .transaction-modal-content {
+        width: 80%;
+        height: auto;
+        max-width: 500px;
+    }
+
+    .topPart {
+        font-size: 24px;
+        /* フォントサイズを少し小さく */
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .middlePart p {
+        font-size: 16px;
+        /* フォントサイズを少し小さく */
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .rating {
+        height: 120px;
+        /* 高さを少し小さく */
+        margin-top: -30px;
+    }
+
+    .rating span {
+        font-size: 80px;
+        /* 星のサイズを少し小さく */
+    }
+
+    .submit-rating {
+        font-size: 22px;
+        /* フォントサイズを小さく */
+        padding: 8px 16px;
+        /* ボタンのパディング調整 */
+    }
+
+    /* 編集メッセージモーダル */
+    .edit-message-modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .edit-message-modal-content {
+        width: 90%;
+        max-width: 400px;
+        padding: 15px 25px;
+    }
+
+    .edit-message-modal-content textarea {
+        font-size: 16px;
+        /* テキストエリアのフォントサイズ調整 */
+        padding: 8px;
+    }
+
+    .buttonArea {
+        text-align: right;
+        /* ボタンエリアを右寄せ */
+    }
+
+    .buttonArea button {
+        padding: 5px 10px;
+        /* ボタンのパディング調整 */
+        margin-right: 8px;
+    }
+
+    .edit-message-modal-content button:hover {
+        background-color: #f0f0f0;
+    }
+}

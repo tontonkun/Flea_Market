@@ -24,7 +24,7 @@ class Item extends Model
     ];
 
     protected $casts = [
-        'is_active' => 'boolean', 
+        'is_active' => 'boolean',
     ];
 
     public function user()
@@ -49,11 +49,21 @@ class Item extends Model
 
     public function purchaser()
     {
-        return $this->belongsTo(User::class, 'purchaser_id'); 
+        return $this->belongsTo(User::class, 'purchaser_id');
     }
 
     public function purchasedItem()
     {
         return $this->hasOne(PurchasedItem::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(\App\Models\Message::class, 'item_id');
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'seller_id');
     }
 }
