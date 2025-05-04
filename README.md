@@ -68,6 +68,30 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
 
+## テストコード実行方法
+
+１，テスト用データベース作成
+
+'docker ps'
+
+でMySQLコンテナのIDを確認し、
+
+'docker exec -it {{ MySQL コンテナID}} mysql -u root -p'
+
+を実行してrootユーザ（管理者)でMySQLコンテナに入り（パスワードは'root'）、
+
+'> CREATE DATABASE demo_test;'
+
+で専用データベース作成（'> SHOW DATABASES;'で確認）
+
+２，テストコード実行
+
+`docker-compose exec php bash`
+
+実行後、
+
+`vendor/bin/phpunit tests/Feature/{{任意のテストファイル名}}`
+
 
 ## 使用技術
 
@@ -89,6 +113,8 @@ javascript
 
 MailHog
 
+Stripe決済
+
 
 ## MailHogに関して
 
@@ -100,7 +126,10 @@ MailHog
 
 ## ER図
 
-![image](https://github.com/user-attachments/assets/4a5c9dcc-633a-4e7c-b414-3d3a1c8906c2)
+※5/5での実装における追加内容を赤にしています
+
+![image](https://github.com/user-attachments/assets/69311072-ed1a-4cc6-a54a-6d4fae23349b)
+
 
 
 
