@@ -72,15 +72,15 @@ DB_PASSWORD=laravel_pass
 
 １，テスト用データベース作成
 
-'docker ps'
+`docker ps`
 
 でMySQLコンテナのIDを確認し、
 
-'docker exec -it {{ MySQL コンテナID}} mysql -u root -p'
+`docker exec -it {{ MySQL コンテナID}} mysql -u root -p`
 
 を実行してrootユーザ（管理者)でMySQLコンテナに入り（パスワードは'root'）、
 
-'> CREATE DATABASE demo_test;'
+`> CREATE DATABASE demo_test;`
 
 で専用データベース作成（'> SHOW DATABASES;'で確認）
 
