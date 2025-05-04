@@ -30,7 +30,7 @@ class MyPageController extends Controller
         $favoriteItems = Item::whereIn('id', $favoriteItemIds)->get();
 
         // 取引中の商品取得（出品者または購入者）
-        $tradingItems = Item::with('messages')
+        $tradingItems = Item::with(['messages', 'purchasedItem'])
             ->where('in_trade', true)
             ->where(function ($query) use ($userId) {
                 $query->where('seller_id', $userId)
@@ -40,17 +40,41 @@ class MyPageController extends Controller
             })
             ->get();
 
-        // 各商品に未読件数と最新メッセージ時間を追加
+        // フィルタリング後の結果を格納
+        $filteredTradingItems = collect();
+
         foreach ($tradingItems as $item) {
+            $purchaserId = optional($item->purchasedItem)->purchaser_id;
+
+            // ログインユーザーが購入者かつ評価済み → 除外
+            if ($purchaserId === $userId) {
+                $alreadyRated = Rating::where('item_id', $item->id)
+                    ->where('evaluator_id', $userId)
+                    ->exists();
+
+                if ($alreadyRated) {
+                    continue;
+                }
+            }
+
+            // 未読メッセージ数
             $unreadCount = $item->messages
                 ->where('user_id', '!=', $userId)
                 ->whereNull('read_at')
                 ->count();
-
             $item->setAttribute('unread_count', $unreadCount);
 
+            // 最新メッセージ時間
             $latestMessage = $item->messages->sortByDesc('created_at')->first();
             $item->setAttribute('latest_message_time', optional($latestMessage)->created_at);
+
+            // 自分宛の評価があるか
+            $hasRating = Rating::where('item_id', $item->id)
+                ->where('evaluated_user_id', $userId)
+                ->exists();
+            $item->setAttribute('is_completed', $hasRating);
+
+            $filteredTradingItems->push($item);
         }
 
         // 最新メッセージ順に並べ替え
@@ -68,7 +92,7 @@ class MyPageController extends Controller
             'postedItems',
             'purchasedItems',
             'favoriteItems',
-            'tradingItems',
+            'filteredTradingItems',
             'roundedRating',
             'totalUnreadCount'
         ));

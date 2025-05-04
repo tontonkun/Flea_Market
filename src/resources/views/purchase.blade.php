@@ -28,7 +28,7 @@
             @csrf
             <div class="paymentSelectionArea">
                 <div class="sectionTitle">支払い方法</div>
-                <select name="payment_method" class="paymentSelect" required onchange="this.form.submit()">
+                <select name="payment_method" class="paymentSelect" required data-selected="{{ session('payment_method_selected') ?? '' }}">
                     <option value="" disabled {{ session('payment_method_selected') ? '' : 'selected' }}>選択してください</option>
                     <option value="convenience_store" {{ session('payment_method_selected') == 'convenience_store' ? 'selected' : '' }}>コンビニ払い</option>
                     <option value="credit_card" {{ session('payment_method_selected') == 'credit_card' ? 'selected' : '' }}>カード決済</option>
@@ -94,20 +94,30 @@
         const hiddenInput = document.getElementById('paymentMethodHidden');
         const submitButton = document.querySelector('.finalPurchaseButton');
 
-        // 初期状態のhiddenInputを更新
-        if (paymentSelect.value) {
-            hiddenInput.value = paymentSelect.value;
+        const selectedValue = paymentSelect.getAttribute('data-selected');
+
+        // 初期状態で選択されていなければ非活性
+        if (selectedValue) {
+            hiddenInput.value = selectedValue;
             submitButton.disabled = false;
+            paymentSelect.classList.add('selected');
+        } else {
+            submitButton.disabled = true;
         }
 
-        // セレクト変更時にも更新
         paymentSelect.addEventListener('change', function() {
             const selectedValue = this.value;
             const selectedText = this.options[this.selectedIndex].text;
 
             paymentDisplay.textContent = selectedText;
             hiddenInput.value = selectedValue;
-            submitButton.disabled = false;
+            submitButton.disabled = !selectedValue;
+
+            if (selectedValue) {
+                paymentSelect.classList.add('selected');
+            } else {
+                paymentSelect.classList.remove('selected');
+            }
         });
     });
 </script>

@@ -25,7 +25,7 @@ class editMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required|max:400',
+            'edit_message' => 'required|max:400',
         ];
     }
 
@@ -37,8 +37,8 @@ class editMessageRequest extends FormRequest
     public function messages()
     {
         return [
-            'message.required' => '本文を入力してください',
-            'message.max' => '本文は400文字以内で入力してください。',
+            'edit_message.required' => '本文を入力してください',
+            'edit_message.max' => '本文は400文字以内で入力してください。',
         ];
     }
 }

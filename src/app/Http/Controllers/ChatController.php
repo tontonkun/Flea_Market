@@ -62,19 +62,26 @@ class ChatController extends Controller
         }
 
         // 評価済みかどうかをチェック
-        $hasRated = false;
-        if ($buyerId && $myId === $buyerId) {
-            $hasRated = Rating::where('evaluator_id', $myId)
-                ->where('evaluated_user_id', $sellerId)
-                ->where('item_id', $itemId)
-                ->exists();
-        }
+        $hasRated = Rating::where('evaluated_user_id', $myId)
+            ->where('item_id', $itemId)
+            ->exists();
 
         // 開いているチャットのメッセージを既読にする
         Message::where('item_id', $itemId)
             ->where('user_id', '!=', $myId)
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
+
+
+        // 購入者が評価したかどうか
+        $hasPartnerRated = Rating::where('evaluated_user_id', $myId)
+            ->where('item_id', $itemId)
+            ->exists();
+
+        // 出品者が評価済みかどうかをチェック
+        $hasRated = Rating::where('evaluated_user_id', $myId)
+            ->where('item_id', $itemId)
+            ->exists();
 
         return view('chat', compact(
             'item',
@@ -84,7 +91,8 @@ class ChatController extends Controller
             'otherItems',
             'myId',
             'buyerId',
-            'hasRated'
+            'hasRated',
+            'hasPartnerRated'
         ));
     }
 
@@ -113,14 +121,14 @@ class ChatController extends Controller
     {
         $message = Message::findOrFail($messageId);
 
-        // 保存せずにバリデーションが通らないと戻る（sendMessageRequestで処理済み）
-        $message->message = $request->input('message');
+        $message->message = $request->input('edit_message');
         $message->save();
 
         return redirect()
             ->route('chat.show', $message->item_id)
-            ->with('editedMessageId', $messageId); // モーダル再表示用
+            ->with('editedMessageId', $messageId);
     }
+
 
     // 削除メソッド
     public function deleteMessage($messageId)
@@ -133,19 +141,19 @@ class ChatController extends Controller
         return redirect()->route('chat.show', $message->item_id); // チャット画面にリダイレクト
     }
 
-    public function evaluation(evaluationRequest $request, $itemId)
+    public function evaluation(EvaluationRequest $request, $itemId)
     {
         $validated = $request->validated();
 
         $item = Item::findOrFail($itemId);
         $userId = auth()->id();
 
-        // 出品者・購入者の判定（ここでは purchasedItem 経由と仮定）
+        // 出品者・購入者の判定
         $purchase = $item->purchasedItem()->first();
         $sellerId = $item->seller_id;
         $buyerId = $purchase ? $purchase->purchaser_id : null;
 
-        // 相手ユーザーを特定（評価対象）
+        // 評価対象ユーザーを決定
         if ($userId === $sellerId && $buyerId) {
             $evaluatedUserId = $buyerId;
         } elseif ($userId === $buyerId) {
@@ -154,8 +162,8 @@ class ChatController extends Controller
             return back()->withErrors('取引関係にないユーザーです');
         }
 
-        DB::transaction(function () use ($item, $userId, $evaluatedUserId, $request) {
-            // 評価登録
+        DB::transaction(function () use ($item, $userId, $evaluatedUserId, $request, $sellerId) {
+            // 評価を保存
             Rating::create([
                 'evaluator_id' => $userId,
                 'evaluated_user_id' => $evaluatedUserId,
@@ -163,14 +171,15 @@ class ChatController extends Controller
                 'item_id' => $item->id,
             ]);
 
-            // 取引完了（in_trade を false に）
-            $item->update(['in_trade' => false]);
+            // 出品者が評価したときのみ in_trade を false に
+            if ($userId === $sellerId) {
+                $item->update(['in_trade' => false]);
+            }
         });
 
-        // 出品者にメール送信
+        // 出品者に通知メール（どちらが評価しても送られる）
         Mail::to($item->seller->email)->send(new TradeCompletedNotification($item));
 
-        // mainPage へリダイレクト
         return redirect('/')->with('success', '取引を完了しました。');
     }
 }

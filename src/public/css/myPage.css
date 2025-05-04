@@ -149,6 +149,18 @@
     line-height: 20px;
 }
 
+.completed-label {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
+    color: white;
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 4px;
+    z-index: 10;
+}
+
 .itemImage {
     width: 200px;
     height: 200px;

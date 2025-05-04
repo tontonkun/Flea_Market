@@ -134,7 +134,7 @@
                 <form id="editMessageForm" method="POST">
                     @csrf
                     @method('PUT')
-                    <textarea name="message" id="editMessageTextarea"></textarea>
+                    <textarea name="edit_message" id="editMessageTextarea"></textarea>
                     <div class="buttonArea">
                         <button type="submit">更新</button>
                         <button type="button" id="closeModalBtn">閉じる</button>
@@ -154,7 +154,8 @@
 
             <!-- テキストエリア + 画像選択 + 送信ボタン -->
             <div class="message-input-row">
-                <textarea name="message" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
+                <textarea name="message" id="messageTextarea" placeholder="取引メッセージを記入してください"></textarea>
+
 
                 <div class="chatButtons">
                     <!-- 画像選択 -->
@@ -172,149 +173,153 @@
         data-my-id="{{ $myId }}"
         data-seller-id="{{ $item->seller_id }}"
         data-buyer-id="{{ $buyerId }}"
-        data-has-rated="{{ isset($hasRated) && $hasRated ? '1' : '0' }}">
+        data-has-rated="{{ isset($hasRated) && $hasRated ? '1' : '0' }}"
+        data-has-partner-rated="{{ isset($hasPartnerRated) && $hasPartnerRated ? '1' : '0' }}">
     </div>
 
 </div>
 
 @section('js')
 <script>
-    // チャット完了モーダル表示切替
-    document.getElementById('evaluationBtn')?.addEventListener('click', function() {
-        document.getElementById('transactionModal').style.display = 'flex';
-    });
-
-    document.getElementById('closeModalBtn')?.addEventListener('click', function() {
-        document.getElementById('transactionModal').style.display = 'none';
-        document.getElementById('editMessageModal').style.display = 'none'; // モーダル閉じる処理共通化
-    });
-
-    // 星評価のクリック処理
-    const stars = document.querySelectorAll('#ratingStars span');
-    const ratingInput = document.getElementById('ratingInput');
-
-    stars.forEach(star => {
-        star.addEventListener('click', () => {
-            const value = parseInt(star.getAttribute('data-value'));
-
-            ratingInput.value = value;
-
-            stars.forEach(s => {
-                const starValue = parseInt(s.getAttribute('data-value'));
-                if (starValue <= value) {
-                    s.classList.add('selected');
-                } else {
-                    s.classList.remove('selected');
-                }
-            });
-        });
-    });
-
-    // 出品者向け：購入者が取引完了済みの場合、自動でモーダル表示
     document.addEventListener('DOMContentLoaded', function() {
-        const chatDataElement = document.getElementById('chatData');
+        // --- チャットメッセージの自動保存・復元 ---
+        const textarea = document.querySelector('.message-form textarea[name="message"]');
+        console.log('取得したtextarea:', textarea);
+        const storageKey = 'chatMessageDraft_{{ $item->id }}';
 
-        const textarea = document.querySelector('textarea[name="message"]');
-        const storageKey = `chatMessageDraft_{{ $item->id }}`;
+        if (textarea) {
+            // 復元処理
+            const savedMessage = localStorage.getItem(storageKey);
+            if (savedMessage && savedMessage.trim() !== '') {
+                textarea.value = savedMessage;
+                console.log('復元:', savedMessage);
+            }
 
-        //入力テキスト復元
-        const savedMessage = localStorage.getItem(storageKey);
-        if (savedMessage && textarea && savedMessage.trim() !== '') {
-            textarea.value = savedMessage;
+            // 入力時に保存
+            textarea.addEventListener('input', function() {
+                localStorage.setItem(storageKey, this.value);
+                console.log('保存:', this.value);
+            });
+        } else {
+            console.warn('textarea[name="message"] が見つかりません');
         }
 
-        // 入力保存
-        textarea?.addEventListener('input', function() {
-            localStorage.setItem(storageKey, this.value);
-        });
-
-        // 送信時に削除
+        // 送信時にlocalStorage削除
         document.querySelector('.message-form')?.addEventListener('submit', function() {
             localStorage.removeItem(storageKey);
         });
 
 
-        const inTrade = chatDataElement.dataset.inTrade === '1';
-        const myId = parseInt(chatDataElement.dataset.myId);
-        const sellerId = parseInt(chatDataElement.dataset.sellerId);
-        const buyerId = parseInt(chatDataElement.dataset.buyerId);
-        const hasRated = chatDataElement.dataset.hasRated === '1';
-
-        // 出品者が取引完了後にチャットを開いたとき（通知や確認用途）
-        if (!inTrade && myId === sellerId) {
+        // --- チャット完了モーダル表示切替 ---
+        document.getElementById('evaluationBtn')?.addEventListener('click', function() {
             document.getElementById('transactionModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeModalBtn')?.addEventListener('click', function() {
+            document.getElementById('transactionModal').style.display = 'none';
+            document.getElementById('editMessageModal').style.display = 'none';
+        });
+
+        // --- 星評価のクリック処理 ---
+        const stars = document.querySelectorAll('#ratingStars span');
+        const ratingInput = document.getElementById('ratingInput');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const value = parseInt(star.getAttribute('data-value'));
+                ratingInput.value = value;
+
+                stars.forEach(s => {
+                    const starValue = parseInt(s.getAttribute('data-value'));
+                    s.classList.toggle('selected', starValue <= value);
+                });
+            });
+        });
+
+        // --- 自動モーダル表示条件処理（評価関連） ---
+        const chatDataElement = document.getElementById('chatData');
+        if (chatDataElement) {
+            const inTrade = chatDataElement.dataset.inTrade === '1';
+            const myId = parseInt(chatDataElement.dataset.myId);
+            const sellerId = parseInt(chatDataElement.dataset.sellerId);
+            const buyerId = parseInt(chatDataElement.dataset.buyerId);
+            const hasRated = chatDataElement.dataset.hasRated === '1';
+            const hasPartnerRated = chatDataElement.dataset.hasPartnerRated === '1';
+
+            // 出品者が評価していなくて、購入者は評価済みなら表示
+            if (myId === sellerId && hasRated && hasPartnerRated) {
+                console.log("出品者が評価済みで、購入者が評価済み");
+                document.getElementById('transactionModal').style.display = 'flex';
+            }
+
+            // 購入者側で未評価なら表示
+            if (!inTrade && myId === buyerId && !hasRated) {
+                document.getElementById('transactionModal').style.display = 'flex';
+            }
         }
 
-        // 購入者が取引完了後 & 未評価 ならモーダル表示
-        if (!inTrade && myId === buyerId && !hasRated) {
-            document.getElementById('transactionModal').style.display = 'flex';
-        }
-    });
-    // メッセージ編集モーダルの表示処理
-    document.querySelectorAll('.edit-message-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const messageId = this.getAttribute('data-message-id');
-            const messageContent = this.getAttribute('data-message-content');
+        // --- メッセージ編集モーダル表示処理 ---
+        document.querySelectorAll('.edit-message-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const messageId = this.getAttribute('data-message-id');
+                const messageContent = this.getAttribute('data-message-content');
 
-            document.getElementById('editMessageTextarea').value = messageContent;
-            document.getElementById('editMessageForm').action = `/chat/${messageId}/edit`;
+                document.getElementById('editMessageTextarea').value = messageContent;
+                document.getElementById('editMessageForm').action = `/chat/${messageId}/edit`;
 
-            // エラーリセット
+                document.getElementById('editError')?.remove();
+                document.getElementById('editMessageModal').style.display = 'flex';
+            });
+        });
+
+        // --- 編集バリデーション ---
+        document.getElementById('editMessageForm')?.addEventListener('submit', function(event) {
+            const textarea = document.getElementById('editMessageTextarea');
+            const content = textarea.value.trim();
+
             document.getElementById('editError')?.remove();
 
-            document.getElementById('editMessageModal').style.display = 'flex';
+            if (content === '') {
+                event.preventDefault();
+                showValidationError('本文を入力してください');
+            } else if (content.length > 400) {
+                event.preventDefault();
+                showValidationError('本文は400文字以内で入力してください。');
+            }
+
+            function showValidationError(message) {
+                const errorElem = document.createElement('p');
+                errorElem.id = 'editError';
+                errorElem.style.color = 'red';
+                errorElem.style.marginTop = '8px';
+                errorElem.textContent = message;
+                textarea.parentNode.insertBefore(errorElem, textarea.nextSibling);
+            }
+        });
+
+        // --- 画像プレビュー処理 ---
+        document.getElementById('image-upload')?.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const imagePreview = document.getElementById('imagePreview');
+            const imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewWrapper.style.display = 'block';
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '';
+                imagePreviewWrapper.style.display = 'none';
+                imagePreview.style.display = 'none';
+            }
         });
     });
-
-    // 編集フォームのクライアントバリデーション追加
-    document.getElementById('editMessageForm')?.addEventListener('submit', function(event) {
-        const textarea = document.getElementById('editMessageTextarea');
-        const content = textarea.value.trim();
-
-        // 既存エラー削除
-        document.getElementById('editError')?.remove();
-
-        if (content === '') {
-            event.preventDefault();
-            showValidationError('本文を入力してください');
-        } else if (content.length > 400) {
-            event.preventDefault();
-            showValidationError('本文は400文字以内で入力してください。');
-        }
-
-        function showValidationError(message) {
-            const errorElem = document.createElement('p');
-            errorElem.id = 'editError';
-            errorElem.style.color = 'red';
-            errorElem.style.marginTop = '8px';
-            errorElem.textContent = message;
-            textarea.parentNode.insertBefore(errorElem, textarea.nextSibling);
-        }
-    });
-
-    // 画像選択でプレビュー表示（テキストエリアは常に必須のまま）
-    document.getElementById('image-upload').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const imagePreview = document.getElementById('imagePreview');
-        const imagePreviewWrapper = document.getElementById('imagePreviewWrapper');
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                imagePreviewWrapper.style.display = 'block';
-                imagePreview.style.display = 'block';
-            };
-
-            reader.readAsDataURL(file);
-        } else {
-            imagePreview.src = '';
-            imagePreviewWrapper.style.display = 'none';
-            imagePreview.style.display = 'none';
-        }
-    });
 </script>
+
 @endsection
 
 @endsection

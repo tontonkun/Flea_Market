@@ -91,11 +91,11 @@
     </div>
 </div>
 
-<!-- 取引中の商品リスト -->
+<!-- 取引中の商品リスト(ユーザーが購入者として評価済みの商品を除外) -->
 <div id="trade-items" class="displayArea" style="display: none;">
     <h2>取引中の商品</h2>
     <div class="itemList">
-        @forelse($tradingItems as $item)
+        @forelse($filteredTradingItems as $item)
         <div class="itemArea">
             <div class="itemImageContainer">
                 <a href="{{ route('chat.show', $item->id) }}">
@@ -108,6 +108,11 @@
                         <div class="unread-count">
                             {{ $item->unread_count }}
                         </div>
+                        @endif
+
+                        <!-- 取引完了ラベル -->
+                        @if ($item->is_completed)
+                        <div class="completed-label">取引完了</div>
                         @endif
                     </div>
                     @else

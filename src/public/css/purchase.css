@@ -126,6 +126,11 @@
     cursor: pointer;
 }
 
+.finalPurchaseButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 @media (min-width: 768px) and (max-width: 1399px) {
     .entire {
         display: block;
