@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Profile;
 use Illuminate\Support\Facades\Storage;
 

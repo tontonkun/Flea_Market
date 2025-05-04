@@ -53,6 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // PurchaseController
     Route::post('/purchase/update-payment', [PurchaseController::class, 'updatePaymentMethod'])->name('purchase.updatePayment');
     Route::post('/purchase/{item}/process', [PurchaseController::class, 'process'])->name('purchase.process');
+    Route::get('/purchase/success/{item}', [PurchaseController::class, 'success'])->name('purchase.success');
 
     // AddressController
     Route::get('/purchase/address/{item_id}', [AddressController::class, 'showAdressChangePage']);

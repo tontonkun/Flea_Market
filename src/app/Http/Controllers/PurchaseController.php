@@ -41,26 +41,15 @@ class PurchaseController extends Controller
         return redirect()->back();
     }
 
-
-
-    public function process(Request $request, Item $item)
+    // 購入処理の共通化
+    private function handlePurchase(Item $item, $paymentMethod)
     {
-       // 購入済みチェック
-        if (!$item->is_active) {
-            return redirect('/')->with('error', 'この商品はすでに購入されています。');
-        }
-
-        // バリデーション（必要ならここでも可能）
-        $request->validate([
-            'payment_method' => 'required|in:convenience_store,credit_card',
-        ]);
-
         // アイテムのステータス更新
         $item->is_active = false;
         $item->in_trade = true;
         $item->save();
 
-        // セッション or プロフィールから配送先情報を取得
+        // セッションまたはプロフィールから配送先情報を取得
         $tempAddress = session('temporary_address');
         $profile = Profile::where('user_id', Auth::id())->latest()->first();
 
@@ -76,12 +65,88 @@ class PurchaseController extends Controller
             'shipping_postal_code' => $postal_code,
             'shipping_address' => $address,
             'shipping_building_name' => $building_name,
-            'payment_method' => $request->input('payment_method'),
+            'payment_method' => $paymentMethod, // 支払い方法
         ]);
 
-        // 一時配送情報クリア
+        // 一時配送情報をクリア
         session()->forget('temporary_address');
+    }
 
-        return redirect('/')->with('success', '商品を購入しました');
+    public function process(Request $request, Item $item)
+    {
+        // StripeのAPIキーを設定
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // 購入済みチェック
+        if (!$item->is_active) {
+            return redirect('/')->with('error', 'この商品はすでに購入されています。');
+        }
+
+        // バリデーション
+        $request->validate([
+            'payment_method' => 'required|in:convenience_store,credit_card',
+        ]);
+
+        // 支払い方法がコンビニ払いの場合
+        if ($request->input('payment_method') == 'convenience_store') {
+            // 購入処理を実行
+            $this->handlePurchase($item, 'convenience_store');
+
+            // トップページにリダイレクト
+            return redirect('/')->with('success', '購入手続きが完了しました。');
+        }
+
+        // クレジットカード決済の場合、Stripe Checkoutセッションを作成
+        if ($request->input('payment_method') == 'credit_card') {
+            Stripe::setApiKey(config('services.stripe.secret'));
+
+            $checkoutSession = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'jpy',
+                            'product_data' => [
+                                'name' => $item->item_name,
+                            ],
+                            'unit_amount' => $item->price * 100, // JPYは最小単位が円なので100倍
+                        ],
+                        'quantity' => 1,
+                    ],
+                ],
+                'mode' => 'payment',
+                'success_url' => route('purchase.success', ['item' => $item->id]) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('showPurchasePage', ['item' => $item->id]),
+            ]);
+
+            return redirect($checkoutSession->url);
+        }
+
+        return redirect('/')->with('error', '支払い方法が選択されていません。');
+    }
+
+    public function success(Request $request, Item $item)
+    {
+        // StripeのAPIキーを設定
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // Stripe Checkoutセッションの取得
+        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+
+        // 決済成功確認
+        if ($session->payment_status == 'paid') {
+            // 購入済みチェック
+            if (!$item->is_active) {
+                return redirect('/')->with('error', 'この商品はすでに購入されています。');
+            }
+
+            // 購入処理を実行
+            $this->handlePurchase($item, $session->payment_method_types[0]);
+
+            return redirect('/')->with('success', '購入手続きが完了しました。');
+        }
+
+        // 決済が失敗した場合
+        return redirect('/')->with('error', '決済が失敗しました');
     }
 }

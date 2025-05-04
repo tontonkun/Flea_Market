@@ -5,6 +5,9 @@
 @endsection
 
 @section('mainContents')
+
+<div id="stripe-config" data-stripe-public-key="{{ config('services.stripe.public') }}"></div>
+
 <div class="entire">
     <div class="pageLeftSide">
         <div class="itemDescriptionArea">
@@ -87,16 +90,18 @@
     </div>
 </div>
 
+<script src="https://js.stripe.com/v3/"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const paymentSelect = document.querySelector('select[name="payment_method"]');
         const paymentDisplay = document.getElementById('paymentMethodDisplay');
         const hiddenInput = document.getElementById('paymentMethodHidden');
         const submitButton = document.querySelector('.finalPurchaseButton');
+        const creditCardForm = document.getElementById('creditCardForm');
 
         const selectedValue = paymentSelect.getAttribute('data-selected');
 
-        // 初期状態で選択されていなければ非活性
         if (selectedValue) {
             hiddenInput.value = selectedValue;
             submitButton.disabled = false;
@@ -113,10 +118,42 @@
             hiddenInput.value = selectedValue;
             submitButton.disabled = !selectedValue;
 
+            if (selectedValue === 'credit_card') {
+                creditCardForm.style.display = 'block';
+            } else {
+                creditCardForm.style.display = 'none';
+            }
+
             if (selectedValue) {
                 paymentSelect.classList.add('selected');
             } else {
                 paymentSelect.classList.remove('selected');
+            }
+        });
+    });
+
+    var stripePublicKey = document.getElementById('stripe-config').getAttribute('data-stripe-public-key');
+    var stripe = Stripe(stripePublicKey);
+    var elements = stripe.elements();
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    var paymentForm = document.getElementById('paymentForm');
+    paymentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        stripe.createToken(card).then(function(result) {
+            if (result.error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                var tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = 'stripeToken';
+                tokenInput.value = result.token.id;
+                paymentForm.appendChild(tokenInput);
+
+                paymentForm.submit();
             }
         });
     });
