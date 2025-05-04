@@ -7,7 +7,6 @@ use App\Models\Item;
 use App\Models\Favorite;
 use App\Models\Comment;
 use App\Models\Profile;
-use Illuminate\Http\Request;
 use App\Http\Requests\CommentRequest; 
 
 class ItemController extends Controller

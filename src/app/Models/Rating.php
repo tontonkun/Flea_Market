@@ -13,6 +13,11 @@ class Rating extends Model
         'item_id',
     ];
 
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
     public function evaluator()
     {
         return $this->belongsTo(User::class, 'evaluator_id');

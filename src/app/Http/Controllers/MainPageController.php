@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MainPageController extends Controller
@@ -11,9 +12,11 @@ class MainPageController extends Controller
     public function showMainPage(Request $request)
     {
         // 初回ログインならprofileページ、そうでない場合はメインページに遷移
-        if (Auth::check() && Auth::user()->is_first_login) {
-            $user = Auth::user();
-            $user->update(['is_first_login' => false]);
+        $user = User::find(Auth::id());
+
+        if ($user && $user->is_first_login) {
+            $user->is_first_login = false;
+            $user->save();
 
             // セッションに入ってる "status" を再度 with で渡す
             return redirect('/myPage/profile')->with('status', session('status'));
@@ -43,14 +46,14 @@ class MainPageController extends Controller
             // ログイン中：is_active が true で、自分が出品していない商品（seller_idがnullの商品も含める）
             $queryBuilder->where('is_active', true)
                 ->where(function ($q) {
-                    $q->whereNull('seller_id')   
-                    ->orWhere('seller_id', '!=', auth()->id());  
+                    $q->whereNull('seller_id')
+                        ->orWhere('seller_id', '!=', auth()->id());
                 });
         } else {
             // 未ログイン：出品者関係なし（全てのseller_idの商品）
             $queryBuilder->where(function ($q) {
                 $q->whereNull('seller_id')
-                ->orWhereNotNull('seller_id'); // 実質全て
+                    ->orWhereNotNull('seller_id'); // 実質全て
             });
         }
 
@@ -77,8 +80,8 @@ class MainPageController extends Controller
             $favoriteItemsQuery = $favoriteItemsQuery->whereHas('user', function ($itemQuery) {
                 // 'items' テーブルを経由して seller_id が現在のユーザーの ID と一致しない商品を絞り込み
                 $itemQuery->where(function ($q) {
-                    $q->whereNull('seller_id')   
-                    ->orWhere('seller_id', '!=', auth()->id());
+                    $q->whereNull('seller_id')
+                        ->orWhere('seller_id', '!=', auth()->id());
                 });
             });
 
@@ -88,9 +91,9 @@ class MainPageController extends Controller
                     $itemQuery->where('item_name', 'LIKE', "%{$query}%");
                 });
             }
-             return $favoriteItemsQuery->get();
+            return $favoriteItemsQuery->get();
         }
         // お気に入りが空の場合は空のコレクションを返す
         return collect();
     }
-    }
+}

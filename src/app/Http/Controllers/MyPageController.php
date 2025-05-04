@@ -7,7 +7,6 @@ use App\Models\Item;
 use App\Models\Profile;
 use App\Models\Favorite;
 use App\Models\PurchasedItem;
-use App\Models\Message;
 use App\Models\Rating;
 
 class MyPageController extends Controller
