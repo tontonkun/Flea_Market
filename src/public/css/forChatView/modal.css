@@ -1,0 +1,207 @@
+.transaction-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.transaction-modal-content {
+    background-color: #FDFCE6;
+    border-radius: 10px;
+    width: 600px;
+    height: 360px;
+}
+
+.topPart {
+    display: block;
+    font-size: 30px;
+    padding: 15px;
+    margin: 10px 0;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.middlePart p {
+    font-size: 20px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.rating {
+    text-align: center;
+    align-items: center;
+    display: block;
+    height: 150px;
+    border-bottom: 1px solid black;
+    margin-top: -40px;
+}
+
+.rating span {
+    font-size: 100px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.rating .selected {
+    color: #FFD700;
+}
+
+.lowerPart {
+    display: flex;
+    justify-content: right;
+    padding: 15px;
+}
+
+.submit-rating {
+    background-color: #FF5555;
+    color: white;
+    font-size: 25px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.submit-rating:hover {
+    background-color: #FF3333;
+}
+
+.edit-message-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* 背景を半透明に */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.edit-message-modal-content {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+}
+
+.edit-message-modal-content textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.buttonArea {
+    text-align: end;
+}
+
+.buttonArea button {
+    background-color: transparent;
+    color: #5F5F5F;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    margin-right: 10px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    cursor: pointer;
+}
+
+.edit-message-modal-content button:hover {
+    background-color: #f0f0f0;
+}
+
+/* 768px から 1200px の画面幅に適用されるスタイル */
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    /* トランザクションモーダル */
+    .transaction-modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .transaction-modal-content {
+        width: 80%;
+        height: auto;
+        max-width: 500px;
+    }
+
+    .topPart {
+        font-size: 24px;
+        /* フォントサイズを少し小さく */
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .middlePart p {
+        font-size: 16px;
+        /* フォントサイズを少し小さく */
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .rating {
+        height: 120px;
+        /* 高さを少し小さく */
+        margin-top: -30px;
+    }
+
+    .rating span {
+        font-size: 80px;
+        /* 星のサイズを少し小さく */
+    }
+
+    .submit-rating {
+        font-size: 22px;
+        /* フォントサイズを小さく */
+        padding: 8px 16px;
+        /* ボタンのパディング調整 */
+    }
+
+    /* 編集メッセージモーダル */
+    .edit-message-modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .edit-message-modal-content {
+        width: 90%;
+        max-width: 400px;
+        padding: 15px 25px;
+    }
+
+    .edit-message-modal-content textarea {
+        font-size: 16px;
+        /* テキストエリアのフォントサイズ調整 */
+        padding: 8px;
+    }
+
+    .buttonArea {
+        text-align: right;
+        /* ボタンエリアを右寄せ */
+    }
+
+    .buttonArea button {
+        padding: 5px 10px;
+        /* ボタンのパディング調整 */
+        margin-right: 8px;
+    }
+
+    .edit-message-modal-content button:hover {
+        background-color: #f0f0f0;
+    }
+}

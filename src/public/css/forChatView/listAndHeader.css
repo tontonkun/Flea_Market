@@ -1,0 +1,253 @@
+.entire {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.itemList-container {
+    width: 15%;
+    background: #868686;
+    color: white;
+    text-align: center;
+    overflow-y: auto;
+    height: 100%;
+    padding: 20px 0;
+    padding-right: 10px;
+}
+
+.itemList-container h2 {
+    font-size: 30px;
+}
+
+.item-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-card {
+    width: 80%;
+    height: 50px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    gap: 10px;
+    border-radius: 3px;
+    background-color: #EEEFEB;
+}
+
+.item-list p {
+    margin: auto;
+    font-size: 20px;
+}
+
+.item-card a {
+    font-size: 20px;
+    margin: auto;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
+
+.item-name {
+    text-decoration: none;
+    font-weight: bold;
+    align-items: center;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 85%;
+    background: #fff;
+    padding: 20px;
+}
+
+.headerSection {
+    height: 100px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+.partnerInfo {
+    display: flex;
+}
+
+.profileIcon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileIconImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.defaultProfileIcon {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background-color: #ddd;
+    border-radius: 50%;
+}
+
+.headerSection h2 {
+    font-size: 36px;
+    margin: 10px;
+}
+
+.evaluationBtn {
+    background-color: #FF5555;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.evaluationBtn:hover {
+    background-color: #FF3333;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    /* 全体のレイアウト */
+    .entire {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* 商品リスト */
+    .itemList-container {
+        width: 20%;
+        background: #868686;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        height: 100vh;
+        padding-right: 5px;
+        padding: 5px 0;
+    }
+
+    .itemList-container h2 {
+        font-size: 15px;
+    }
+
+    .item-list {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .item-card {
+        width: 90%;
+        /* アイテムカードの幅を広げる */
+        height: auto;
+        padding: 5px 8px;
+    }
+
+    .item-card a {
+        font-size: 13px;
+        margin: auto;
+        align-items: center;
+        text-decoration: none;
+        color: black;
+    }
+
+    .item-list p {
+        margin: auto;
+        font-size: 13px;
+    }
+
+    /* チャットエリア */
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        padding: 15px;
+    }
+
+    .headerSection {
+        height: auto;
+        justify-content: space-between;
+    }
+
+    .partnerInfo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* プロフィールアイコン */
+    .profileIcon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .profileIconImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* 取引完了ボタン */
+    .evaluationBtn {
+
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    /* ヘッダーのタイトル */
+    .headerSection h2 {
+        font-size: 28px;
+        /* タイトルフォントサイズ調整 */
+        margin: 0;
+    }
+
+    /* メッセージエリア */
+    .messageSection {
+        padding-top: 20px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .message {
+        font-size: 14px;
+        /* メッセージのフォントを小さく */
+    }
+
+    .message-input-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* 画像プレビュー */
+    #imagePreviewWrapper {
+        max-width: 100%;
+    }
+
+    /* テキストエリア */
+    textarea {
+        width: 100%;
+        min-height: 80px;
+    }
+}

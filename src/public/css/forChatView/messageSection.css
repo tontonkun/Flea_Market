@@ -1,0 +1,268 @@
+.messageSection {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    min-height: 30%;
+    max-height: calc(100vh - 120px);
+    padding: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+    overflow-y: auto;
+}
+
+.my-message {
+    align-self: flex-end;
+    text-align: right;
+}
+
+.other-message {
+    align-self: flex-start;
+    text-align: left;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.my-message .message-content {
+    align-items: flex-end;
+}
+
+.message-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.message-meta.mine {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.message-meta.partner {
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.message-meta strong {
+    font-size: 20px;
+}
+
+.mini-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 8px;
+}
+
+.mini-default-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.chat-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    margin: 5px 0;
+}
+
+.message-text {
+    background-color: #D9D9D9;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    width: auto;
+    max-width: 400px;
+    min-width: 17px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    word-break: break-word;
+}
+
+.message-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-message-btn,
+.delete-message-btn {
+    color: #5F5F5F;
+    background-color: transparent;
+    border: none;
+    padding: 5px 10px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+
+.edit-message-btn:hover,
+.delete-message-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+
+/* プレビュー画像ラッパー */
+#imagePreviewWrapper {
+    display: none;
+    margin-bottom: 10px;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+}
+
+/* テキスト、画像選択、送信ボタンの横並び */
+.message-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chatButtons {
+    display: flex;
+    align-items: center;
+}
+
+/* テキストボックス */
+.message-input-row textarea {
+    flex: 1;
+    height: 40px;
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+}
+
+/* 画像選択ボタン */
+.custom-file-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 105px;
+    height: 40px;
+    color: red;
+    border: 2px solid red;
+    background-color: white;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+}
+
+/* 非表示のファイル選択 */
+.custom-file-input {
+    display: none;
+}
+
+/* 送信ボタン（画像） */
+.sendMessage {
+    width: 40px;
+    height: 30px;
+    background-image: url('/img/messageSendButton.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.error-message {
+    color: red;
+}
+
+/* 768px から 1200px の画面幅に適用されるスタイル */
+@media (min-width: 768px) and (max-width: 1200px) {
+
+    /* メッセージセクションの調整 */
+    .messageSection {
+        flex-grow: 1;
+        padding: 20px;
+        max-height: calc(100vh - 120px);
+        gap: 15px;
+        padding-bottom: 30px;
+        overflow-y: auto;
+    }
+
+    /* メッセージ内容の調整 */
+    .message-text {
+        max-width: 100%;
+        /* 最大幅を100%にして、画面サイズに合わせる */
+    }
+
+    .message-meta strong {
+        font-size: 18px;
+        /* 少し小さめに */
+    }
+
+    .message-input-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .message-input-row textarea {
+        font-size: 18px;
+    }
+
+    .chatButtons {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .sendMessage {
+        width: 45px;
+        /* 少し大きめに調整 */
+        height: 35px;
+    }
+
+    /* ファイル選択ボタンの調整 */
+    .custom-file-label {
+        width: 100px;
+        height: 40px;
+    }
+
+    /* プレビュー画像の調整 */
+    #imagePreview {
+        max-width: 100%;
+        max-height: 180px;
+    }
+
+    /* メッセージアクションボタンの調整 */
+    .edit-message-btn,
+    .delete-message-btn {
+        padding: 8px 12px;
+        /* ボタンのサイズを少し大きく */
+    }
+
+    /* メッセージフォーム */
+    .message-form {
+        padding: 10px 15px;
+    }
+}

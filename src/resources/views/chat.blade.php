@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/chat.css') }}">
-<link rel="stylesheet" href="{{ asset('css/itemSectionInChat.css') }}">
-<link rel="stylesheet" href="{{ asset('css/modalInChat.css') }}">
+<link rel="stylesheet" href="{{ asset('css/forChatView/listAndHeader.css') }}">
+<link rel="stylesheet" href="{{ asset('css/forChatView/itemSection.css') }}">
+<link rel="stylesheet" href="{{ asset('css/forChatView/messageSection.css') }}">
+<link rel="stylesheet" href="{{ asset('css/forChatView/modal.css') }}">
 @endsection
 
 @section('mainContents')
@@ -165,6 +166,16 @@
                     <!-- 送信ボタン -->
                     <button class="sendMessage" type="submit"></button>
                 </div>
+            </div>
+
+            {{--チャットメッセージ送信エラー用--}}
+            @error('message')
+            <div class="alert-danger">{{ $message }}</div>
+            @enderror
+
+            @if ($errors->has('image'))
+            <div class="alert-danger">{{ $errors->first('image') }}</div>
+            @endif
         </form>
     </div>
 

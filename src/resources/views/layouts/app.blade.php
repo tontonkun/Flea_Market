@@ -32,15 +32,6 @@
     <div class="alert-danger">{{ $message }}</div>
     @enderror
 
-    {{--チャットメッセージ送信エラー用--}}
-    @error('message')
-    <div class="alert-danger">{{ $message }}</div>
-    @enderror
-
-    @if ($errors->has('image'))
-    <div class="alert-danger">{{ $errors->first('image') }}</div>
-    @endif
-
     <div class="header">
         <div class="headerlogo">
             <img src="/img/logo.svg" alt="coachtech" width="220" height="50">
