@@ -77,10 +77,10 @@ class MyPageController extends Controller
         }
 
         // 最新メッセージ順に並べ替え
-        $tradingItems = $tradingItems->sortByDesc('latest_message_time')->values();
+        $filteredTradingItems = $filteredTradingItems->sortByDesc('latest_message_time')->values();
 
         // 未読メッセージ総数
-        $totalUnreadCount = $tradingItems->sum('unread_count');
+        $totalUnreadCount = $filteredTradingItems->sum('unread_count');
 
         // 評価の平均
         $averageRating = Rating::where('evaluated_user_id', $userId)->avg('rating_value');
