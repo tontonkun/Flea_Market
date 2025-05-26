@@ -31,4 +31,5 @@ RUN php artisan config:cache
 
 RUN php artisan storage:link
 
-CMD ["tail", "-f", "storage/logs/laravel.log"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]
+
