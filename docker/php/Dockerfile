@@ -30,6 +30,8 @@ RUN composer install --no-dev --optimize-autoloader
 RUN php artisan config:cache
 RUN php artisan storage:link
 
+# EXPOSE は任意（$PORT はビルド時ではなく実行時に決まる）
 EXPOSE 8080
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# ✅ CMD を修正：Render が割り当てる $PORT を使う
+CMD php artisan serve --host=0.0.0.0 --port=${PORT}
