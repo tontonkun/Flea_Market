@@ -28,9 +28,8 @@ COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader
 
 RUN php artisan config:cache
-
 RUN php artisan storage:link
 
+EXPOSE 8080
+
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
-
-
