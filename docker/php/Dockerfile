@@ -32,5 +32,5 @@ RUN php artisan storage:link
 
 EXPOSE 8080
 
-# ✅ PORTをsh経由で展開する
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT}"]
+CMD ["sh", "-c", "echo PORT=$PORT && php artisan serve --host=0.0.0.0 --port=${PORT}"]
+
