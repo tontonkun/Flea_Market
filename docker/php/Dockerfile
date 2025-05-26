@@ -11,3 +11,14 @@ RUN curl -sS https://getcomposer.org/installer | php \
   && composer self-update
 
 WORKDIR /var/www
+
+# Laravel の依存関係インストールとキャッシュ
+COPY . /var/www
+WORKDIR /var/www
+
+RUN composer install --no-dev --optimize-autoloader
+
+# Laravel の key 生成とキャッシュ処理（ビルド時 or 起動時に）
+RUN php artisan config:cache
+
+RUN php artisan storage:link
