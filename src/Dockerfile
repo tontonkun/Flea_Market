@@ -26,6 +26,10 @@ WORKDIR /var/www
 # Laravel アプリの全コードをコピー（Docker ビルドコンテキストが Laravel ルートになっている必要あり）
 COPY . .
 
+# ディレクトリ書き込み権限
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
+
 # Composer インストール
 RUN composer install --no-dev --optimize-autoloader
 
