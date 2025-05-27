@@ -1,4 +1,4 @@
-FROM php:7.4.9-fpm
+FROM php:8.2-fpm
 
 RUN apt update && apt install -y \
     default-mysql-client \
