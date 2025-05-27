@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.2
 
 # システム依存パッケージと PHP 拡張のインストール
 RUN apt update && apt install -y \
