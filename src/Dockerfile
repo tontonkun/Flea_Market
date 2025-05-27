@@ -20,23 +20,23 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update
 
-# 作業ディレクトリを Laravel プロジェクトの src に設定
-WORKDIR /var/www/src
+# 作業ディレクトリを Laravel プロジェクトルートに設定
+WORKDIR /var/www
 
-# Laravel アプリのソースコードを src 配下にコピー
-COPY ./src ./ 
+# srcディレクトリ配下のファイルを /var/www にコピー
+COPY ./src /var/www
 
-# ディレクトリ書き込み権限を src 内の storage と bootstrap/cache に付与
+# storage と bootstrap/cache の権限を設定
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
-# Composer インストールを src 配下で実行
+# Composer インストール（src配下で実行）
 RUN composer install --no-dev --optimize-autoloader
 
 # Laravel 必須コマンド（artisanが見えてる前提）
 RUN test -f artisan && php artisan config:cache && php artisan storage:link
 
-# ポート開放（Renderでは PORT 環境変数に従って CMD でバインド）
+# ポート開放
 EXPOSE 8080
 
 # アプリ起動
