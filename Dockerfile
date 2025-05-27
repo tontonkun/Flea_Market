@@ -1,6 +1,6 @@
 FROM php:8.2
 
-# 必要パッケージとPHP拡張
+# システム依存パッケージと PHP 拡張のインストール
 RUN apt update && apt install -y \
     default-mysql-client \
     zlib1g-dev \
@@ -16,31 +16,29 @@ RUN apt update && apt install -y \
     && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath gd
 
 # Composer インストール
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer && \
-    composer self-update
+RUN curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer \
+    && composer self-update
 
 # 作業ディレクトリを Laravel プロジェクトルートに設定
 WORKDIR /var/www
 
-# Laravel アプリのコードをコピー
+# Laravel アプリのコードと .env をコピー
 COPY ./src /var/www
+COPY ./src/.env /var/www/.env
 
-# .env が無ければ仮コピー（必要に応じて）
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# ストレージとキャッシュディレクトリのパーミッションを設定
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
 
-# 権限設定
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
-    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
-# Composer インストール
+# Composer インストール（--no-dev 本番用）
 RUN composer install --no-dev --optimize-autoloader
 
-# Laravel 初期コマンド
+# Laravel のキャッシュ・シンボリックリンク設定
 RUN test -f artisan && php artisan config:cache && php artisan storage:link
 
-# ポート開放
+# ポート開放（Render で必要）
 EXPOSE 8080
 
-# アプリ起動
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# アプリケーション起動コマンド
+CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT}"]
