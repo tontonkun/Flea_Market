@@ -1,6 +1,6 @@
 FROM php:8.2
 
-# システム依存パッケージと PHP 拡張のインストール
+# PHP拡張と依存インストール
 RUN apt update && apt install -y \
     default-mysql-client \
     zlib1g-dev \
@@ -20,25 +20,23 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer self-update
 
-# 作業ディレクトリを Laravel プロジェクトルートに設定
+# 作業ディレクトリ
 WORKDIR /var/www
 
-# Laravel アプリのコードと .env をコピー
-COPY ./src /var/www
-COPY ./src/.env /var/www/.env
+# Laravel アプリと .env をコピー
+COPY ../../src /var/www
+COPY ../../src/.env /var/www/.env
 
-# ストレージとキャッシュディレクトリのパーミッションを設定
+# パーミッション
 RUN chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache
 
-# Composer インストール（--no-dev 本番用）
+# Composer install
 RUN composer install --no-dev --optimize-autoloader
 
-# Laravel のキャッシュ・シンボリックリンク設定
+# Laravel コマンド実行
 RUN test -f artisan && php artisan config:cache && php artisan storage:link
 
-# ポート開放（Render で必要）
 EXPOSE 8080
 
-# アプリケーション起動コマンド
 CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT}"]
