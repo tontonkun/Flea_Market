@@ -23,7 +23,6 @@ RUN curl -sS https://getcomposer.org/installer | php \
 # 作業ディレクトリを Laravel プロジェクトルートに設定
 WORKDIR /var/www
 
-# srcディレクトリ配下のファイルを /var/www にコピー
 COPY ./src /var/www
 
 # storage と bootstrap/cache の権限を設定
