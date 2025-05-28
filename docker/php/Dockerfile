@@ -26,16 +26,18 @@ WORKDIR /var/www
 # Laravel アプリをコピー
 COPY ../../src /var/www
 
-# パーミッション
-RUN chown -R www-data:www-data storage bootstrap/cache && \
-    chmod -R 775 storage bootstrap/cache
+# entrypoint.sh をコピー
+COPY ../../docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Composer install
+# Composer install（.env なしでOKな範囲で）
 RUN composer install --no-dev --optimize-autoloader
 
-# Laravel コマンド実行
-RUN test -f artisan && php artisan config:cache && php artisan storage:link
+# Laravel の public/storage シンボリックリンク作成用（実行は entrypoint.sh に移動しても可）
+RUN test -f artisan && php artisan storage:link || true
 
+# ポート開放（Renderが動的に割り当てる）
 EXPOSE 8080
 
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT}"]
+# 起動処理を entrypoint.sh に任せる
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
