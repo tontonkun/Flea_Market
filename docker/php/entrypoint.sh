@@ -38,5 +38,8 @@ php artisan view:cache
 # マイグレーション実行（失敗してもクラッシュしない）
 php artisan migrate --force || true
 
+# Seeder 実行（失敗してもクラッシュしない）
+php artisan db:seed --force || true
+
 # Laravelのビルトインサーバ起動（Renderはこの形式でOK）
 php artisan serve --host=0.0.0.0 --port=${PORT}
