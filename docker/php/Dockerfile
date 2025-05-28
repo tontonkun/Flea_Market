@@ -1,8 +1,10 @@
 FROM php:8.2
 
-# PHP拡張と依存インストール
+# PHP拡張と依存インストール（MySQL + PostgreSQL 両対応）
 RUN apt update && apt install -y \
     default-mysql-client \
+    postgresql-client \
+    libpq-dev \
     zlib1g-dev \
     libzip-dev \
     unzip \
@@ -13,7 +15,7 @@ RUN apt update && apt install -y \
     curl \
     git \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install pdo_mysql zip mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo_mysql pdo_pgsql zip mbstring exif pcntl bcmath gd
 
 # Composer インストール
 RUN curl -sS https://getcomposer.org/installer | php \
